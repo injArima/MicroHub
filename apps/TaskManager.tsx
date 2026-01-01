@@ -1,41 +1,55 @@
-import React, { useState } from 'react';
-import { Share2, Clock, MoreHorizontal, Plus, Calendar, ArrowLeft } from 'lucide-react';
-import { AppRoute, Task } from '../types';
+import React, { useState, useEffect } from 'react';
+import { Share2, Clock, Plus, Calendar, ArrowLeft } from 'lucide-react';
+import { Task, SheetConfig } from '../types';
+import { syncToCloud } from '../services/sheet';
 
 interface TaskManagerProps {
     onBack: () => void;
+    sheetConfig: SheetConfig | null;
 }
 
-const TaskManager: React.FC<TaskManagerProps> = ({ onBack }) => {
-  const [tasks] = useState<Task[]>([
-    {
-      id: '1',
-      title: 'February Dribbble Shot Design',
-      date: '26 Feb',
-      time: '10:15pm',
-      priority: 'Medium',
-      team: ['https://picsum.photos/32/32?random=1', 'https://picsum.photos/32/32?random=2', 'https://picsum.photos/32/32?random=3'],
-      colorTheme: 'lime'
-    },
-    {
-      id: '2',
-      title: 'Mobile App Prototype',
-      date: '27 Feb',
-      time: '02:00pm',
-      priority: 'High',
-      team: ['https://picsum.photos/32/32?random=4'],
-      colorTheme: 'yellow'
-    },
-    {
-      id: '3',
-      title: 'Client Meeting Preparation',
-      date: '28 Feb',
-      time: '09:00am',
-      priority: 'Medium',
-      team: ['https://picsum.photos/32/32?random=5', 'https://picsum.photos/32/32?random=6'],
-      colorTheme: 'red'
-    }
-  ]);
+const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
+  const [tasks, setTasks] = useState<Task[]>(() => {
+     try {
+         const saved = localStorage.getItem('microhub_tasks');
+         return saved ? JSON.parse(saved) : [];
+     } catch (e) {
+         return [];
+     }
+  });
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  // Sync to Cloud Effect
+  useEffect(() => {
+      localStorage.setItem('microhub_tasks', JSON.stringify(tasks));
+      
+      if (isDirty && sheetConfig) {
+          const timeout = setTimeout(() => {
+              // Get other data from LS to ensure full payload
+              const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
+              const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
+              syncToCloud(sheetConfig, { tasks, journal, movies });
+              setIsDirty(false);
+          }, 2000); // Debounce
+          return () => clearTimeout(timeout);
+      }
+  }, [tasks, sheetConfig, isDirty]);
+
+  const addTask = () => {
+    // Dummy task for demo
+    const newTask: Task = {
+        id: Date.now().toString(),
+        title: 'New Task Item',
+        date: 'Today',
+        time: '12:00pm',
+        priority: 'Medium',
+        team: [],
+        colorTheme: 'yellow'
+    };
+    setTasks([newTask, ...tasks]);
+    setIsDirty(true);
+  };
 
   const dates = [
       { day: '06', mon: 'Apr' },
@@ -80,7 +94,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack }) => {
       <div className="flex justify-between items-end mb-6">
           <div>
             <h1 className="text-3xl font-bold text-white mb-1">Manage Your Task</h1>
-            <p className="text-gray-400 text-sm">3 tasks for today</p>
+            <p className="text-gray-400 text-sm">{tasks.length} tasks recorded</p>
           </div>
           <button className="text-gray-400 text-sm hover:text-white">See all</button>
       </div>
@@ -136,7 +150,10 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack }) => {
         ))}
       </div>
 
-       <button className="mt-6 w-full py-4 rounded-full bg-[#fde047] text-black font-bold text-lg flex items-center justify-center gap-2 hover:bg-[#facc15] transition-colors">
+       <button 
+        onClick={addTask}
+        className="mt-6 w-full py-4 rounded-full bg-[#fde047] text-black font-bold text-lg flex items-center justify-center gap-2 hover:bg-[#facc15] transition-colors"
+       >
           <Plus size={20} /> Create New Task
        </button>
     </div>

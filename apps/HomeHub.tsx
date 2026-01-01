@@ -1,22 +1,33 @@
 import React from 'react';
-import { ListTodo, MessageSquare, Image as ImageIcon, Bell, BookOpen } from 'lucide-react';
-import { AppRoute } from '../types';
+import { ListTodo, MessageSquare, Image as ImageIcon, BookOpen, Film, Settings, Database } from 'lucide-react';
+import { AppRoute, SheetConfig } from '../types';
 
 interface HomeHubProps {
     onNavigate: (route: AppRoute) => void;
+    config: SheetConfig | null;
 }
 
-const HomeHub: React.FC<HomeHubProps> = ({ onNavigate }) => {
+const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config }) => {
     return (
         <div className="w-full min-h-screen bg-[#0f0f10] pb-24 px-4 pt-6">
             <div className="flex justify-between items-start mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-white mb-1">Good Morning,</h1>
-                    <h2 className="text-3xl font-light text-gray-400">Alex</h2>
+                    <h1 className="text-3xl font-bold text-white mb-1">MicroHub</h1>
+                    <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${config ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`}></span>
+                        <p className="text-sm font-medium text-gray-400">
+                            {config ? 'Database Connected' : 'Local Storage Only'}
+                        </p>
+                    </div>
                 </div>
-                <button className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors">
-                    <Bell size={20} />
-                </button>
+                <div className="flex gap-2">
+                    <button 
+                        onClick={() => onNavigate(AppRoute.PROFILE)}
+                        className={`w-12 h-12 rounded-full border flex items-center justify-center transition-colors ${config ? 'bg-green-500/10 border-green-500/30 text-green-500' : 'border-white/10 text-white hover:bg-white/5'}`}
+                    >
+                       {config ? <Database size={20} /> : <Settings size={20} />}
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -34,17 +45,29 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate }) => {
                     </div>
                 </div>
 
-                 {/* Journal Tile - Large */}
+                 {/* Journal Tile */}
                  <div 
                     onClick={() => onNavigate(AppRoute.JOURNAL)}
-                    className="col-span-2 bg-[#a78bfa] rounded-[32px] p-6 h-40 relative cursor-pointer hover:scale-[1.02] transition-transform active:scale-95"
+                    className="bg-[#a78bfa] rounded-[32px] p-6 h-44 relative cursor-pointer hover:scale-[1.02] transition-transform active:scale-95 border border-white/5"
                 >
-                    <div className="absolute top-6 right-6 w-10 h-10 bg-black/10 rounded-full flex items-center justify-center text-black">
+                    <div className="w-10 h-10 bg-black/10 rounded-full flex items-center justify-center text-black mb-4">
                         <BookOpen size={20} />
                     </div>
-                     <div className="absolute bottom-6 left-6">
-                        <p className="text-black/60 text-sm font-semibold mb-1">Daily Log</p>
-                        <h3 className="text-2xl font-bold text-black leading-tight">My<br/>Journal</h3>
+                     <div>
+                        <h3 className="text-xl font-bold text-black">Daily<br/>Journal</h3>
+                    </div>
+                </div>
+
+                {/* Movie Tile */}
+                <div 
+                    onClick={() => onNavigate(AppRoute.MOVIES)}
+                    className="bg-[#22d3ee] rounded-[32px] p-6 h-44 relative cursor-pointer hover:scale-[1.02] transition-transform active:scale-95"
+                >
+                    <div className="w-10 h-10 bg-black/10 rounded-full flex items-center justify-center text-black mb-4">
+                        <Film size={20} />
+                    </div>
+                     <div>
+                        <h3 className="text-xl font-bold text-black">Cinema<br/>Log</h3>
                     </div>
                 </div>
 

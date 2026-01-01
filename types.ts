@@ -4,6 +4,22 @@ export enum AppRoute {
   AI_CHAT = 'AI_CHAT',
   IMAGE_GEN = 'IMAGE_GEN',
   JOURNAL = 'JOURNAL',
+  MOVIES = 'MOVIES',
+  PROFILE = 'PROFILE',
+}
+
+export interface SheetConfig {
+  sheetId: string;
+  authKey: string;
+  scriptUrl: string;
+  connectedAt: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
 }
 
 export interface Task {
@@ -30,4 +46,22 @@ export interface JournalEntry {
   content: string;
   date: string;
   tags: string[];
+}
+
+export interface Movie {
+  id: string;
+  title: string;
+  year: string;
+  director: string;
+  genre: string[];
+  plot: string;
+  status: 'watchlist' | 'watched';
+  posterUrl?: string;
+}
+
+// For full state sync
+export interface AppData {
+  tasks: Task[];
+  journal: JournalEntry[];
+  movies: Movie[];
 }

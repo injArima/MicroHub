@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, MoreHorizontal, ChevronLeft } from 'lucide-react';
-import { JournalEntry } from '../types';
+import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft } from 'lucide-react';
+import { JournalEntry, SheetConfig } from '../types';
+import { syncToCloud } from '../services/sheet';
 
 interface JournalAppProps {
     onBack: () => void;
+    sheetConfig: SheetConfig | null;
 }
 
 const STORAGE_KEY = 'microhub_journal_entries';
@@ -16,24 +18,16 @@ const DEFAULT_ENTRIES: JournalEntry[] = [
         content: '# React Hooks\n\nToday I learned about **useEffect** and **useState**.\n\n- They allow functional components to have state.\n- `useEffect` handles side effects.\n\n```javascript\nconst [count, setCount] = useState(0);\n```',
         date: '28 Feb',
         tags: ['React', 'Coding']
-    },
-    {
-        id: '2',
-        title: 'Design Systems Ideas',
-        content: 'Thinking about a new *dark mode* color palette. \n\n> "Design is intelligence made visible." \n\nNeed to explore using `violet` and `zinc` together.',
-        date: '27 Feb',
-        tags: ['Design', 'UI/UX']
     }
 ];
 
-const JournalApp: React.FC<JournalAppProps> = ({ onBack }) => {
-    // Initialize from localStorage if available
+const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
+    // Initialize from localStorage
     const [entries, setEntries] = useState<JournalEntry[]>(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
             return saved ? JSON.parse(saved) : DEFAULT_ENTRIES;
         } catch (e) {
-            console.error("Failed to load journal entries", e);
             return DEFAULT_ENTRIES;
         }
     });
@@ -44,10 +38,19 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack }) => {
     const [editorContent, setEditorContent] = useState('');
     const [previewMode, setPreviewMode] = useState(false);
 
-    // Save to localStorage whenever entries change
+    // Sync Logic
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     }, [entries]);
+
+    const saveToCloudNow = () => {
+        if (sheetConfig) {
+             // Gather all data state from LS
+             const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
+             const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
+             syncToCloud(sheetConfig, { journal: entries, tasks, movies });
+        }
+    }
 
     const handleCreateNew = () => {
         setActiveEntry(null);
@@ -85,11 +88,16 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack }) => {
         };
 
         if (activeEntry) {
-            setEntries(entries.map(e => e.id === activeEntry.id ? newEntry : e));
+            setEntries(prev => prev.map(e => e.id === activeEntry.id ? newEntry : e));
         } else {
-            setEntries([newEntry, ...entries]);
+            setEntries(prev => [newEntry, ...prev]);
         }
         
+        // Trigger save to cloud via effect or direct call? Direct call is safer here since we know the save point.
+        // However, React state update is async, so we should use an effect or setTimeout.
+        // Simplest: just wait a tick.
+        setTimeout(saveToCloudNow, 100);
+
         setView('list');
     };
 
