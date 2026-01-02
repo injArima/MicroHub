@@ -4,7 +4,6 @@
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  // Wait up to 30 seconds for other processes to finish.
   lock.tryLock(30000);
 
   try {
@@ -29,14 +28,13 @@ function doPost(e) {
       case 'wipe_and_reset':
         result = handleWipeAndReset(ss, params.userName);
         break;
-      case 'sync_push':
-        result = handleSyncPush(ss, params.authKey, params.data);
+      case 'sync_sheet': // Standardized Sync Action
+        result = handleSyncSheet(ss, params.authKey, params.targetSheetName, params.data);
         break;
       default:
         result = response({ status: 'error', message: 'Invalid action' });
     }
     
-    // Ensure all changes are committed before returning
     SpreadsheetApp.flush();
     return result;
 
@@ -77,11 +75,9 @@ function handleCheckStatus(ss) {
 }
 
 function handleSetupNewUser(ss, userName) {
-  // 1. Generate Key
   const rawKey = Math.floor(100000 + Math.random() * 900000).toString();
   const hashedKey = hashString(rawKey);
 
-  // 2. Setup Config Sheet
   let configSheet = ss.getSheetByName('App_Config');
   if (!configSheet) {
     const sheets = ss.getSheets();
@@ -94,17 +90,15 @@ function handleSetupNewUser(ss, userName) {
   }
   
   configSheet.clear();
-  configSheet.appendRow(['Parameter', 'Value']); // Headers
+  configSheet.appendRow(['Parameter', 'Value']);
   configSheet.appendRow(['User Name', userName]);
   configSheet.appendRow(['Auth Hash', hashedKey]);
   configSheet.appendRow(['Created At', new Date().toISOString()]);
   
-  // Style Config
   configSheet.getRange('A1:B1').setFontWeight('bold').setBackground('#f3f4f6');
   configSheet.setColumnWidth(1, 150);
   configSheet.setColumnWidth(2, 300);
 
-  // 3. Create Sub-Sheets structure
   setupSubSheets(ss);
 
   return response({ status: 'success', rawKey: rawKey });
@@ -118,7 +112,6 @@ function handleLogin(ss, providedKey) {
 }
 
 function handleWipeAndReset(ss, userName) {
-  // 1. Delete all sheets except a temp one to avoid "All sheets removed" error
   const sheets = ss.getSheets();
   let temp = ss.insertSheet('TEMP_WIPE_' + Date.now());
   
@@ -126,15 +119,11 @@ function handleWipeAndReset(ss, userName) {
     try { ss.deleteSheet(s); } catch(e) {}
   });
 
-  // CRITICAL: Flush to ensure deletions are registered before re-creation
   SpreadsheetApp.flush();
 
-  // 2. Call setup logic
   const resultObj = handleSetupNewUser(ss, userName);
-  // Extract content to verify success before deleting temp
   const result = JSON.parse(resultObj.getContent());
 
-  // 3. Remove temp
   if (result.status === 'success') {
       try { ss.deleteSheet(temp); } catch(e) {}
       SpreadsheetApp.flush();
@@ -144,18 +133,30 @@ function handleWipeAndReset(ss, userName) {
   }
 }
 
-function handleSyncPush(ss, providedKey, data) {
+function handleSyncSheet(ss, providedKey, targetSheetName, data) {
   if (!verifyKey(ss, providedKey)) throw new Error("Unauthorized");
 
-  // Update Task Tracker
-  if (data.tasks) updateSheetData(ss, 'Task_Tracker', ['ID', 'Title', 'Date', 'Time', 'Priority', 'Status'], data.tasks);
-  
-  // Update Journal
-  if (data.journal) updateSheetData(ss, 'Journal_Notes', ['ID', 'Date', 'Title', 'Content', 'Tags'], data.journal);
-  
-  // Update Cinema Log
-  if (data.movies) updateSheetData(ss, 'Cinema_Log', ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status'], data.movies);
+  let headers = [];
+  let mapper = null;
 
+  // Schema Definitions
+  if (targetSheetName === 'Task_Tracker') {
+    headers = ['ID', 'Title', 'Date', 'Time', 'Priority', 'Theme'];
+    mapper = t => [t.id, t.title, t.date, t.time, t.priority, t.colorTheme];
+  } 
+  else if (targetSheetName === 'Journal_Notes') {
+    headers = ['ID', 'Date', 'Title', 'Content', 'Tags'];
+    mapper = j => [j.id, j.date, j.title, j.content, Array.isArray(j.tags) ? j.tags.join(',') : j.tags];
+  } 
+  else if (targetSheetName === 'Cinema_Log') {
+    headers = ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL'];
+    mapper = m => [m.id, m.title, m.year, m.director, Array.isArray(m.genre) ? m.genre.join(',') : m.genre, m.status, m.posterUrl];
+  } 
+  else {
+    throw new Error("Unknown Target Sheet: " + targetSheetName);
+  }
+
+  updateSheetData(ss, targetSheetName, headers, data, mapper);
   return response({ status: 'success' });
 }
 
@@ -164,10 +165,9 @@ function handleSyncPull(ss) {
   const journal = readSheetData(ss, 'Journal_Notes', ['id', 'date', 'title', 'content', 'tags']);
   const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl']);
 
-  // Post-process arrays back to specific formats if needed (e.g. tags split)
   const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.toString().split(',') : []}));
   const formattedMovies = movies.map(m => ({...m, genre: m.genre ? m.genre.toString().split(',') : [], posterUrl: m.posterUrl || ''}));
-  const formattedTasks = tasks.map(t => ({...t, team: [], colorTheme: t.colorTheme || 'yellow'})); // Defaults
+  const formattedTasks = tasks.map(t => ({...t, team: [], colorTheme: t.colorTheme || 'yellow'}));
 
   return response({
     status: 'success',
@@ -183,7 +183,7 @@ function handleSyncPull(ss) {
 
 function setupSubSheets(ss) {
   const definitions = [
-    { name: 'Task_Tracker', headers: ['ID', 'Title', 'Date', 'Time', 'Priority', 'Status'] },
+    { name: 'Task_Tracker', headers: ['ID', 'Title', 'Date', 'Time', 'Priority', 'Theme'] },
     { name: 'Journal_Notes', headers: ['ID', 'Date', 'Title', 'Content', 'Tags'] },
     { name: 'Cinema_Log', headers: ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL'] }
   ];
@@ -198,14 +198,14 @@ function setupSubSheets(ss) {
   });
 }
 
-function updateSheetData(ss, sheetName, headers, dataArray) {
+function updateSheetData(ss, sheetName, headers, dataArray, mapper) {
   let sheet = ss.getSheetByName(sheetName);
   if (!sheet) {
     sheet = ss.insertSheet(sheetName);
     sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#e5e7eb');
   }
 
-  // Clear existing content (keep headers)
   const lastRow = sheet.getLastRow();
   if (lastRow > 1) {
     sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).clearContent();
@@ -213,13 +213,7 @@ function updateSheetData(ss, sheetName, headers, dataArray) {
 
   if (!dataArray || dataArray.length === 0) return;
 
-  // Transform objects to 2D array based on sheet type
-  const rows = dataArray.map(item => {
-    if (sheetName === 'Task_Tracker') return [item.id, item.title, item.date, item.time, item.priority, item.colorTheme];
-    if (sheetName === 'Journal_Notes') return [item.id, item.date, item.title, item.content, Array.isArray(item.tags) ? item.tags.join(',') : item.tags];
-    if (sheetName === 'Cinema_Log') return [item.id, item.title, item.year, item.director, Array.isArray(item.genre) ? item.genre.join(',') : item.genre, item.status, item.posterUrl];
-    return [];
-  });
+  const rows = dataArray.map(mapper);
 
   if (rows.length > 0) {
     sheet.getRange(2, 1, rows.length, rows[0].length).setValues(rows);
@@ -244,7 +238,7 @@ function readSheetData(ss, sheetName, keys) {
 function verifyKey(ss, providedKey) {
   const config = ss.getSheetByName('App_Config');
   if (!config) return false;
-  const storedHash = config.getRange('B3').getValue(); // Assuming B3 is Auth Hash
+  const storedHash = config.getRange('B3').getValue();
   const providedHash = hashString(providedKey);
   return storedHash === providedHash;
 }

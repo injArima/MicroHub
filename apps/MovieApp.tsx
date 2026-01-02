@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Movie, SheetConfig } from '../types';
 import { searchMovie } from '../services/movieService';
-import { syncToCloud } from '../services/sheet';
+import { syncSheet } from '../services/sheet';
 
 interface MovieAppProps {
     onBack: () => void;
@@ -38,10 +38,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 setSaveStatus('saving');
                 setErrorMessage('');
                 try {
-                    const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
-                    const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
-                    
-                    await syncToCloud(sheetConfig, { movies, tasks, journal });
+                    await syncSheet(sheetConfig, 'Cinema_Log', movies);
                     
                     setSaveStatus('saved');
                     setIsDirty(false);
@@ -79,8 +76,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
             setIsDirty(true);
             setSaveStatus('idle');
         } catch (error) {
-            console.error("Failed to fetch movie", error);
-            // Fallback for offline or error
+            // Fallback for offline or error, silent fail to manual mode
             const fallbackMovie: Movie = {
                 id: Date.now().toString(),
                 title: searchQuery,

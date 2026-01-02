@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { JournalEntry, SheetConfig } from '../types';
-import { syncToCloud } from '../services/sheet';
+import { syncSheet } from '../services/sheet';
 
 interface JournalAppProps {
     onBack: () => void;
@@ -53,11 +53,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
              setSaveStatus('saving');
              setErrorMessage('');
              try {
-                // Gather all data state from LS
-                const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
-                const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
-                
-                await syncToCloud(sheetConfig, { journal: entries, tasks, movies });
+                await syncSheet(sheetConfig, 'Journal_Notes', entries);
                 
                 setSaveStatus('saved');
                 setTimeout(() => setSaveStatus('idle'), 3000);

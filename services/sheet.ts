@@ -88,23 +88,24 @@ export const fetchCloudData = async (config: SheetConfig): Promise<Partial<AppDa
     }
 };
 
-export const syncToCloud = async (config: SheetConfig, data: Partial<AppData>): Promise<void> => {
+export const syncSheet = async (config: SheetConfig, sheetName: string, data: any[]): Promise<void> => {
     try {
         const response = await fetch(config.scriptUrl, {
             method: 'POST',
             body: JSON.stringify({
-                action: 'sync_push',
+                action: 'sync_sheet',
                 sheetId: config.sheetId,
                 authKey: config.authKey,
+                targetSheetName: sheetName,
                 data: data
             })
         });
         const json = await response.json();
         if (json.status !== 'success') {
-            throw new Error(json.message || "Sync failed");
+            throw new Error(json.message || `Failed to sync ${sheetName}`);
         }
     } catch (e: any) {
-        console.error("Sync Error", e);
+        console.error(`Sync Error (${sheetName})`, e);
         throw new Error(e.message || "Network Error");
     }
 };

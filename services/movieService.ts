@@ -6,9 +6,13 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
     try {
         // Step 1: Search for the movie
         const searchRes = await fetch(`${IMDB_API_BASE}/?q=${encodeURIComponent(query)}`);
+        
+        if (!searchRes.ok) throw new Error("Search service unavailable");
+        
         const searchData = await searchRes.json();
         
         if (!searchData.description || searchData.description.length === 0) {
+            // Throwing a standard error that the UI handles as "Not Found"
             throw new Error("Movie not found");
         }
 
@@ -17,8 +21,12 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
 
         // Step 2: Get details
         const detailsRes = await fetch(`${IMDB_API_BASE}/?tt=${imdbId}`);
-        const detailsData = await detailsRes.json();
-        const info = detailsData.short || {};
+        
+        let info: any = {};
+        if (detailsRes.ok) {
+            const detailsData = await detailsRes.json();
+            info = detailsData.short || {};
+        }
 
         // Extract Director
         let director = "Unknown";
@@ -48,8 +56,12 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
             posterUrl: info.image || firstResult["#IMG_POSTER"]
         };
 
-    } catch (error) {
-        console.error("Movie Service Error:", error);
+    } catch (error: any) {
+        // If it's a "Movie not found" error, just rethrow it for the UI to handle.
+        // If it's something else, log it for debugging but still throw.
+        if (error.message !== "Movie not found") {
+             console.warn("Movie Search Warning:", error.message);
+        }
         throw error;
     }
 };

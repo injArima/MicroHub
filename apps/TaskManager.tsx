@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Share2, Clock, Plus, Calendar, ArrowLeft, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Task, SheetConfig } from '../types';
-import { syncToCloud } from '../services/sheet';
+import { syncSheet } from '../services/sheet';
 
 interface TaskManagerProps {
     onBack: () => void;
@@ -35,11 +35,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
               setErrorMessage('');
               
               try {
-                  // Get other data from LS to ensure full payload
-                  const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
-                  const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
-                  
-                  await syncToCloud(sheetConfig, { tasks, journal, movies });
+                  await syncSheet(sheetConfig, 'Task_Tracker', tasks);
                   
                   setSaveStatus('saved');
                   setIsDirty(false);
