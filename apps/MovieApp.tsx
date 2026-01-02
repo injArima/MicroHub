@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2 } from 'lucide-react';
+import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Movie, SheetConfig } from '../types';
 import { searchMovie } from '../services/movieService';
 import { syncToCloud } from '../services/sheet';
@@ -8,6 +8,8 @@ interface MovieAppProps {
     onBack: () => void;
     sheetConfig: SheetConfig | null;
 }
+
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 const STORAGE_KEY = 'microhub_movies';
 
@@ -25,15 +27,29 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const [isSearching, setIsSearching] = useState(false);
     const [activeTab, setActiveTab] = useState<'watchlist' | 'watched'>('watchlist');
     const [isDirty, setIsDirty] = useState(false);
+    
+    const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
         if (isDirty && sheetConfig) {
-             const timeout = setTimeout(() => {
-                const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
-                const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
-                syncToCloud(sheetConfig, { movies, tasks, journal });
-                setIsDirty(false);
+             const timeout = setTimeout(async () => {
+                setSaveStatus('saving');
+                setErrorMessage('');
+                try {
+                    const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
+                    const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
+                    
+                    await syncToCloud(sheetConfig, { movies, tasks, journal });
+                    
+                    setSaveStatus('saved');
+                    setIsDirty(false);
+                    setTimeout(() => setSaveStatus('idle'), 3000);
+                } catch (e: any) {
+                    setSaveStatus('error');
+                    setErrorMessage(e.message || "Save failed");
+                }
              }, 2000);
              return () => clearTimeout(timeout);
         }
@@ -61,6 +77,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
             setMovies(prev => [newMovie, ...prev]);
             setSearchQuery('');
             setIsDirty(true);
+            setSaveStatus('idle');
         } catch (error) {
             console.error("Failed to fetch movie", error);
             // Fallback for offline or error
@@ -77,6 +94,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
             setMovies(prev => [fallbackMovie, ...prev]);
             setSearchQuery('');
             setIsDirty(true);
+            setSaveStatus('idle');
         } finally {
             setIsSearching(false);
         }
@@ -89,22 +107,43 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 : m
         ));
         setIsDirty(true);
+        setSaveStatus('idle');
     };
 
     const deleteMovie = (id: string) => {
         setMovies(movies.filter(m => m.id !== id));
         setIsDirty(true);
+        setSaveStatus('idle');
     };
 
     const filteredMovies = movies.filter(m => m.status === activeTab);
 
     return (
         <div className="w-full min-h-screen bg-[#0f0f10] pb-24 pt-4 px-4 flex flex-col">
-            <div className="flex items-center gap-4 mb-6">
-                <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white hover:bg-[#3f3f46] transition-colors">
-                    <ArrowLeft size={20} />
-                </button>
-                <h1 className="text-xl font-bold text-white">Cinema Log</h1>
+            <div className="flex items-center justify-between mb-6">
+                 <div className="flex items-center gap-4">
+                    <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white hover:bg-[#3f3f46] transition-colors">
+                        <ArrowLeft size={20} />
+                    </button>
+                    <h1 className="text-xl font-bold text-white">Cinema Log</h1>
+                 </div>
+                 <div className="flex items-center gap-2">
+                    {saveStatus === 'saving' && (
+                        <div className="flex items-center gap-2 bg-[#27272a] px-3 py-1 rounded-full border border-white/5">
+                            <Loader2 size={12} className="animate-spin text-gray-400" />
+                        </div>
+                    )}
+                    {saveStatus === 'saved' && (
+                        <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
+                            <CheckCircle size={12} className="text-green-500" />
+                        </div>
+                    )}
+                    {saveStatus === 'error' && (
+                         <div className="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20" title={errorMessage}>
+                            <AlertTriangle size={12} className="text-red-400" />
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Search Input */}
@@ -192,6 +231,9 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                     ))
                 )}
             </div>
+             {errorMessage && (
+                <p className="text-red-400 text-center text-xs mt-4 pb-4">{errorMessage}</p>
+            )}
         </div>
     );
 };

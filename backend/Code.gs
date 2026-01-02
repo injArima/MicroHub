@@ -4,7 +4,8 @@
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  lock.tryLock(10000);
+  // Wait up to 30 seconds for other processes to finish.
+  lock.tryLock(30000);
 
   try {
     const params = JSON.parse(e.postData.contents);
@@ -14,20 +15,30 @@ function doPost(e) {
     if (!sheetId) throw new Error("Missing Sheet ID");
     const ss = SpreadsheetApp.openById(sheetId);
 
+    let result;
     switch (action) {
       case 'check_status':
-        return handleCheckStatus(ss);
+        result = handleCheckStatus(ss);
+        break;
       case 'setup_new_user':
-        return handleSetupNewUser(ss, params.userName);
+        result = handleSetupNewUser(ss, params.userName);
+        break;
       case 'login':
-        return handleLogin(ss, params.authKey);
+        result = handleLogin(ss, params.authKey);
+        break;
       case 'wipe_and_reset':
-        return handleWipeAndReset(ss, params.userName);
+        result = handleWipeAndReset(ss, params.userName);
+        break;
       case 'sync_push':
-        return handleSyncPush(ss, params.authKey, params.data);
+        result = handleSyncPush(ss, params.authKey, params.data);
+        break;
       default:
-        return response({ status: 'error', message: 'Invalid action' });
+        result = response({ status: 'error', message: 'Invalid action' });
     }
+    
+    // Ensure all changes are committed before returning
+    SpreadsheetApp.flush();
+    return result;
 
   } catch (err) {
     return response({ status: 'error', message: err.toString() });
@@ -107,7 +118,7 @@ function handleLogin(ss, providedKey) {
 }
 
 function handleWipeAndReset(ss, userName) {
-  // Delete all sheets except one (store as temp), then re-init
+  // 1. Delete all sheets except a temp one to avoid "All sheets removed" error
   const sheets = ss.getSheets();
   let temp = ss.insertSheet('TEMP_WIPE_' + Date.now());
   
@@ -115,26 +126,35 @@ function handleWipeAndReset(ss, userName) {
     try { ss.deleteSheet(s); } catch(e) {}
   });
 
-  // Call setup logic
-  const result = handleSetupNewUser(ss, userName);
-  
-  // Remove temp
-  try { ss.deleteSheet(temp); } catch(e) {}
+  // CRITICAL: Flush to ensure deletions are registered before re-creation
+  SpreadsheetApp.flush();
 
-  return result;
+  // 2. Call setup logic
+  const resultObj = handleSetupNewUser(ss, userName);
+  // Extract content to verify success before deleting temp
+  const result = JSON.parse(resultObj.getContent());
+
+  // 3. Remove temp
+  if (result.status === 'success') {
+      try { ss.deleteSheet(temp); } catch(e) {}
+      SpreadsheetApp.flush();
+      return resultObj;
+  } else {
+      throw new Error("Re-initialization failed");
+  }
 }
 
 function handleSyncPush(ss, providedKey, data) {
   if (!verifyKey(ss, providedKey)) throw new Error("Unauthorized");
 
   // Update Task Tracker
-  updateSheetData(ss, 'Task_Tracker', ['ID', 'Title', 'Date', 'Time', 'Priority', 'Status'], data.tasks);
+  if (data.tasks) updateSheetData(ss, 'Task_Tracker', ['ID', 'Title', 'Date', 'Time', 'Priority', 'Status'], data.tasks);
   
   // Update Journal
-  updateSheetData(ss, 'Journal_Notes', ['ID', 'Date', 'Title', 'Content', 'Tags'], data.journal);
+  if (data.journal) updateSheetData(ss, 'Journal_Notes', ['ID', 'Date', 'Title', 'Content', 'Tags'], data.journal);
   
   // Update Cinema Log
-  updateSheetData(ss, 'Cinema_Log', ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status'], data.movies);
+  if (data.movies) updateSheetData(ss, 'Cinema_Log', ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status'], data.movies);
 
   return response({ status: 'success' });
 }
@@ -145,8 +165,8 @@ function handleSyncPull(ss) {
   const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl']);
 
   // Post-process arrays back to specific formats if needed (e.g. tags split)
-  const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.split(',') : []}));
-  const formattedMovies = movies.map(m => ({...m, genre: m.genre ? m.genre.split(',') : [], posterUrl: m.posterUrl || ''}));
+  const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.toString().split(',') : []}));
+  const formattedMovies = movies.map(m => ({...m, genre: m.genre ? m.genre.toString().split(',') : [], posterUrl: m.posterUrl || ''}));
   const formattedTasks = tasks.map(t => ({...t, team: [], colorTheme: t.colorTheme || 'yellow'})); // Defaults
 
   return response({
@@ -196,8 +216,8 @@ function updateSheetData(ss, sheetName, headers, dataArray) {
   // Transform objects to 2D array based on sheet type
   const rows = dataArray.map(item => {
     if (sheetName === 'Task_Tracker') return [item.id, item.title, item.date, item.time, item.priority, item.colorTheme];
-    if (sheetName === 'Journal_Notes') return [item.id, item.date, item.title, item.content, item.tags.join(',')];
-    if (sheetName === 'Cinema_Log') return [item.id, item.title, item.year, item.director, item.genre.join(','), item.status, item.posterUrl];
+    if (sheetName === 'Journal_Notes') return [item.id, item.date, item.title, item.content, Array.isArray(item.tags) ? item.tags.join(',') : item.tags];
+    if (sheetName === 'Cinema_Log') return [item.id, item.title, item.year, item.director, Array.isArray(item.genre) ? item.genre.join(',') : item.genre, item.status, item.posterUrl];
     return [];
   });
 

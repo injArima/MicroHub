@@ -4,7 +4,7 @@ const STORAGE_KEY = 'microhub_sheet_config';
 
 export const getSheetConfig = (): SheetConfig | null => {
     try {
-        const saved = localStorage.getItem(STORAGE_KEY);
+        const saved = sessionStorage.getItem(STORAGE_KEY);
         return saved ? JSON.parse(saved) : null;
     } catch (e) {
         return null;
@@ -18,9 +18,11 @@ export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Prom
             method: 'POST',
             body: JSON.stringify({ action: 'check_status', sheetId })
         });
-        return await response.json();
-    } catch (e) {
-        throw new Error("Failed to connect to script.");
+        const json = await response.json();
+        if (json.status === 'error') throw new Error(json.message);
+        return json;
+    } catch (e: any) {
+        throw new Error(e.message || "Failed to connect to script.");
     }
 };
 
@@ -30,7 +32,9 @@ export const setupNewUser = async (scriptUrl: string, sheetId: string, userName:
         method: 'POST',
         body: JSON.stringify({ action: 'setup_new_user', sheetId, userName })
     });
-    return await response.json();
+    const json = await response.json();
+    if (json.status === 'error') throw new Error(json.message);
+    return json;
 };
 
 // Login Returning User
@@ -53,15 +57,17 @@ export const wipeAndReset = async (scriptUrl: string, sheetId: string, userName:
         method: 'POST',
         body: JSON.stringify({ action: 'wipe_and_reset', sheetId, userName })
     });
-    return await response.json();
+    const json = await response.json();
+    if (json.status === 'error') throw new Error(json.message);
+    return json;
 };
 
 export const saveConfig = (config: SheetConfig) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
 };
 
 export const disconnectSheet = () => {
-    localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(STORAGE_KEY);
 };
 
 // Data Operations
@@ -73,17 +79,18 @@ export const fetchCloudData = async (config: SheetConfig): Promise<Partial<AppDa
         
         if (json.status === 'success') {
             return json.data;
+        } else {
+             throw new Error(json.message || "Fetch failed");
         }
-        return {};
-    } catch (e) {
+    } catch (e: any) {
         console.error("Fetch Error", e);
-        return {};
+        throw e;
     }
 };
 
-export const syncToCloud = async (config: SheetConfig, data: Partial<AppData>) => {
+export const syncToCloud = async (config: SheetConfig, data: Partial<AppData>): Promise<void> => {
     try {
-        fetch(config.scriptUrl, {
+        const response = await fetch(config.scriptUrl, {
             method: 'POST',
             body: JSON.stringify({
                 action: 'sync_push',
@@ -92,7 +99,12 @@ export const syncToCloud = async (config: SheetConfig, data: Partial<AppData>) =
                 data: data
             })
         });
-    } catch (e) {
+        const json = await response.json();
+        if (json.status !== 'success') {
+            throw new Error(json.message || "Sync failed");
+        }
+    } catch (e: any) {
         console.error("Sync Error", e);
+        throw new Error(e.message || "Network Error");
     }
 };

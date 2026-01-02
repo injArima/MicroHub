@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { JournalEntry, SheetConfig } from '../types';
 import { syncToCloud } from '../services/sheet';
 
@@ -8,6 +8,8 @@ interface JournalAppProps {
     onBack: () => void;
     sheetConfig: SheetConfig | null;
 }
+
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 const STORAGE_KEY = 'microhub_journal_entries';
 
@@ -37,18 +39,32 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     const [editorTitle, setEditorTitle] = useState('');
     const [editorContent, setEditorContent] = useState('');
     const [previewMode, setPreviewMode] = useState(false);
+    
+    const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Sync Logic
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     }, [entries]);
 
-    const saveToCloudNow = () => {
+    const saveToCloudNow = async () => {
         if (sheetConfig) {
-             // Gather all data state from LS
-             const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
-             const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
-             syncToCloud(sheetConfig, { journal: entries, tasks, movies });
+             setSaveStatus('saving');
+             setErrorMessage('');
+             try {
+                // Gather all data state from LS
+                const tasks = JSON.parse(localStorage.getItem('microhub_tasks') || '[]');
+                const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
+                
+                await syncToCloud(sheetConfig, { journal: entries, tasks, movies });
+                
+                setSaveStatus('saved');
+                setTimeout(() => setSaveStatus('idle'), 3000);
+             } catch (e: any) {
+                 setSaveStatus('error');
+                 setErrorMessage(e.message || "Save failed");
+             }
         }
     }
 
@@ -93,10 +109,8 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
             setEntries(prev => [newEntry, ...prev]);
         }
         
-        // Trigger save to cloud via effect or direct call? Direct call is safer here since we know the save point.
-        // However, React state update is async, so we should use an effect or setTimeout.
-        // Simplest: just wait a tick.
-        setTimeout(saveToCloudNow, 100);
+        // Wait for state to update then sync
+        setTimeout(() => saveToCloudNow(), 100);
 
         setView('list');
     };
@@ -199,10 +213,29 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     return (
         <div className="w-full min-h-screen bg-[#0f0f10] pb-24 pt-4 px-4">
             <div className="flex justify-between items-center mb-6">
-                <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white">
-                    <ArrowLeft size={20} />
-                </button>
-                <h1 className="text-xl font-bold text-white">Journal</h1>
+                <div className="flex items-center gap-4">
+                    <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white">
+                        <ArrowLeft size={20} />
+                    </button>
+                    <h1 className="text-xl font-bold text-white">Journal</h1>
+                </div>
+                 <div className="flex items-center gap-2">
+                    {saveStatus === 'saving' && (
+                        <div className="flex items-center gap-2 bg-[#27272a] px-3 py-1 rounded-full border border-white/5">
+                            <Loader2 size={12} className="animate-spin text-gray-400" />
+                        </div>
+                    )}
+                    {saveStatus === 'saved' && (
+                        <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
+                            <CheckCircle size={12} className="text-green-500" />
+                        </div>
+                    )}
+                    {saveStatus === 'error' && (
+                         <div className="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20" title={errorMessage}>
+                            <AlertTriangle size={12} className="text-red-400" />
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="bg-[#a78bfa] rounded-[32px] p-6 mb-8 relative overflow-hidden group cursor-pointer" onClick={handleCreateNew}>
@@ -241,6 +274,9 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
                     </div>
                 ))}
             </div>
+             {errorMessage && (
+                <p className="text-red-400 text-center text-xs mt-4 pb-4">{errorMessage}</p>
+            )}
         </div>
     );
 };

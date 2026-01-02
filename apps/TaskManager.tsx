@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Share2, Clock, Plus, Calendar, ArrowLeft } from 'lucide-react';
+import { Share2, Clock, Plus, Calendar, ArrowLeft, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Task, SheetConfig } from '../types';
 import { syncToCloud } from '../services/sheet';
 
@@ -7,6 +7,8 @@ interface TaskManagerProps {
     onBack: () => void;
     sheetConfig: SheetConfig | null;
 }
+
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -18,19 +20,38 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
      }
   });
 
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
   const [isDirty, setIsDirty] = useState(false);
 
   // Sync to Cloud Effect
   useEffect(() => {
+      // Always save to local storage immediately
       localStorage.setItem('microhub_tasks', JSON.stringify(tasks));
       
       if (isDirty && sheetConfig) {
-          const timeout = setTimeout(() => {
-              // Get other data from LS to ensure full payload
-              const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
-              const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
-              syncToCloud(sheetConfig, { tasks, journal, movies });
-              setIsDirty(false);
+          const timeout = setTimeout(async () => {
+              setSaveStatus('saving');
+              setErrorMessage('');
+              
+              try {
+                  // Get other data from LS to ensure full payload
+                  const journal = JSON.parse(localStorage.getItem('microhub_journal_entries') || '[]');
+                  const movies = JSON.parse(localStorage.getItem('microhub_movies') || '[]');
+                  
+                  await syncToCloud(sheetConfig, { tasks, journal, movies });
+                  
+                  setSaveStatus('saved');
+                  setIsDirty(false);
+                  
+                  // Reset status after 3 seconds
+                  setTimeout(() => {
+                      setSaveStatus(prev => prev === 'saved' ? 'idle' : prev);
+                  }, 3000);
+              } catch (e: any) {
+                  setSaveStatus('error');
+                  setErrorMessage(e.message || "Failed to save");
+              }
           }, 2000); // Debounce
           return () => clearTimeout(timeout);
       }
@@ -49,6 +70,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
     };
     setTasks([newTask, ...tasks]);
     setIsDirty(true);
+    setSaveStatus('idle'); // Clear previous states
   };
 
   const dates = [
@@ -85,8 +107,26 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
             <ArrowLeft size={20} />
         </button>
         <div className="flex items-center gap-2">
+            {saveStatus === 'saving' && (
+                <div className="flex items-center gap-2 bg-[#27272a] px-3 py-1 rounded-full border border-white/5">
+                    <Loader2 size={12} className="animate-spin text-gray-400" />
+                    <span className="text-xs text-gray-400">Syncing...</span>
+                </div>
+            )}
+            {saveStatus === 'saved' && (
+                <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
+                    <CheckCircle size={12} className="text-green-500" />
+                    <span className="text-xs text-green-500">Saved</span>
+                </div>
+            )}
+            {saveStatus === 'error' && (
+                <div className="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20" title={errorMessage}>
+                    <AlertTriangle size={12} className="text-red-400" />
+                    <span className="text-xs text-red-400">Error</span>
+                </div>
+            )}
             <button className="bg-[#fde047] text-black px-4 py-2 rounded-full font-semibold text-sm flex items-center gap-2">
-                <span className="text-xs">✏️</span> Edit Task
+                <span className="text-xs">✏️</span> Edit
             </button>
         </div>
       </div>
@@ -156,6 +196,10 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
        >
           <Plus size={20} /> Create New Task
        </button>
+       
+       {errorMessage && (
+           <p className="text-red-400 text-center text-xs mt-4">{errorMessage}</p>
+       )}
     </div>
   );
 };
