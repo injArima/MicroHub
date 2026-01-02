@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Movie, SheetConfig } from '../types';
 import { searchMovie } from '../services/movieService';
 import { syncSheet } from '../services/sheet';
@@ -31,6 +31,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
 
+    // Auto Sync Logic
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
         if (isDirty && sheetConfig) {
@@ -39,7 +40,6 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 setErrorMessage('');
                 try {
                     await syncSheet(sheetConfig, 'Cinema_Log', movies);
-                    
                     setSaveStatus('saved');
                     setIsDirty(false);
                     setTimeout(() => setSaveStatus('idle'), 3000);
@@ -51,6 +51,22 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
              return () => clearTimeout(timeout);
         }
     }, [movies, sheetConfig, isDirty]);
+
+    // Manual Sync Handler
+    const handleManualSync = async () => {
+        if (!sheetConfig) return;
+        setSaveStatus('saving');
+        setErrorMessage('');
+        try {
+            await syncSheet(sheetConfig, 'Cinema_Log', movies);
+            setSaveStatus('saved');
+            setIsDirty(false);
+            setTimeout(() => setSaveStatus('idle'), 3000);
+        } catch (e: any) {
+            setSaveStatus('error');
+            setErrorMessage(e.message || "Manual sync failed");
+        }
+    };
 
     const handleAddMovie = async () => {
         if (!searchQuery.trim()) return;
@@ -138,6 +154,16 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                          <div className="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20" title={errorMessage}>
                             <AlertTriangle size={12} className="text-red-400" />
                         </div>
+                    )}
+                    {/* Manual Sync Button */}
+                     {sheetConfig && (
+                        <button 
+                            onClick={handleManualSync}
+                            className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#3f3f46] transition-colors"
+                            title="Force Sync"
+                        >
+                            <RefreshCw size={16} className={saveStatus === 'saving' ? 'animate-spin' : ''} />
+                        </button>
                     )}
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Share2, Clock, Plus, Calendar, ArrowLeft, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Share2, Clock, Plus, Calendar, ArrowLeft, Loader2, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Task, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
 
@@ -24,7 +24,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isDirty, setIsDirty] = useState(false);
 
-  // Sync to Cloud Effect
+  // Auto Sync to Cloud Effect
   useEffect(() => {
       // Always save to local storage immediately
       localStorage.setItem('microhub_tasks', JSON.stringify(tasks));
@@ -52,6 +52,22 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
           return () => clearTimeout(timeout);
       }
   }, [tasks, sheetConfig, isDirty]);
+
+  // Manual Sync Handler
+  const handleManualSync = async () => {
+      if (!sheetConfig) return;
+      setSaveStatus('saving');
+      setErrorMessage('');
+      try {
+          await syncSheet(sheetConfig, 'Task_Tracker', tasks);
+          setSaveStatus('saved');
+          setIsDirty(false);
+          setTimeout(() => setSaveStatus('idle'), 3000);
+      } catch (e: any) {
+          setSaveStatus('error');
+          setErrorMessage(e.message || "Manual sync failed");
+      }
+  };
 
   const addTask = () => {
     // Dummy task for demo
@@ -120,6 +136,16 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                     <AlertTriangle size={12} className="text-red-400" />
                     <span className="text-xs text-red-400">Error</span>
                 </div>
+            )}
+             {/* Manual Sync Button */}
+             {sheetConfig && (
+                <button 
+                    onClick={handleManualSync}
+                    className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#3f3f46] transition-colors"
+                    title="Force Sync"
+                >
+                    <RefreshCw size={16} className={saveStatus === 'saving' ? 'animate-spin' : ''} />
+                </button>
             )}
             <button className="bg-[#fde047] text-black px-4 py-2 rounded-full font-semibold text-sm flex items-center gap-2">
                 <span className="text-xs">✏️</span> Edit

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
 import { JournalEntry, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
 
@@ -40,29 +40,50 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     const [editorContent, setEditorContent] = useState('');
     const [previewMode, setPreviewMode] = useState(false);
     
+    // Sync States
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isDirty, setIsDirty] = useState(false);
 
-    // Sync Logic
+    // 1. Auto-Save Logic (Effect based to avoid stale closures)
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    }, [entries]);
 
-    const saveToCloudNow = async () => {
-        if (sheetConfig) {
-             setSaveStatus('saving');
-             setErrorMessage('');
-             try {
-                await syncSheet(sheetConfig, 'Journal_Notes', entries);
-                
-                setSaveStatus('saved');
-                setTimeout(() => setSaveStatus('idle'), 3000);
-             } catch (e: any) {
-                 setSaveStatus('error');
-                 setErrorMessage(e.message || "Save failed");
-             }
+        if (isDirty && sheetConfig) {
+            const timeout = setTimeout(async () => {
+                setSaveStatus('saving');
+                setErrorMessage('');
+                try {
+                    await syncSheet(sheetConfig, 'Journal_Notes', entries);
+                    setSaveStatus('saved');
+                    setIsDirty(false);
+                    setTimeout(() => setSaveStatus('idle'), 3000);
+                } catch (e: any) {
+                    setSaveStatus('error');
+                    setErrorMessage(e.message || "Auto-save failed");
+                }
+            }, 2000); // 2-second debounce
+            return () => clearTimeout(timeout);
         }
-    }
+    }, [entries, isDirty, sheetConfig]);
+
+    // 2. Manual Sync Handler
+    const handleManualSync = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!sheetConfig) return;
+        
+        setSaveStatus('saving');
+        setErrorMessage('');
+        try {
+            await syncSheet(sheetConfig, 'Journal_Notes', entries);
+            setSaveStatus('saved');
+            setIsDirty(false);
+            setTimeout(() => setSaveStatus('idle'), 3000);
+        } catch (e: any) {
+            setSaveStatus('error');
+            setErrorMessage(e.message || "Manual sync failed");
+        }
+    };
 
     const handleCreateNew = () => {
         setActiveEntry(null);
@@ -105,9 +126,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
             setEntries(prev => [newEntry, ...prev]);
         }
         
-        // Wait for state to update then sync
-        setTimeout(() => saveToCloudNow(), 100);
-
+        setIsDirty(true); // Mark as dirty to trigger auto-save
         setView('list');
     };
 
@@ -216,6 +235,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
                     <h1 className="text-xl font-bold text-white">Journal</h1>
                 </div>
                  <div className="flex items-center gap-2">
+                    {/* Status Indicators */}
                     {saveStatus === 'saving' && (
                         <div className="flex items-center gap-2 bg-[#27272a] px-3 py-1 rounded-full border border-white/5">
                             <Loader2 size={12} className="animate-spin text-gray-400" />
@@ -230,6 +250,16 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
                          <div className="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20" title={errorMessage}>
                             <AlertTriangle size={12} className="text-red-400" />
                         </div>
+                    )}
+                    {/* Manual Sync Button */}
+                    {sheetConfig && (
+                        <button 
+                            onClick={handleManualSync}
+                            className="w-8 h-8 rounded-full bg-[#27272a] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#3f3f46] transition-colors"
+                            title="Force Sync"
+                        >
+                            <RefreshCw size={14} className={saveStatus === 'saving' ? 'animate-spin' : ''} />
+                        </button>
                     )}
                 </div>
             </div>
