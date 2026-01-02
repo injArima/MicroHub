@@ -11,27 +11,30 @@ export const getSheetConfig = (): SheetConfig | null => {
     }
 };
 
-interface InitResponse {
-    status: 'created' | 'existing' | 'error';
-    authKey?: string;
-    message?: string;
-}
-
-// Step 1: Initialize connection
-export const initializeConnection = async (scriptUrl: string, sheetId: string): Promise<InitResponse> => {
+// Check if user is New or Returning
+export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Promise<{status: 'new_user' | 'returning_user', userName?: string}> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
-            body: JSON.stringify({ action: 'init', sheetId })
+            body: JSON.stringify({ action: 'check_status', sheetId })
         });
         return await response.json();
     } catch (e) {
-        throw new Error("Failed to connect to script. Check URL.");
+        throw new Error("Failed to connect to script.");
     }
 };
 
-// Step 2: Login / Verify
-export const verifyConnection = async (scriptUrl: string, sheetId: string, authKey: string): Promise<boolean> => {
+// Setup New User
+export const setupNewUser = async (scriptUrl: string, sheetId: string, userName: string): Promise<{status: 'success', rawKey: string}> => {
+    const response = await fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'setup_new_user', sheetId, userName })
+    });
+    return await response.json();
+};
+
+// Login Returning User
+export const loginUser = async (scriptUrl: string, sheetId: string, authKey: string): Promise<boolean> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
@@ -42,6 +45,15 @@ export const verifyConnection = async (scriptUrl: string, sheetId: string, authK
     } catch (e) {
         return false;
     }
+};
+
+// Wipe and Reset
+export const wipeAndReset = async (scriptUrl: string, sheetId: string, userName: string): Promise<{status: 'success', rawKey: string}> => {
+    const response = await fetch(scriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'wipe_and_reset', sheetId, userName })
+    });
+    return await response.json();
 };
 
 export const saveConfig = (config: SheetConfig) => {
@@ -70,12 +82,11 @@ export const fetchCloudData = async (config: SheetConfig): Promise<Partial<AppDa
 };
 
 export const syncToCloud = async (config: SheetConfig, data: Partial<AppData>) => {
-    // Fire and forget, don't block UI
     try {
         fetch(config.scriptUrl, {
             method: 'POST',
             body: JSON.stringify({
-                action: 'sync',
+                action: 'sync_push',
                 sheetId: config.sheetId,
                 authKey: config.authKey,
                 data: data
