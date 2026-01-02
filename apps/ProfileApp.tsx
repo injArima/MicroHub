@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Database, CheckCircle, XCircle, Loader2, Link, FileSpreadsheet, Key, Server, User, Trash2, AlertTriangle } from 'lucide-react';
 import { SheetConfig } from '../types';
-import { checkSheetStatus, setupNewUser, loginUser, wipeAndReset, saveConfig, disconnectSheet } from '../services/sheet.ts';
+import { checkSheetStatus, setupNewUser, loginUser, wipeAndReset, saveConfig, disconnectSheet } from '../services/sheet';
 
 interface ProfileAppProps {
     config: SheetConfig | null;

@@ -8,7 +8,7 @@ import JournalApp from './apps/JournalApp';
 import MovieApp from './apps/MovieApp';
 import ProfileApp from './apps/ProfileApp';
 import { AppRoute, SheetConfig } from './types';
-import { getSheetConfig, fetchCloudData } from './services/sheet.ts';
+import { getSheetConfig, fetchCloudData } from './services/sheet';
 import { Loader2 } from 'lucide-react';
 
 const App: React.FC = () => {
