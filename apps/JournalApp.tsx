@@ -47,8 +47,10 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
 
     // 1. Auto-Save Logic (Effect based to avoid stale closures)
     useEffect(() => {
+        // Save to local storage immediately
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 
+        // Auto-sync to cloud if configured and dirty
         if (isDirty && sheetConfig) {
             const timeout = setTimeout(async () => {
                 setSaveStatus('saving');
