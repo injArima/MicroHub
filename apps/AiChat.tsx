@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Send, Bot, User, ArrowLeft, Sparkles } from 'lucide-react';
 import { generateText } from '../services/gemini';
 import { ChatMessage } from '../types';
 
@@ -9,116 +9,82 @@ interface AiChatProps {
 
 const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: '0', role: 'model', text: "Hello! I'm Gemini. How can I help you today?" }
+    { id: '0', role: 'model', text: "Hello. I am Gemini. How can I assist you?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
-
     const userMsg: ChatMessage = { id: Date.now().toString(), role: 'user', text: input };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
-
     try {
       const responseText = await generateText(input);
-      const botMsg: ChatMessage = { id: (Date.now() + 1).toString(), role: 'model', text: responseText };
-      setMessages(prev => [...prev, botMsg]);
-    } catch (error) {
-      const errorMsg: ChatMessage = { 
-          id: (Date.now() + 1).toString(), 
-          role: 'model', 
-          text: "I'm having trouble connecting right now.", 
-          isError: true 
-      };
-      setMessages(prev => [...prev, errorMsg]);
+      setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'model', text: responseText }]);
+    } catch {
+      setMessages(prev => [...prev, { id: 'err', role: 'model', text: "Connection error.", isError: true }]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full h-screen flex flex-col bg-[#0f0f10] pb-24">
-       {/* Header */}
-       <div className="p-4 flex items-center gap-4 bg-[#0f0f10] sticky top-0 z-10 border-b border-white/5">
-        <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white hover:bg-[#3f3f46] transition-colors">
+    <div className="w-full h-screen flex flex-col pb-24 pt-8 px-4">
+       <div className="flex items-center gap-4 mb-4 px-2">
+        <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
             <ArrowLeft size={20} />
         </button>
         <div>
-            <h1 className="text-xl font-bold text-white">Gemini Assistant</h1>
-            <p className="text-xs text-[#d9f99d]">Online</p>
+            <h1 className="text-lg font-bold text-white flex items-center gap-2">Gemini <Sparkles size={14} className="text-[#d9f99d]"/></h1>
+            <p className="text-[10px] text-[#d9f99d] uppercase tracking-wider font-bold">Online</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div className="flex-1 overflow-y-auto space-y-4 px-2 no-scrollbar">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-              
-              <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${msg.role === 'model' ? 'bg-[#d9f99d] text-black' : 'bg-[#27272a] text-white'}`}>
-                {msg.role === 'model' ? <Bot size={16} /> : <User size={16} />}
-              </div>
-
-              <div className={`p-4 rounded-[20px] text-sm leading-relaxed ${
+            <div className={`p-4 rounded-[20px] max-w-[80%] text-sm leading-relaxed ${
                 msg.role === 'user' 
-                  ? 'bg-[#27272a] text-white rounded-br-none' 
-                  : msg.isError 
-                    ? 'bg-red-500/10 text-red-400 border border-red-500/20 rounded-bl-none'
-                    : 'bg-[#d9f99d] text-black rounded-bl-none'
+                  ? 'bg-white/10 text-white rounded-br-none border border-white/5' 
+                  : 'glass-card text-[#d9f99d] rounded-bl-none border border-[#d9f99d]/20'
               }`}>
-                {msg.isError && <AlertCircle size={16} className="inline mr-2 mb-1" />}
                 {msg.text}
-              </div>
-
             </div>
           </div>
         ))}
         {isLoading && (
             <div className="flex justify-start">
-                 <div className="flex items-end gap-2">
-                    <div className="w-8 h-8 rounded-full bg-[#d9f99d] flex items-center justify-center text-black">
-                        <Bot size={16} />
-                    </div>
-                    <div className="bg-[#d9f99d] px-4 py-3 rounded-[20px] rounded-bl-none">
-                        <div className="flex gap-1">
-                            <span className="w-2 h-2 bg-black/40 rounded-full animate-bounce"></span>
-                            <span className="w-2 h-2 bg-black/40 rounded-full animate-bounce delay-75"></span>
-                            <span className="w-2 h-2 bg-black/40 rounded-full animate-bounce delay-150"></span>
-                        </div>
-                    </div>
-                 </div>
+                 <div className="glass-card px-4 py-3 rounded-[20px] rounded-bl-none flex gap-1 items-center">
+                    <span className="w-1.5 h-1.5 bg-[#d9f99d] rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-[#d9f99d] rounded-full animate-bounce delay-75"></span>
+                    <span className="w-1.5 h-1.5 bg-[#d9f99d] rounded-full animate-bounce delay-150"></span>
+                </div>
             </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 bg-[#0f0f10]">
-        <div className="bg-[#27272a] rounded-[32px] p-2 pl-4 flex items-center gap-2 border border-white/5 focus-within:border-[#fde047] transition-colors">
+      <div className="mt-4">
+        <div className="glass-card rounded-full p-1 pl-4 flex items-center gap-2 focus-within:border-[#d9f99d]/50 transition-colors">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask anything..."
-            className="flex-1 bg-transparent text-white outline-none text-sm placeholder:text-gray-500 h-10"
+            placeholder="Ask something..."
+            className="flex-1 bg-transparent text-white outline-none text-sm h-10 placeholder:text-gray-600"
           />
           <button 
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="w-10 h-10 rounded-full bg-[#fde047] flex items-center justify-center text-black disabled:opacity-50 hover:bg-[#facc15] transition-colors"
+            className="w-10 h-10 rounded-full bg-[#d9f99d] flex items-center justify-center text-black hover:scale-105 transition-transform disabled:opacity-50"
           >
-            <Send size={18} />
+            <Send size={16} />
           </button>
         </div>
       </div>

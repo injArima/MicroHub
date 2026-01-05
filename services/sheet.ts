@@ -11,55 +11,59 @@ export const getSheetConfig = (): SheetConfig | null => {
     }
 };
 
-// Check if user is New or Returning
-export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Promise<{status: 'new_user' | 'returning_user', userName?: string}> => {
+// 1. Check if user is New or Returning
+export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Promise<{status: 'new_user' | 'returning_user' | 'error', userName?: string, message?: string}> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
             body: JSON.stringify({ action: 'check_status', sheetId })
         });
         const json = await response.json();
-        if (json.status === 'error') throw new Error(json.message);
         return json;
     } catch (e: any) {
-        throw new Error(e.message || "Failed to connect to script.");
+        return { status: 'error', message: e.message || "Failed to connect to script." };
     }
 };
 
-// Setup New User
-export const setupNewUser = async (scriptUrl: string, sheetId: string, userName: string): Promise<{status: 'success', rawKey: string}> => {
-    const response = await fetch(scriptUrl, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'setup_new_user', sheetId, userName })
-    });
-    const json = await response.json();
-    if (json.status === 'error') throw new Error(json.message);
-    return json;
+// 2. Setup New User
+export const setupNewUser = async (scriptUrl: string, sheetId: string, userName: string): Promise<{status: 'success' | 'error', rawKey?: string, message?: string}> => {
+    try {
+        const response = await fetch(scriptUrl, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'setup_new_user', sheetId, userName })
+        });
+        const json = await response.json();
+        return json;
+    } catch (e: any) {
+        return { status: 'error', message: e.message };
+    }
 };
 
-// Login Returning User
-export const loginUser = async (scriptUrl: string, sheetId: string, authKey: string): Promise<boolean> => {
+// 3. Login Returning User
+export const loginUser = async (scriptUrl: string, sheetId: string, authKey: string): Promise<{status: 'success' | 'error', message?: string}> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
             body: JSON.stringify({ action: 'login', sheetId, authKey })
         });
         const data = await response.json();
-        return data.status === 'success';
-    } catch (e) {
-        return false;
+        return data;
+    } catch (e: any) {
+        return { status: 'error', message: e.message };
     }
 };
 
-// Wipe and Reset
-export const wipeAndReset = async (scriptUrl: string, sheetId: string, userName: string): Promise<{status: 'success', rawKey: string}> => {
-    const response = await fetch(scriptUrl, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'wipe_and_reset', sheetId, userName })
-    });
-    const json = await response.json();
-    if (json.status === 'error') throw new Error(json.message);
-    return json;
+// 4. Reset/Wipe Sheet (No Auth required for lost key scenario)
+export const resetSheet = async (scriptUrl: string, sheetId: string): Promise<{status: 'success' | 'error', message?: string}> => {
+    try {
+        const response = await fetch(scriptUrl, {
+             method: 'POST',
+             body: JSON.stringify({ action: 'reset_sheet', sheetId })
+        });
+        return await response.json();
+    } catch (e: any) {
+        return { status: 'error', message: e.message };
+    }
 };
 
 export const saveConfig = (config: SheetConfig) => {

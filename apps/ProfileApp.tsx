@@ -1,325 +1,326 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Database, CheckCircle, XCircle, Loader2, Link, FileSpreadsheet, Key, Server, User, Trash2, AlertTriangle } from 'lucide-react';
+import { Database, Loader2, FileSpreadsheet, Server, User as UserIcon, Lock, Key, CheckCircle, AlertTriangle, RefreshCw, Trash2, ArrowRight } from 'lucide-react';
 import { SheetConfig } from '../types';
-import { checkSheetStatus, setupNewUser, loginUser, wipeAndReset, saveConfig, disconnectSheet } from '../services/sheet';
+import { saveConfig, disconnectSheet, setupNewUser, checkSheetStatus, loginUser, resetSheet } from '../services/sheet';
 
 interface ProfileAppProps {
     config: SheetConfig | null;
     onConnect: (config: SheetConfig) => void;
     onDisconnect: () => void;
-    onBack: () => void;
 }
 
-type SetupState = 'INPUT_DETAILS' | 'CHECKING' | 'NEW_USER_FORM' | 'RETURNING_USER_LOGIN' | 'SHOW_NEW_KEY' | 'WIPE_CONFIRM';
+type ConnectionStep = 'input' | 'auth_returning' | 'auth_new_success' | 'onboarding';
 
-const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect, onBack }) => {
-    // Input State
+const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect }) => {
+    // State
+    const [step, setStep] = useState<ConnectionStep>('input');
     const [scriptUrl, setScriptUrl] = useState('');
     const [sheetId, setSheetId] = useState('');
-    
-    // Auth State
-    const [userName, setUserName] = useState('');
-    const [authKey, setAuthKey] = useState('');
-    const [detectedUser, setDetectedUser] = useState('');
-    
-    // UI State
-    const [viewState, setViewState] = useState<SetupState>('INPUT_DETAILS');
+    const [accessKey, setAccessKey] = useState('');
     const [generatedKey, setGeneratedKey] = useState('');
+    const [userName, setUserName] = useState('');
+    
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+    const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-    const handleInitialConnect = async () => {
+    // Step 1: Check Status
+    const handleCheckConnection = async () => {
         if (!scriptUrl.trim() || !sheetId.trim()) {
-            setError('Please enter both Script URL and Sheet ID');
+            setErrorMsg("Enter URL and ID");
             return;
         }
         setIsLoading(true);
-        setError('');
-        
+        setErrorMsg('');
+
         try {
-            const status = await checkSheetStatus(scriptUrl, sheetId);
-            if (status.status === 'new_user') {
-                setViewState('NEW_USER_FORM');
+            const statusRes = await checkSheetStatus(scriptUrl, sheetId);
+            
+            if (statusRes.status === 'returning_user') {
+                setStep('auth_returning');
+            } else if (statusRes.status === 'new_user') {
+                setStep('onboarding');
             } else {
-                setDetectedUser(status.userName || 'Unknown User');
-                setViewState('RETURNING_USER_LOGIN');
+                setErrorMsg(statusRes.message || "Connection failed");
             }
-        } catch (e) {
-            setError('Connection failed. Check permissions or URL.');
+        } catch (e: any) {
+            setErrorMsg(e.message);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleSetup = async () => {
-        if (!userName.trim()) return;
+    const performSetup = async () => {
+        if (!userName.trim()) {
+            setErrorMsg("Please enter your name");
+            return;
+        }
         setIsLoading(true);
         try {
-            const res = await setupNewUser(scriptUrl, sheetId, userName);
-            setGeneratedKey(res.rawKey);
-            setViewState('SHOW_NEW_KEY');
-        } catch (e) {
-            setError('Setup failed.');
+            const setupRes = await setupNewUser(scriptUrl, sheetId, userName);
+            if (setupRes.status === 'success' && setupRes.rawKey) {
+                setGeneratedKey(setupRes.rawKey);
+                setStep('auth_new_success');
+                
+                const newConfig: SheetConfig = { 
+                    scriptUrl, sheetId, authKey: setupRes.rawKey, connectedAt: new Date().toISOString() 
+                };
+                saveConfig(newConfig);
+            } else {
+                setErrorMsg("Setup Failed: " + setupRes.message);
+            }
+        } catch (e: any) {
+            setErrorMsg(e.message);
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Step 2: Login Existing User
     const handleLogin = async () => {
-        if (!authKey.trim()) return;
+        if (!accessKey.trim() || accessKey.length !== 6) {
+            setErrorMsg("Invalid Key format");
+            return;
+        }
         setIsLoading(true);
-        setError('');
         try {
-            const success = await loginUser(scriptUrl, sheetId, authKey);
-            if (success) {
-                completeConnection(authKey, detectedUser);
+            const loginRes = await loginUser(scriptUrl, sheetId, accessKey);
+            if (loginRes.status === 'success') {
+                const newConfig: SheetConfig = { 
+                    scriptUrl, sheetId, authKey: accessKey, connectedAt: new Date().toISOString() 
+                };
+                saveConfig(newConfig);
+                onConnect(newConfig);
             } else {
-                setError('Invalid Access Key.');
+                setErrorMsg(loginRes.message || "Invalid Key");
             }
-        } catch (e) {
-            setError('Login failed.');
+        } catch (e: any) {
+            setErrorMsg(e.message);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleWipe = async () => {
-        // Trigger wipe
+    // Step 2.5: Wipe and Reset
+    const handleReset = async () => {
         setIsLoading(true);
         try {
-            // We reuse the new user setup flow but call the wipe endpoint
-            // We need a name for the fresh start
-            const res = await wipeAndReset(scriptUrl, sheetId, detectedUser || "Reset User");
-            setGeneratedKey(res.rawKey);
-            setViewState('SHOW_NEW_KEY');
-        } catch (e) {
-            setError('Wipe failed.');
+            const resetRes = await resetSheet(scriptUrl, sheetId);
+            if (resetRes.status === 'success') {
+                // After reset, go to onboarding to ask for name
+                setShowResetConfirm(false);
+                setAccessKey('');
+                setUserName('');
+                setStep('onboarding');
+            } else {
+                setErrorMsg(resetRes.message || "Reset failed");
+            }
+        } catch (e: any) {
+            setErrorMsg(e.message);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const completeConnection = (key: string, name?: string) => {
-        const newConfig: SheetConfig = {
-            scriptUrl,
-            sheetId,
-            authKey: key,
-            connectedAt: new Date().toISOString()
-        };
-        saveConfig(newConfig);
-        onConnect(newConfig);
-    };
-
-    const handleKeySaved = () => {
-        completeConnection(generatedKey, userName || detectedUser);
-    };
-
-    const handleDisconnect = () => {
-        disconnectSheet();
-        onDisconnect();
-        setScriptUrl('');
-        setSheetId('');
-        setAuthKey('');
-        setUserName('');
-        setViewState('INPUT_DETAILS');
+    // Step 3: Finish New User Setup
+    const finishSetup = () => {
+        if (generatedKey) {
+            const newConfig: SheetConfig = { 
+                scriptUrl, sheetId, authKey: generatedKey, connectedAt: new Date().toISOString() 
+            };
+            onConnect(newConfig);
+        }
     };
 
     return (
-        <div className="w-full min-h-screen bg-[#0f0f10] flex flex-col">
-            {/* Header */}
-            <div className="p-4 flex items-center justify-between sticky top-0 bg-[#0f0f10] z-10 border-b border-white/5">
-                <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white hover:bg-[#3f3f46] transition-colors">
-                    <ArrowLeft size={20} />
-                </button>
-                <h1 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Settings</h1>
-                <div className="w-10" /> 
+        <div className="w-full min-h-screen pb-32 pt-12 px-6 flex flex-col">
+            <div className="flex flex-col items-center mb-8">
+                <div className="w-24 h-24 rounded-full glass-card flex items-center justify-center mb-4 border border-white/10 relative">
+                    {config ? <CheckCircle size={40} className="text-[#d9f99d]" /> : <UserIcon size={40} className="text-gray-400" />}
+                    {config && <div className="absolute inset-0 bg-[#d9f99d]/20 rounded-full blur-xl animate-pulse"></div>}
+                </div>
+                <h1 className="text-2xl font-light text-white">Cloud <span className="font-bold text-[#d9f99d]">Sync</span></h1>
+                <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest">{config ? 'Connected' : 'Disconnected'}</p>
             </div>
 
-            <div className="flex-1 p-6 flex flex-col items-center max-w-sm mx-auto w-full">
-                
-                {/* Hero Icon */}
-                <div className={`w-24 h-24 rounded-[32px] flex items-center justify-center mb-6 shadow-2xl transition-all ${config ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-[#27272a] text-gray-400 border border-white/5'}`}>
-                    <FileSpreadsheet size={40} />
-                </div>
-
-                <h2 className="text-2xl font-bold text-white mb-2">
-                    {config ? 'Database Syncing' : 'Google Sheets DB'}
-                </h2>
-                <p className="text-gray-400 text-center text-sm mb-10 leading-relaxed">
-                    {config 
-                        ? 'Your app is actively syncing tasks, notes, and inventory to your spreadsheet.' 
-                        : 'Connect a Google Sheet to enable multi-device sync and detailed data management.'}
-                </p>
-
-                {config ? (
-                    <div className="w-full space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="bg-[#27272a] p-5 rounded-[24px] border border-white/5">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
-                                    <Database size={20} />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Status</p>
-                                    <p className="text-white font-medium flex items-center gap-2">
-                                        Online <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                                    </p>
-                                </div>
-                            </div>
-                            
-                            <div className="space-y-3">
-                                <div className="bg-[#18181b] p-3 rounded-xl">
-                                    <p className="text-xs text-gray-500 mb-1">Sheet ID</p>
-                                    <p className="text-white font-mono text-xs truncate">{config.sheetId}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button 
-                            onClick={handleDisconnect}
-                            disabled={isLoading}
-                            className="w-full py-4 rounded-[24px] border border-red-500/20 text-red-400 font-bold text-sm hover:bg-red-500/10 transition-colors flex items-center justify-center gap-2"
-                        >
-                            <XCircle size={18} /> Disconnect
-                        </button>
-                    </div>
-                ) : (
-                    <div className="w-full space-y-6">
-                        
-                        {/* 1. INITIAL CONNECTION FORM */}
-                        {viewState === 'INPUT_DETAILS' && (
-                            <>
-                                <div className="space-y-4">
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-gray-500 ml-4 uppercase tracking-wider">Web App URL</label>
-                                        <div className="bg-[#27272a] p-3 rounded-[24px] border border-white/5 flex items-center gap-3">
-                                            <Server size={18} className="text-gray-500" />
-                                            <input 
-                                                value={scriptUrl} 
-                                                onChange={e => setScriptUrl(e.target.value)}
-                                                className="bg-transparent text-white outline-none text-sm w-full"
-                                                placeholder="https://script.google.com/..." 
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-gray-500 ml-4 uppercase tracking-wider">Sheet ID</label>
-                                        <div className="bg-[#27272a] p-3 rounded-[24px] border border-white/5 flex items-center gap-3">
-                                            <Link size={18} className="text-gray-500" />
-                                            <input 
-                                                value={sheetId} 
-                                                onChange={e => setSheetId(e.target.value)}
-                                                className="bg-transparent text-white outline-none text-sm w-full"
-                                                placeholder="Spreadsheet ID" 
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <button onClick={handleInitialConnect} disabled={isLoading} className="w-full h-14 bg-white text-black font-bold rounded-full flex items-center justify-center gap-2 hover:bg-gray-200">
-                                    {isLoading ? <Loader2 className="animate-spin" /> : 'Connect'}
-                                </button>
-                            </>
-                        )}
-
-                        {/* 2. NEW USER SETUP */}
-                        {viewState === 'NEW_USER_FORM' && (
-                            <div className="animate-in slide-in-from-right-8">
-                                <div className="text-center mb-6">
-                                    <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mx-auto mb-2">
-                                        <User size={20} />
-                                    </div>
-                                    <h3 className="text-lg font-bold">New Database Detected</h3>
-                                    <p className="text-xs text-gray-500">Let's set up your profile.</p>
-                                </div>
-                                <div className="space-y-4">
-                                     <div className="bg-[#27272a] p-3 rounded-[24px] border border-white/5 flex items-center gap-3">
-                                        <User size={18} className="text-gray-500" />
-                                        <input 
-                                            value={userName} 
-                                            onChange={e => setUserName(e.target.value)}
-                                            className="bg-transparent text-white outline-none text-sm w-full"
-                                            placeholder="Enter your name" 
-                                        />
-                                    </div>
-                                    <button onClick={handleSetup} disabled={isLoading} className="w-full h-14 bg-blue-500 text-white font-bold rounded-full flex items-center justify-center gap-2">
-                                        {isLoading ? <Loader2 className="animate-spin" /> : 'Create Profile'}
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 3. RETURNING USER LOGIN OR WIPE */}
-                        {viewState === 'RETURNING_USER_LOGIN' && (
-                             <div className="animate-in slide-in-from-right-8">
-                                <div className="text-center mb-6">
-                                    <h3 className="text-lg font-bold">Welcome Back, {detectedUser}</h3>
-                                    <p className="text-xs text-gray-500">Enter your 6-digit key to sync.</p>
-                                </div>
-                                
-                                <div className="space-y-6">
-                                    <div className="bg-[#27272a] p-3 rounded-[24px] border border-white/5 flex items-center gap-3">
-                                        <Key size={18} className="text-gray-500" />
-                                        <input 
-                                            value={authKey} 
-                                            onChange={e => setAuthKey(e.target.value)}
-                                            className="bg-transparent text-white outline-none text-sm w-full"
-                                            placeholder="6-digit Master Key" 
-                                            type="password"
-                                        />
-                                    </div>
-                                    
-                                    <button onClick={handleLogin} disabled={isLoading || !authKey} className="w-full h-14 bg-white text-black font-bold rounded-full flex items-center justify-center gap-2">
-                                        {isLoading ? <Loader2 className="animate-spin" /> : 'Sync Data'}
-                                    </button>
-
-                                    <div className="pt-6 border-t border-white/5">
-                                        <button onClick={() => setViewState('WIPE_CONFIRM')} className="w-full py-3 text-xs font-bold text-red-500 flex items-center justify-center gap-2 hover:bg-red-500/10 rounded-full transition-colors">
-                                            <Trash2 size={14} /> Wipe Sheet & Start Fresh
-                                        </button>
-                                    </div>
-                                </div>
-                             </div>
-                        )}
-
-                         {/* 4. WIPE CONFIRMATION */}
-                         {viewState === 'WIPE_CONFIRM' && (
-                            <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-[32px] text-center animate-in zoom-in-95">
-                                <AlertTriangle size={32} className="text-red-500 mx-auto mb-4" />
-                                <h3 className="text-red-400 font-bold text-lg mb-2">Are you sure?</h3>
-                                <p className="text-gray-400 text-xs mb-6">This will delete ALL data in the Google Sheet and generate a new access key. This cannot be undone.</p>
-                                <div className="flex gap-3">
-                                    <button onClick={() => setViewState('RETURNING_USER_LOGIN')} className="flex-1 py-3 bg-[#27272a] rounded-full text-xs font-bold text-white">Cancel</button>
-                                    <button onClick={handleWipe} className="flex-1 py-3 bg-red-500 rounded-full text-xs font-bold text-white hover:bg-red-600">Yes, Wipe It</button>
-                                </div>
-                            </div>
-                         )}
-
-                        {/* 5. DISPLAY GENERATED KEY (Success State) */}
-                        {viewState === 'SHOW_NEW_KEY' && (
-                            <div className="bg-[#27272a] p-6 rounded-[24px] border border-green-500/20 flex flex-col items-center text-center animate-in zoom-in-95">
-                                <Key size={32} className="text-green-500 mb-4" />
-                                <h3 className="text-white font-bold text-lg mb-2">Master Access Key</h3>
-                                <p className="text-gray-400 text-xs mb-6">Write this down. You will need it to login from other devices. We do not store this key unhashed.</p>
-                                
-                                <div className="bg-black/40 p-4 rounded-xl w-full mb-6 border border-white/10">
-                                    <span className="text-3xl font-mono text-green-400 font-bold tracking-widest">{generatedKey}</span>
-                                </div>
-
-                                <button 
-                                    onClick={handleKeySaved}
-                                    className="w-full h-12 bg-green-500 text-black font-bold rounded-full hover:bg-green-400 transition-colors"
-                                >
-                                    I have saved this key
-                                </button>
-                            </div>
-                        )}
-
-                        {error && (
-                            <p className="text-red-400 text-xs text-center flex items-center justify-center gap-1 mt-4 animate-in slide-in-from-bottom-2">
-                                <XCircle size={12} /> {error}
-                            </p>
-                        )}
+            <div className="glass-card rounded-[32px] p-6 relative overflow-hidden">
+                {/* Error Banner */}
+                {errorMsg && (
+                    <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-4 flex items-center gap-2 text-red-300 text-xs">
+                        <AlertTriangle size={14} />
+                        {errorMsg}
                     </div>
                 )}
+
+                {!config ? (
+                    <>
+                        {/* Step 1: Inputs */}
+                        {step === 'input' && (
+                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
+                                <p className="text-center text-gray-400 text-xs mb-2">Connect Google Sheet</p>
+                                <div className="space-y-3">
+                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                        <Server size={14} className="text-gray-500" />
+                                        <input 
+                                            value={scriptUrl} 
+                                            onChange={e => setScriptUrl(e.target.value)}
+                                            className="bg-transparent text-white outline-none text-xs w-full h-10 placeholder:text-gray-600"
+                                            placeholder="Script URL" 
+                                        />
+                                    </div>
+                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                        <FileSpreadsheet size={14} className="text-gray-500" />
+                                        <input 
+                                            value={sheetId} 
+                                            onChange={e => setSheetId(e.target.value)}
+                                            className="bg-transparent text-white outline-none text-xs w-full h-10 placeholder:text-gray-600"
+                                            placeholder="Sheet ID" 
+                                        />
+                                    </div>
+                                    <button onClick={handleCheckConnection} disabled={isLoading} className="w-full h-12 btn-lime rounded-full font-bold text-sm flex items-center justify-center gap-2 mt-2">
+                                        {isLoading ? <Loader2 className="animate-spin" /> : 'Check Connection'}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Step 1.5: Onboarding (Ask Name) */}
+                        {step === 'onboarding' && (
+                            <div className="space-y-4 animate-in fade-in slide-in-from-right-8">
+                                <div className="text-center mb-4">
+                                    <h3 className="text-white font-bold">Welcome</h3>
+                                    <p className="text-gray-500 text-xs mt-1">Let's set up your database.</p>
+                                </div>
+                                
+                                <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                    <UserIcon size={14} className="text-gray-500" />
+                                    <input 
+                                        value={userName} 
+                                        onChange={e => setUserName(e.target.value)}
+                                        className="bg-transparent text-white outline-none text-sm w-full h-10 placeholder:text-gray-600"
+                                        placeholder="What should we call you?" 
+                                    />
+                                </div>
+                                
+                                <button onClick={performSetup} disabled={isLoading} className="w-full h-12 btn-lime rounded-full font-bold text-sm flex items-center justify-center gap-2">
+                                    {isLoading ? <Loader2 className="animate-spin" /> : <>Create Database <ArrowRight size={14}/></>}
+                                </button>
+                                
+                                <button onClick={() => setStep('input')} className="w-full py-2 text-gray-500 text-[10px] hover:text-white">
+                                    Cancel
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Step 2: Returning User Auth */}
+                        {step === 'auth_returning' && (
+                            <div className="space-y-4 animate-in fade-in slide-in-from-right-8">
+                                <div className="text-center mb-4">
+                                    <h3 className="text-white font-bold">Welcome Back</h3>
+                                    <p className="text-gray-500 text-xs mt-1">
+                                        {showResetConfirm ? 'This will ERASE ALL DATA to start fresh.' : 'This sheet is protected. Enter your key.'}
+                                    </p>
+                                </div>
+                                
+                                {/* Only show input if NOT in reset mode */}
+                                {!showResetConfirm && (
+                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                        <Key size={14} className="text-[#d9f99d]" />
+                                        <input 
+                                            type="text" 
+                                            maxLength={6}
+                                            value={accessKey} 
+                                            onChange={e => setAccessKey(e.target.value.replace(/[^0-9]/g, ''))}
+                                            className="bg-transparent text-white outline-none text-lg w-full h-12 placeholder:text-gray-700 tracking-[0.5em] font-mono text-center"
+                                            placeholder="000000" 
+                                        />
+                                    </div>
+                                )}
+                                
+                                {showResetConfirm ? (
+                                    <div className="space-y-3">
+                                        <div className="bg-red-500/10 p-3 rounded-xl border border-red-500/20 text-red-300 text-[10px] leading-relaxed">
+                                            Warning: This action cannot be undone. All tasks, journals, and logs will be permanently deleted from the Google Sheet.
+                                        </div>
+                                        <button onClick={handleReset} disabled={isLoading} className="w-full h-12 bg-red-500 text-white rounded-full font-bold text-sm flex items-center justify-center gap-2">
+                                            {isLoading ? <Loader2 className="animate-spin" /> : 'Yes, Delete Everything'}
+                                        </button>
+                                        <button onClick={() => setShowResetConfirm(false)} className="w-full h-12 bg-white/5 rounded-full font-bold text-sm text-gray-400">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <button onClick={handleLogin} disabled={isLoading} className="w-full h-12 btn-lime rounded-full font-bold text-sm flex items-center justify-center gap-2">
+                                            {isLoading ? <Loader2 className="animate-spin" /> : 'Unlock & Sync'}
+                                        </button>
+                                        
+                                        <div className="pt-2 flex justify-between items-center px-1">
+                                            <button onClick={() => setStep('input')} className="text-gray-500 text-[10px] hover:text-white">Back</button>
+                                            <button onClick={() => setShowResetConfirm(true)} className="text-red-400/50 text-[10px] hover:text-red-400 flex items-center gap-1">
+                                                <Trash2 size={10} /> Lost Key?
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Step 3: New User Success */}
+                        {step === 'auth_new_success' && (
+                            <div className="space-y-6 text-center animate-in zoom-in duration-300">
+                                <div className="w-12 h-12 bg-[#d9f99d]/20 rounded-full flex items-center justify-center mx-auto text-[#d9f99d]">
+                                    <CheckCircle size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="text-white font-bold text-lg">Setup Complete!</h3>
+                                    <p className="text-gray-400 text-xs mt-2 max-w-[200px] mx-auto">
+                                        This is your Access Key. Save it to connect other devices.
+                                    </p>
+                                </div>
+                                
+                                <div className="bg-black/40 p-4 rounded-xl border border-[#d9f99d]/30">
+                                    <p className="text-3xl font-mono text-[#d9f99d] tracking-widest font-bold">{generatedKey}</p>
+                                </div>
+
+                                <div className="bg-yellow-500/10 p-3 rounded-lg flex gap-2 text-left">
+                                    <AlertTriangle size={16} className="text-yellow-500 flex-shrink-0 mt-0.5" />
+                                    <p className="text-[10px] text-yellow-200/70">
+                                        We will not show this key again. If you lose it, you may lose access to your data on other devices.
+                                    </p>
+                                </div>
+
+                                <button onClick={finishSetup} className="w-full h-12 btn-lime rounded-full font-bold text-sm">
+                                    I've Saved It, Continue
+                                </button>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    // Connected State
+                    <div className="flex flex-col items-center">
+                        <div className="mb-6 w-full bg-white/5 p-4 rounded-2xl border border-white/5">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-xs text-gray-500">Database Status</span>
+                                <span className="text-[10px] bg-[#d9f99d]/20 text-[#d9f99d] px-2 py-1 rounded-full font-bold">ACTIVE</span>
+                            </div>
+                            <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                                <div className="h-full bg-[#d9f99d] w-full animate-pulse"></div>
+                            </div>
+                            <p className="text-[10px] text-gray-500 mt-2 text-right">Last sync: Just now</p>
+                        </div>
+                        
+                        <button onClick={() => { disconnectSheet(); onDisconnect(); setStep('input'); }} className="w-full h-12 bg-red-500/10 border border-red-500/30 text-red-400 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors">
+                            Disconnect Database
+                        </button>
+                    </div>
+                )}
+            </div>
+            
+            <div className="mt-8 text-center px-4">
+                 <p className="text-[10px] text-gray-600 leading-relaxed">
+                    MicroHub stores data directly on your Google Sheet. No external servers are used.
+                 </p>
             </div>
         </div>
     );

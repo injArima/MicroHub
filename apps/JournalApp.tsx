@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, RefreshCw } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
 import { JournalEntry, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
 
@@ -9,302 +9,156 @@ interface JournalAppProps {
     sheetConfig: SheetConfig | null;
 }
 
-type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
-
 const STORAGE_KEY = 'microhub_journal_entries';
-
 const DEFAULT_ENTRIES: JournalEntry[] = [
     {
         id: '1',
-        title: 'Learning React Hooks',
-        content: '# React Hooks\n\nToday I learned about **useEffect** and **useState**.\n\n- They allow functional components to have state.\n- `useEffect` handles side effects.\n\n```javascript\nconst [count, setCount] = useState(0);\n```',
+        title: 'Reflections',
+        content: '# Daily Reflection\n\nToday was a day of focus. I prioritized my mental clarity over noise.\n\n- [x] Morning meditation\n- [ ] Reading',
         date: '28 Feb',
-        tags: ['React', 'Coding']
+        tags: ['Mindset']
     }
 ];
 
 const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
-    // Initialize from localStorage
     const [entries, setEntries] = useState<JournalEntry[]>(() => {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            return saved ? JSON.parse(saved) : DEFAULT_ENTRIES;
-        } catch (e) {
-            return DEFAULT_ENTRIES;
-        }
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '') || DEFAULT_ENTRIES; } 
+        catch { return DEFAULT_ENTRIES; }
     });
-
-    const [view, setView] = useState<'list' | 'editor' | 'detail'>('list');
+    const [view, setView] = useState<'list' | 'editor'>('list');
     const [activeEntry, setActiveEntry] = useState<JournalEntry | null>(null);
-    const [editorTitle, setEditorTitle] = useState('');
-    const [editorContent, setEditorContent] = useState('');
-    const [previewMode, setPreviewMode] = useState(false);
-    
-    // Sync States
-    const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [isDirty, setIsDirty] = useState(false);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [isPreview, setIsPreview] = useState(false);
 
-    // 1. Auto-Save Logic (Effect based to avoid stale closures)
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+
     useEffect(() => {
-        // Save to local storage immediately
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }, [entries]);
 
-        // Auto-sync to cloud if configured and dirty
-        if (isDirty && sheetConfig) {
-            const timeout = setTimeout(async () => {
-                setSaveStatus('saving');
-                setErrorMessage('');
-                try {
-                    await syncSheet(sheetConfig, 'Journal_Notes', entries);
-                    setSaveStatus('saved');
-                    setIsDirty(false);
-                    setTimeout(() => setSaveStatus('idle'), 3000);
-                } catch (e: any) {
-                    setSaveStatus('error');
-                    setErrorMessage(e.message || "Auto-save failed");
-                }
-            }, 2000); // 2-second debounce
-            return () => clearTimeout(timeout);
-        }
-    }, [entries, isDirty, sheetConfig]);
-
-    // 2. Manual Sync Handler
-    const handleManualSync = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!sheetConfig) return;
-        
-        setSaveStatus('saving');
-        setErrorMessage('');
-        try {
-            await syncSheet(sheetConfig, 'Journal_Notes', entries);
-            setSaveStatus('saved');
-            setIsDirty(false);
-            setTimeout(() => setSaveStatus('idle'), 3000);
-        } catch (e: any) {
-            setSaveStatus('error');
-            setErrorMessage(e.message || "Manual sync failed");
-        }
-    };
-
-    const handleCreateNew = () => {
-        setActiveEntry(null);
-        setEditorTitle('');
-        setEditorContent('');
-        setPreviewMode(false);
-        setView('editor');
-    };
-
-    const handleViewEntry = (entry: JournalEntry) => {
-        setActiveEntry(entry);
-        setView('detail');
-    };
-
-    const handleEditEntry = (entry: JournalEntry) => {
-        setActiveEntry(entry);
-        setEditorTitle(entry.title);
-        setEditorContent(entry.content);
-        setPreviewMode(false);
-        setView('editor');
-    };
-
-    const handleSave = () => {
-        if (!editorTitle.trim()) return;
-
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-
+    const handleSave = async () => {
         const newEntry: JournalEntry = {
-            id: activeEntry ? activeEntry.id : Date.now().toString(),
-            title: editorTitle,
-            content: editorContent,
-            date: activeEntry ? activeEntry.date : dateStr,
-            tags: activeEntry ? activeEntry.tags : ['Journal']
+            id: activeEntry?.id || Date.now().toString(),
+            title: title || 'Untitled',
+            content: content,
+            date: activeEntry?.date || new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+            tags: activeEntry?.tags || ['Note']
         };
-
-        if (activeEntry) {
-            setEntries(prev => prev.map(e => e.id === activeEntry.id ? newEntry : e));
-        } else {
-            setEntries(prev => [newEntry, ...prev]);
-        }
         
-        setIsDirty(true); // Mark as dirty to trigger auto-save
+        setEntries(prev => activeEntry ? prev.map(e => e.id === activeEntry.id ? newEntry : e) : [newEntry, ...prev]);
         setView('list');
+        
+        if(sheetConfig) {
+            setSaveStatus('saving');
+            try { await syncSheet(sheetConfig, 'Journal_Notes', [newEntry, ...entries.filter(e => e.id !== newEntry.id)]); setSaveStatus('saved'); }
+            catch { setSaveStatus('idle'); }
+        }
     };
 
-    // Styling for markdown content
-    const markdownStyles = `
-        prose prose-invert max-w-none
-        [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h1]:text-white
-        [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h2]:text-white
-        [&>p]:text-gray-300 [&>p]:leading-relaxed [&>p]:mb-4
-        [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ul]:text-gray-300
-        [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&>ol]:text-gray-300
-        [&>blockquote]:border-l-4 [&>blockquote]:border-violet-400 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-400 [&>blockquote]:mb-4
-        [&>pre]:bg-[#18181b] [&>pre]:p-4 [&>pre]:rounded-xl [&>pre]:mb-4 [&>pre]:overflow-x-auto [&>pre]:border [&>pre]:border-white/10
-        [&>code]:font-mono [&>code]:text-sm [&>code]:bg-[#18181b] [&>code]:px-1 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-violet-300
-        [&_a]:text-violet-400 [&_a]:underline
-    `;
+    const openEditor = (entry?: JournalEntry) => {
+        setActiveEntry(entry || null);
+        setTitle(entry?.title || '');
+        setContent(entry?.content || '');
+        // Open in preview mode if entry exists, otherwise edit mode
+        setIsPreview(!!entry);
+        setView('editor');
+    };
 
     if (view === 'editor') {
         return (
-            <div className="w-full min-h-screen bg-[#0f0f10] flex flex-col pb-6">
-                <div className="p-4 flex items-center justify-between sticky top-0 bg-[#0f0f10] z-10 border-b border-white/5">
-                     <button onClick={() => setView('list')} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white">
+            <div className="w-full min-h-screen pb-6 flex flex-col pt-8 px-6">
+                <div className="flex justify-between items-center mb-6">
+                    <button onClick={() => setView('list')} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                         <ArrowLeft size={20} />
                     </button>
-                    <div className="flex gap-2">
-                        <button 
-                            onClick={() => setPreviewMode(!previewMode)} 
-                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 ${previewMode ? 'bg-[#a78bfa] text-black' : 'bg-[#27272a] text-white'}`}
+                    
+                    <div className="flex items-center gap-2">
+                         <button 
+                            onClick={() => setIsPreview(!isPreview)} 
+                            className={`w-10 h-10 rounded-full glass-card flex items-center justify-center transition-colors ${isPreview ? 'bg-[#d9f99d] text-black' : 'text-white hover:bg-white/10'}`}
                         >
-                            {previewMode ? <Edit2 size={16} /> : <Eye size={16} />}
-                            {previewMode ? 'Edit' : 'Preview'}
+                            {isPreview ? <Edit2 size={16} /> : <Eye size={16} />}
                         </button>
-                        <button 
-                            onClick={handleSave} 
-                            className="bg-[#fde047] text-black px-4 py-2 rounded-full font-semibold text-sm flex items-center gap-2"
-                        >
-                            <Save size={16} /> Save
+                        <button onClick={handleSave} className="btn-lime px-6 py-2 rounded-full font-bold text-xs flex items-center gap-2 h-10">
+                            <Save size={14} /> Save
                         </button>
                     </div>
                 </div>
-
-                <div className="flex-1 p-4 flex flex-col gap-4">
-                     <input 
-                        type="text" 
-                        value={editorTitle}
-                        onChange={(e) => setEditorTitle(e.target.value)}
-                        placeholder="Title your thought..."
-                        className="bg-transparent text-3xl font-bold text-white placeholder:text-gray-600 outline-none w-full"
-                     />
-                     
-                     <div className="flex-1 bg-[#27272a] rounded-[24px] border border-white/5 overflow-hidden flex flex-col relative">
-                        {previewMode ? (
-                            <div className={`p-6 overflow-y-auto h-full ${markdownStyles}`}>
-                                <ReactMarkdown>{editorContent || '*No content yet...*'}</ReactMarkdown>
-                            </div>
-                        ) : (
-                            <textarea 
-                                value={editorContent}
-                                onChange={(e) => setEditorContent(e.target.value)}
-                                placeholder="Write in Markdown..."
-                                className="w-full h-full bg-transparent text-gray-200 p-6 outline-none resize-none font-mono text-sm leading-relaxed"
-                            />
-                        )}
-                        {!previewMode && (
-                            <div className="absolute bottom-4 right-4 text-xs text-gray-500 pointer-events-none bg-[#0f0f10]/80 px-2 py-1 rounded">
-                                Markdown Supported
-                            </div>
-                        )}
-                     </div>
+                
+                <input 
+                    className="bg-transparent text-3xl font-light text-white placeholder:text-gray-600 outline-none w-full mb-6"
+                    placeholder="Title..."
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                />
+                
+                <div className="flex-1 glass-card rounded-[24px] overflow-hidden relative flex flex-col">
+                    {isPreview ? (
+                        <div className="flex-1 p-6 overflow-y-auto prose prose-invert prose-sm max-w-none">
+                            <ReactMarkdown>{content}</ReactMarkdown>
+                            {!content && <p className="text-gray-600 italic">Nothing to preview...</p>}
+                        </div>
+                    ) : (
+                        <textarea 
+                            className="flex-1 w-full h-full p-6 bg-transparent text-gray-300 outline-none resize-none font-light leading-relaxed text-sm placeholder:text-gray-700"
+                            placeholder="Write your thoughts (Markdown supported)..."
+                            value={content}
+                            onChange={e => setContent(e.target.value)}
+                        />
+                    )}
                 </div>
             </div>
         );
     }
 
-    if (view === 'detail' && activeEntry) {
-        return (
-            <div className="w-full min-h-screen bg-[#0f0f10] flex flex-col pb-24">
-                <div className="p-4 flex items-center justify-between sticky top-0 bg-[#0f0f10] z-10 border-b border-white/5">
-                     <button onClick={() => setView('list')} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white">
-                        <ChevronLeft size={20} />
-                    </button>
-                    <button onClick={() => handleEditEntry(activeEntry)} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white">
-                        <Edit2 size={18} />
-                    </button>
-                </div>
-
-                <div className="p-6">
-                    <span className="text-[#a78bfa] text-sm font-semibold mb-2 block">{activeEntry.date}</span>
-                    <h1 className="text-3xl font-bold text-white mb-6 leading-tight">{activeEntry.title}</h1>
-                    <div className={markdownStyles}>
-                         <ReactMarkdown>{activeEntry.content}</ReactMarkdown>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    // List View
     return (
-        <div className="w-full min-h-screen bg-[#0f0f10] pb-24 pt-4 px-4">
-            <div className="flex justify-between items-center mb-6">
-                <div className="flex items-center gap-4">
-                    <button onClick={onBack} className="w-10 h-10 rounded-full bg-[#27272a] flex items-center justify-center text-white">
-                        <ArrowLeft size={20} />
-                    </button>
-                    <h1 className="text-xl font-bold text-white">Journal</h1>
-                </div>
-                 <div className="flex items-center gap-2">
-                    {/* Status Indicators */}
-                    {saveStatus === 'saving' && (
-                        <div className="flex items-center gap-2 bg-[#27272a] px-3 py-1 rounded-full border border-white/5">
-                            <Loader2 size={12} className="animate-spin text-gray-400" />
-                        </div>
-                    )}
-                    {saveStatus === 'saved' && (
-                        <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
-                            <CheckCircle size={12} className="text-green-500" />
-                        </div>
-                    )}
-                    {saveStatus === 'error' && (
-                         <div className="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20" title={errorMessage}>
-                            <AlertTriangle size={12} className="text-red-400" />
-                        </div>
-                    )}
-                    {/* Manual Sync Button */}
-                    {sheetConfig && (
-                        <button 
-                            onClick={handleManualSync}
-                            className="w-8 h-8 rounded-full bg-[#27272a] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#3f3f46] transition-colors"
-                            title="Force Sync"
-                        >
-                            <RefreshCw size={14} className={saveStatus === 'saving' ? 'animate-spin' : ''} />
-                        </button>
-                    )}
+        <div className="w-full min-h-screen pb-32 pt-8 px-6 flex flex-col">
+            <div className="flex justify-between items-center mb-8">
+                <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
+                    <ArrowLeft size={20} />
+                </button>
+                {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-[#d9f99d]" />}
+            </div>
+
+            <div className="mb-8">
+                <h1 className="text-3xl font-light text-white mb-2">Daily<br/><span className="font-bold text-[#d9f99d]">Journal</span></h1>
+            </div>
+
+            <div onClick={() => openEditor()} className="bg-[#d9f99d] rounded-[28px] p-6 mb-8 relative overflow-hidden group cursor-pointer transition-transform active:scale-95">
+                <h2 className="text-xl font-bold text-black mb-1">New Entry</h2>
+                <p className="text-black/70 text-xs font-medium">Write something for today.</p>
+                <div className="absolute right-4 bottom-4 w-10 h-10 bg-black/10 rounded-full flex items-center justify-center text-black">
+                    <Plus size={20} />
                 </div>
             </div>
 
-            <div className="bg-[#a78bfa] rounded-[32px] p-6 mb-8 relative overflow-hidden group cursor-pointer" onClick={handleCreateNew}>
-                <div className="relative z-10">
-                    <h2 className="text-2xl font-bold text-black mb-1">New Entry</h2>
-                    <p className="text-black/70 font-medium">Capture your daily learnings.</p>
-                </div>
-                <div className="absolute right-4 bottom-4 w-12 h-12 bg-black/10 rounded-full flex items-center justify-center text-black">
-                    <Plus size={24} />
-                </div>
-            </div>
-
-            <div className="space-y-4">
-                <div className="flex justify-between items-end mb-2">
-                    <h3 className="text-white font-bold text-lg">Recent Entries</h3>
-                    <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">Archive</span>
-                </div>
-
+            <div className="space-y-3">
                 {entries.map(entry => (
-                    <div key={entry.id} onClick={() => handleViewEntry(entry)} className="bg-[#27272a] p-5 rounded-[24px] border border-white/5 active:scale-95 transition-transform cursor-pointer">
-                        <div className="flex justify-between items-start mb-3">
-                             <div className="flex gap-2">
-                                {entry.tags.map(tag => (
-                                    <span key={tag} className="text-[10px] bg-white/5 text-gray-300 px-2 py-1 rounded-full uppercase tracking-wide font-bold">{tag}</span>
-                                ))}
-                             </div>
-                             <span className="text-xs text-gray-500 flex items-center gap-1">
-                                <Calendar size={12} />
-                                {entry.date}
-                             </span>
+                    <div key={entry.id} onClick={() => openEditor(entry)} className="glass-card p-5 rounded-[24px] cursor-pointer hover:bg-white/10 transition-colors">
+                        <div className="flex justify-between mb-2">
+                            <span className="text-[10px] bg-white/5 text-[#d9f99d] px-2 py-0.5 rounded-full uppercase font-bold tracking-wider">{entry.tags[0]}</span>
+                            <span className="text-xs text-gray-500">{entry.date}</span>
                         </div>
-                        <h4 className="text-lg font-bold text-white mb-2">{entry.title}</h4>
-                        <p className="text-gray-400 text-sm line-clamp-2">
-                            {entry.content.replace(/[#*`>]/g, '')}
-                        </p>
+                        <h3 className="text-white font-bold mb-1">{entry.title}</h3>
+                        <div className="text-gray-400 text-xs line-clamp-2 leading-relaxed opacity-70">
+                             <ReactMarkdown 
+                                components={{
+                                    p: ({node, ...props}) => <span className="mr-1" {...props} />,
+                                    h1: ({node, ...props}) => <span className="font-bold mr-1" {...props} />,
+                                    h2: ({node, ...props}) => <span className="font-bold mr-1" {...props} />,
+                                    h3: ({node, ...props}) => <span className="font-bold mr-1" {...props} />,
+                                    li: ({node, ...props}) => <span className="mr-1" {...props} />,
+                                }}
+                                allowedElements={['p', 'h1', 'h2', 'h3', 'li', 'strong', 'em', 'span']}
+                                unwrapDisallowed={true}
+                             >
+                                {entry.content}
+                             </ReactMarkdown>
+                        </div>
                     </div>
                 ))}
             </div>
-             {errorMessage && (
-                <p className="text-red-400 text-center text-xs mt-4 pb-4">{errorMessage}</p>
-            )}
         </div>
     );
 };

@@ -1,8 +1,5 @@
 {
   "name": "MicroHub",
-  "description": "A stylish suite of micro-apps featuring task management and AI tools, designed with a modern dark aesthetics.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
+  "description": "A stylish suite of micro-apps featuring task management, journaling, and a movie watchlist, designed with modern dark aesthetics.",
+  "requestFramePermissions": []
 }

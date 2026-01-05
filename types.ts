@@ -1,8 +1,6 @@
 export enum AppRoute {
   HOME = 'HOME',
   TASKS = 'TASKS',
-  AI_CHAT = 'AI_CHAT',
-  IMAGE_GEN = 'IMAGE_GEN',
   JOURNAL = 'JOURNAL',
   MOVIES = 'MOVIES',
   PROFILE = 'PROFILE',
@@ -32,14 +30,6 @@ export interface Task {
   colorTheme: 'lime' | 'yellow' | 'red' | 'blue';
 }
 
-export interface ChatMessage {
-  id: string;
-  role: 'user' | 'model';
-  text: string;
-  image?: string;
-  isError?: boolean;
-}
-
 export interface JournalEntry {
   id: string;
   title: string;
@@ -57,6 +47,13 @@ export interface Movie {
   plot: string;
   status: 'watchlist' | 'watched';
   posterUrl?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'model';
+  text: string;
+  isError?: boolean;
 }
 
 // For full state sync

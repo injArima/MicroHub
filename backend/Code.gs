@@ -25,10 +25,11 @@ function doPost(e) {
       case 'login':
         result = handleLogin(ss, params.authKey);
         break;
-      case 'wipe_and_reset':
-        result = handleWipeAndReset(ss, params.userName);
+      case 'reset_sheet':
+        // No key required for reset (User lost key scenario)
+        result = handleResetSheet(ss);
         break;
-      case 'sync_sheet': // Standardized Sync Action
+      case 'sync_sheet':
         result = handleSyncSheet(ss, params.authKey, params.targetSheetName, params.data);
         break;
       default:
@@ -53,6 +54,7 @@ function doGet(e) {
     if (!sheetId || !authKey) throw new Error("Missing parameters");
     const ss = SpreadsheetApp.openById(sheetId);
     
+    // Verify Key
     if (!verifyKey(ss, authKey)) throw new Error("Invalid Credentials");
 
     return handleSyncPull(ss);
@@ -66,24 +68,29 @@ function doGet(e) {
 
 function handleCheckStatus(ss) {
   const configSheet = ss.getSheetByName('App_Config');
-  if (configSheet) {
+  // If config sheet exists and has a hash in B3, it's a returning user
+  if (configSheet && configSheet.getRange('B3').getValue() !== "") {
     const userName = configSheet.getRange('B2').getValue();
-    return response({ status: 'returning_user', userName: userName });
+    return response({ status: 'returning_user', userName: userName || 'User' });
   } else {
+    // Check if it's a completely empty default sheet (clean slate)
     return response({ status: 'new_user' });
   }
 }
 
 function handleSetupNewUser(ss, userName) {
+  // 1. Generate 6-digit Key
   const rawKey = Math.floor(100000 + Math.random() * 900000).toString();
   const hashedKey = hashString(rawKey);
 
+  // 2. Setup Config Sheet
   let configSheet = ss.getSheetByName('App_Config');
   if (!configSheet) {
+    // Try to rename the first sheet if it exists to avoid clutter
     const sheets = ss.getSheets();
     if (sheets.length > 0) {
-      sheets[0].setName('App_Config');
       configSheet = sheets[0];
+      configSheet.setName('App_Config');
     } else {
       configSheet = ss.insertSheet('App_Config');
     }
@@ -92,16 +99,41 @@ function handleSetupNewUser(ss, userName) {
   configSheet.clear();
   configSheet.appendRow(['Parameter', 'Value']);
   configSheet.appendRow(['User Name', userName]);
-  configSheet.appendRow(['Auth Hash', hashedKey]);
+  configSheet.appendRow(['Auth Hash', hashedKey]); // B3 is the Hash
   configSheet.appendRow(['Created At', new Date().toISOString()]);
   
+  // Style config
   configSheet.getRange('A1:B1').setFontWeight('bold').setBackground('#f3f4f6');
   configSheet.setColumnWidth(1, 150);
   configSheet.setColumnWidth(2, 300);
 
+  // 3. Initialize Data Sheets
   setupSubSheets(ss);
 
+  // Return the RAW key to the user ONLY ONCE
   return response({ status: 'success', rawKey: rawKey });
+}
+
+function handleResetSheet(ss) {
+  // WIPE LOGIC - NO KEY REQUIRED
+  // We cannot delete the last sheet.
+  // 1. Insert a temp sheet.
+  let temp = ss.getSheetByName('Temp_Reset_Placeholder');
+  if (!temp) temp = ss.insertSheet('Temp_Reset_Placeholder');
+
+  // 2. Delete all other sheets
+  const sheets = ss.getSheets();
+  sheets.forEach(s => {
+    if (s.getName() !== 'Temp_Reset_Placeholder') {
+      try { ss.deleteSheet(s); } catch(e) {}
+    }
+  });
+
+  // 3. Rename Temp to App_Config and leave empty
+  temp.setName('App_Config');
+  temp.clear();
+
+  return response({ status: 'success', message: 'Sheet reset complete.' });
 }
 
 function handleLogin(ss, providedKey) {
@@ -111,35 +143,13 @@ function handleLogin(ss, providedKey) {
   return response({ status: 'error', message: 'Invalid Access Key' });
 }
 
-function handleWipeAndReset(ss, userName) {
-  const sheets = ss.getSheets();
-  let temp = ss.insertSheet('TEMP_WIPE_' + Date.now());
-  
-  sheets.forEach(s => {
-    try { ss.deleteSheet(s); } catch(e) {}
-  });
-
-  SpreadsheetApp.flush();
-
-  const resultObj = handleSetupNewUser(ss, userName);
-  const result = JSON.parse(resultObj.getContent());
-
-  if (result.status === 'success') {
-      try { ss.deleteSheet(temp); } catch(e) {}
-      SpreadsheetApp.flush();
-      return resultObj;
-  } else {
-      throw new Error("Re-initialization failed");
-  }
-}
-
 function handleSyncSheet(ss, providedKey, targetSheetName, data) {
   if (!verifyKey(ss, providedKey)) throw new Error("Unauthorized");
 
+  // Schema Definitions
   let headers = [];
   let mapper = null;
 
-  // Schema Definitions
   if (targetSheetName === 'Task_Tracker') {
     headers = ['ID', 'Title', 'Date', 'Time', 'Priority', 'Theme'];
     mapper = t => [t.id, t.title, t.date, t.time, t.priority, t.colorTheme];
@@ -165,6 +175,7 @@ function handleSyncPull(ss) {
   const journal = readSheetData(ss, 'Journal_Notes', ['id', 'date', 'title', 'content', 'tags']);
   const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl']);
 
+  // Data Clean up (Strings to Arrays)
   const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.toString().split(',') : []}));
   const formattedMovies = movies.map(m => ({...m, genre: m.genre ? m.genre.toString().split(',') : [], posterUrl: m.posterUrl || ''}));
   const formattedTasks = tasks.map(t => ({...t, team: [], colorTheme: t.colorTheme || 'yellow'}));
@@ -203,9 +214,9 @@ function updateSheetData(ss, sheetName, headers, dataArray, mapper) {
   if (!sheet) {
     sheet = ss.insertSheet(sheetName);
     sheet.appendRow(headers);
-    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#e5e7eb');
   }
 
+  // Clear existing data (preserve header)
   const lastRow = sheet.getLastRow();
   if (lastRow > 1) {
     sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).clearContent();
@@ -214,7 +225,6 @@ function updateSheetData(ss, sheetName, headers, dataArray, mapper) {
   if (!dataArray || dataArray.length === 0) return;
 
   const rows = dataArray.map(mapper);
-
   if (rows.length > 0) {
     sheet.getRange(2, 1, rows.length, rows[0].length).setValues(rows);
   }
@@ -238,13 +248,14 @@ function readSheetData(ss, sheetName, keys) {
 function verifyKey(ss, providedKey) {
   const config = ss.getSheetByName('App_Config');
   if (!config) return false;
+  // Hash the provided key and compare with stored hash in B3
   const storedHash = config.getRange('B3').getValue();
   const providedHash = hashString(providedKey);
   return storedHash === providedHash;
 }
 
 function hashString(str) {
-  const rawHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, str);
+  const rawHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, str.toString());
   let txtHash = '';
   for (let i = 0; i < rawHash.length; i++) {
     let hashVal = rawHash[i];
