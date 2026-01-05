@@ -1,15 +1,22 @@
 const CACHE_NAME = 'microhub-v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './icon.svg'
+  '/',
+  '/index.html',
+  '/icon.svg',
+  '/manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
+  // Perform install steps
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
+      .catch((err) => {
+        console.error('Service Worker cache failed:', err);
+      })
   );
 });
 
@@ -27,7 +34,7 @@ self.addEventListener('fetch', (event) => {
         const responseToCache = response.clone();
 
         caches.open(CACHE_NAME).then((cache) => {
-          // Only cache requests from the same origin (avoids caching data URIs or external API calls inappropriately)
+          // Only cache requests from the same origin
           if(event.request.url.startsWith(self.location.origin)) {
              cache.put(event.request, responseToCache);
           }
