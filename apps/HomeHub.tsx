@@ -5,9 +5,10 @@ import { AppRoute, SheetConfig } from '../types';
 interface HomeHubProps {
     onNavigate: (route: AppRoute) => void;
     config: SheetConfig | null;
+    userName: string;
 }
 
-const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config }) => {
+const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
     const [greeting, setGreeting] = useState('');
 
     useEffect(() => {
@@ -25,18 +26,18 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config }) => {
                 <div>
                     <h1 className="text-4xl font-light text-white leading-tight">
                         {greeting},<br />
-                        <span className="font-bold text-[#d9f99d]">Traveler</span>
+                        <span className="font-bold text-[#d9f99d]">{userName}</span>
                     </h1>
                 </div>
             </div>
 
-            {/* Apps Grid - 2 Column Layout */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Apps Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 
-                {/* Column 1: Vertical Tasks Card */}
+                {/* Tasks Card - Spans 2 rows on mobile, 2 columns on desktop */}
                 <div 
                     onClick={() => onNavigate(AppRoute.TASKS)}
-                    className="col-span-1 row-span-2 glass-card rounded-[32px] p-5 flex flex-col justify-between cursor-pointer group hover:bg-white/10 transition-colors relative overflow-hidden h-full"
+                    className="col-span-1 row-span-2 md:col-span-2 md:row-span-1 glass-card rounded-[32px] p-5 flex flex-col justify-between cursor-pointer group hover:bg-white/10 transition-colors relative overflow-hidden min-h-[280px]"
                 >
                     <div className="relative z-10">
                         <div className="flex justify-between items-start mb-4">
@@ -72,8 +73,8 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config }) => {
                     <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#d9f99d]/10 rounded-full blur-2xl pointer-events-none"></div>
                 </div>
 
-                {/* Column 2: Stacked Cards */}
-                <div className="col-span-1 flex flex-col gap-4">
+                {/* Right Column Stack */}
+                <div className="col-span-1 flex flex-col gap-4 md:gap-6">
                     {/* Journal Card */}
                     <div 
                         onClick={() => onNavigate(AppRoute.JOURNAL)}

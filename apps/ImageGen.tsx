@@ -21,7 +21,7 @@ const ImageGen: React.FC<ImageGenProps> = ({ onBack }) => {
     };
 
     return (
-        <div className="w-full min-h-screen flex flex-col pb-32 pt-8 px-6">
+        <div className="w-full max-w-2xl mx-auto min-h-screen flex flex-col pb-32 pt-8 px-6">
             <div className="flex items-center justify-between mb-8">
                 <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                     <ArrowLeft size={20} />

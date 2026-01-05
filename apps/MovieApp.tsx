@@ -55,7 +55,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const filteredMovies = movies.filter(m => m.status === activeTab);
 
     return (
-        <div className="w-full min-h-screen pb-32 pt-8 px-6 flex flex-col">
+        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
             <div className="flex justify-between items-center mb-6">
                  <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                     <ArrowLeft size={20} />
@@ -65,7 +65,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 </div>
             </div>
 
-            <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-6 focus-within:border-[#d9f99d]/50 transition-colors">
+            <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-6 focus-within:border-[#d9f99d]/50 transition-colors max-w-2xl mx-auto w-full">
                 <Search size={16} className="text-gray-400" />
                 <input
                     type="text"
@@ -78,13 +78,13 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 <button 
                     onClick={handleAddMovie}
                     disabled={isSearching}
-                    className="w-8 h-8 rounded-full bg-[#d9f99d] flex items-center justify-center text-black"
+                    className="w-8 h-8 rounded-full bg-[#d9f99d] flex items-center justify-center text-black hover:scale-105 transition-transform"
                 >
                     {isSearching ? <Loader2 size={14} className="animate-spin" /> : <Plus size={16} />}
                 </button>
             </div>
 
-            <div className="flex glass-card p-1 rounded-full mb-6">
+            <div className="flex glass-card p-1 rounded-full mb-6 max-w-md mx-auto w-full">
                 {['watchlist', 'watched'].map((tab) => (
                     <button 
                         key={tab}
@@ -96,15 +96,15 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredMovies.map(movie => (
                     <div key={movie.id} className="glass-card rounded-[24px] p-4 flex gap-4 hover:bg-white/10 transition-colors">
                         <div className="w-16 h-24 bg-black/50 rounded-xl flex-shrink-0 overflow-hidden">
                             <img src={movie.posterUrl} className="w-full h-full object-cover" alt="Poster" />
                         </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                            <h3 className="font-bold text-white leading-tight mb-1">{movie.title}</h3>
-                            <p className="text-xs text-gray-500 mb-3">{movie.year} • {movie.director}</p>
+                        <div className="flex-1 flex flex-col justify-center min-w-0">
+                            <h3 className="font-bold text-white leading-tight mb-1 truncate">{movie.title}</h3>
+                            <p className="text-xs text-gray-500 mb-3 truncate">{movie.year} • {movie.director}</p>
                             <div className="flex gap-2">
                                 <button onClick={() => setMovies(prev => prev.map(m => m.id === movie.id ? {...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist'} : m))} className="text-[#d9f99d] text-xs font-bold hover:underline">
                                     {movie.status === 'watchlist' ? 'Mark Watched' : 'Rewatch'}

@@ -61,4 +61,5 @@ export interface AppData {
   tasks: Task[];
   journal: JournalEntry[];
   movies: Movie[];
+  user?: { name: string };
 }

@@ -5,6 +5,8 @@ import TaskManager from './apps/TaskManager';
 import JournalApp from './apps/JournalApp';
 import MovieApp from './apps/MovieApp';
 import ProfileApp from './apps/ProfileApp';
+import AiChat from './apps/AiChat';
+import ImageGen from './apps/ImageGen';
 import { AppRoute, SheetConfig } from './types';
 import { getSheetConfig, fetchCloudData, disconnectSheet } from './services/sheet';
 import { Loader2 } from 'lucide-react';
@@ -13,6 +15,7 @@ const App: React.FC = () => {
   const [currentRoute, setCurrentRoute] = useState<AppRoute>(AppRoute.HOME);
   const [sheetConfig, setSheetConfig] = useState<SheetConfig | null>(getSheetConfig());
   const [isSyncing, setIsSyncing] = useState(false);
+  const [userName, setUserName] = useState<string>(() => localStorage.getItem('microhub_username') || 'Traveler');
 
   // Sync Data on Startup if Connected
   useEffect(() => {
@@ -21,9 +24,16 @@ const App: React.FC = () => {
             setIsSyncing(true);
             try {
                 const cloudData = await fetchCloudData(sheetConfig);
+                
                 if (cloudData.tasks) localStorage.setItem('microhub_tasks', JSON.stringify(cloudData.tasks));
                 if (cloudData.journal) localStorage.setItem('microhub_journal_entries', JSON.stringify(cloudData.journal));
                 if (cloudData.movies) localStorage.setItem('microhub_movies', JSON.stringify(cloudData.movies));
+                
+                if (cloudData.user?.name) {
+                    setUserName(cloudData.user.name);
+                    localStorage.setItem('microhub_username', cloudData.user.name);
+                }
+
             } catch (e: any) {
                 console.error("Sync failed", e);
                 // Auto-disconnect if credentials are invalid to prevent infinite error loops
@@ -46,6 +56,8 @@ const App: React.FC = () => {
 
   const handleDisconnect = () => {
     setSheetConfig(null);
+    setUserName('Traveler');
+    localStorage.removeItem('microhub_username');
   };
 
   const renderScreen = () => {
@@ -60,7 +72,7 @@ const App: React.FC = () => {
 
     switch (currentRoute) {
       case AppRoute.HOME:
-        return <HomeHub onNavigate={setCurrentRoute} config={sheetConfig} />;
+        return <HomeHub onNavigate={setCurrentRoute} config={sheetConfig} userName={userName} />;
       case AppRoute.TASKS:
         return <TaskManager onBack={() => setCurrentRoute(AppRoute.HOME)} sheetConfig={sheetConfig} />;
       case AppRoute.JOURNAL:
@@ -76,7 +88,7 @@ const App: React.FC = () => {
           />
         );
       default:
-        return <HomeHub onNavigate={setCurrentRoute} config={sheetConfig} />;
+        return <HomeHub onNavigate={setCurrentRoute} config={sheetConfig} userName={userName} />;
     }
   };
 
@@ -90,7 +102,7 @@ const App: React.FC = () => {
         <div className="absolute top-[40%] left-[20%] w-[300px] h-[300px] bg-blue-900/10 rounded-full blur-[80px] opacity-30" />
       </div>
 
-      <main className="max-w-md mx-auto min-h-screen relative z-10 backdrop-blur-[1px]">
+      <main className="w-full md:max-w-6xl mx-auto min-h-screen relative z-10 backdrop-blur-[1px] transition-all duration-300">
         {renderScreen()}
         <BottomNav currentRoute={currentRoute} onNavigate={setCurrentRoute} />
       </main>

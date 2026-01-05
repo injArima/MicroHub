@@ -34,7 +34,7 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col pb-24 pt-8 px-4">
+    <div className="w-full max-w-3xl mx-auto h-screen flex flex-col pb-24 pt-8 px-4">
        <div className="flex items-center gap-4 mb-4 px-2">
         <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
             <ArrowLeft size={20} />

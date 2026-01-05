@@ -62,7 +62,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   ];
 
   return (
-    <div className="w-full min-h-screen pb-32 pt-8 px-6 flex flex-col">
+    <div className="w-full max-w-5xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
@@ -83,9 +83,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
       </div>
 
       {/* Date Strip */}
-      <div className="flex justify-between gap-3 overflow-x-auto no-scrollbar mb-8">
+      <div className="flex justify-between gap-3 overflow-x-auto no-scrollbar mb-8 pb-2">
           {dates.map((d, i) => (
-              <div key={i} className={`flex flex-col items-center justify-center min-w-[60px] h-[75px] rounded-[20px] cursor-pointer transition-all border ${d.active ? 'bg-[#d9f99d] border-[#d9f99d] text-black' : 'glass-card border-white/5 text-gray-400'}`}>
+              <div key={i} className={`flex flex-col items-center justify-center min-w-[60px] h-[75px] rounded-[20px] cursor-pointer transition-all border ${d.active ? 'bg-[#d9f99d] border-[#d9f99d] text-black' : 'glass-card border-white/5 text-gray-400 hover:bg-white/5'}`}>
                   {d.label && <span className="text-[9px] font-bold uppercase mb-1 opacity-60">{d.label}</span>}
                   <span className="text-lg font-bold">{d.day}</span>
                   <span className="text-[10px]">{d.mon}</span>
@@ -93,13 +93,13 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
           ))}
       </div>
 
-      {/* Task List */}
-      <div className="space-y-4">
+      {/* Task List Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {tasks.map((task) => (
             <div key={task.id} className="glass-card p-5 rounded-[28px] relative group hover:bg-white/10 transition-colors">
                 <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-bold text-white leading-tight max-w-[70%]">{task.title}</h3>
-                    <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center cursor-pointer hover:bg-white/10">
                         <Share2 size={14} className="text-gray-400" />
                     </div>
                 </div>
@@ -118,7 +118,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                 <div className="flex justify-between items-center">
                     <div className="flex -space-x-2">
                         <div className="w-8 h-8 rounded-full bg-white/10 border border-black flex items-center justify-center text-[10px] text-white">AM</div>
-                        <button className="w-8 h-8 rounded-full bg-[#d9f99d] border border-black flex items-center justify-center text-black">
+                        <button className="w-8 h-8 rounded-full bg-[#d9f99d] border border-black flex items-center justify-center text-black hover:scale-105 transition-transform">
                             <Plus size={14} />
                         </button>
                     </div>
@@ -133,7 +133,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
 
        <button 
         onClick={addTask}
-        className="mt-6 w-full py-4 rounded-[24px] btn-lime font-bold text-sm flex items-center justify-center gap-2"
+        className="mt-6 w-full py-4 rounded-[24px] btn-lime font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
        >
           <Plus size={18} /> Add New Task
        </button>

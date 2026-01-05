@@ -37,6 +37,9 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
             const statusRes = await checkSheetStatus(scriptUrl, sheetId);
             
             if (statusRes.status === 'returning_user') {
+                if (statusRes.userName) {
+                     localStorage.setItem('microhub_username', statusRes.userName);
+                }
                 setStep('auth_returning');
             } else if (statusRes.status === 'new_user') {
                 setStep('onboarding');
@@ -59,6 +62,9 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
         try {
             const setupRes = await setupNewUser(scriptUrl, sheetId, userName);
             if (setupRes.status === 'success' && setupRes.rawKey) {
+                // Save name immediately for instant UI update
+                localStorage.setItem('microhub_username', userName);
+                
                 setGeneratedKey(setupRes.rawKey);
                 setStep('auth_new_success');
                 
@@ -133,7 +139,7 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
     };
 
     return (
-        <div className="w-full min-h-screen pb-32 pt-12 px-6 flex flex-col">
+        <div className="w-full max-w-md mx-auto min-h-screen pb-32 pt-12 px-6 flex flex-col">
             <div className="flex flex-col items-center mb-8">
                 <div className="w-24 h-24 rounded-full glass-card flex items-center justify-center mb-4 border border-white/10 relative">
                     {config ? <CheckCircle size={40} className="text-[#d9f99d]" /> : <UserIcon size={40} className="text-gray-400" />}

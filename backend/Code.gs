@@ -174,6 +174,10 @@ function handleSyncPull(ss) {
   const tasks = readSheetData(ss, 'Task_Tracker', ['id', 'title', 'date', 'time', 'priority', 'colorTheme']);
   const journal = readSheetData(ss, 'Journal_Notes', ['id', 'date', 'title', 'content', 'tags']);
   const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl']);
+  
+  // Get User Name from Config
+  const configSheet = ss.getSheetByName('App_Config');
+  const storedName = configSheet ? configSheet.getRange('B2').getValue() : 'Traveler';
 
   // Data Clean up (Strings to Arrays)
   const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.toString().split(',') : []}));
@@ -185,7 +189,8 @@ function handleSyncPull(ss) {
     data: {
       tasks: formattedTasks,
       journal: formattedJournal,
-      movies: formattedMovies
+      movies: formattedMovies,
+      user: { name: storedName }
     }
   });
 }
