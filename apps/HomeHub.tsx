@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ListTodo, BookOpen, Film, ArrowUpRight, PlayCircle, Heart } from 'lucide-react';
-import { AppRoute, SheetConfig } from '../types';
+import { ListTodo, BookOpen, Film, ArrowUpRight, PlayCircle, Plus } from 'lucide-react';
+import { AppRoute, SheetConfig, Task } from '../types';
 
 interface HomeHubProps {
     onNavigate: (route: AppRoute) => void;
@@ -10,19 +10,24 @@ interface HomeHubProps {
 
 const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
     const [greeting, setGreeting] = useState('');
+    const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
         const hour = new Date().getHours();
         if (hour < 12) setGreeting('Good Morning');
         else if (hour < 18) setGreeting('Good Afternoon');
         else setGreeting('Good Evening');
-    }, []);
 
-    const FilterPill = ({ label, active = false }: { label: string, active?: boolean }) => (
-        <button className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all ${active ? 'bg-[#333] text-white border border-white/10' : 'glass-button text-gray-400 hover:bg-white/10'}`}>
-            {label}
-        </button>
-    );
+        // Load tasks for preview
+        try {
+            const stored = localStorage.getItem('microhub_tasks');
+            if (stored) {
+                setTasks(JSON.parse(stored));
+            }
+        } catch (e) {
+            console.error("Failed to load tasks", e);
+        }
+    }, []);
 
     return (
         <div className="w-full min-h-screen pb-32 px-6 pt-14 flex flex-col">
@@ -39,14 +44,6 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                 </h1>
             </div>
 
-            {/* Filter Pills */}
-            <div className="flex gap-3 overflow-x-auto no-scrollbar mb-8 pb-1">
-                <FilterPill label="All" active />
-                <FilterPill label="Mantras" />
-                <FilterPill label="Meditation" />
-                <FilterPill label="Sleep" />
-            </div>
-
             {/* Apps Grid */}
             <div className="grid grid-cols-2 gap-4">
                 
@@ -55,28 +52,34 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                     onClick={() => onNavigate(AppRoute.TASKS)}
                     className="col-span-1 row-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden min-h-[320px] group"
                 >
-                    <div className="relative z-10">
+                    <div className="relative z-10 w-full">
+                        {/* Header with Title Left and Icon Right */}
                         <div className="flex justify-between items-start mb-6">
+                            <h3 className="text-2xl font-light text-white leading-tight">My<br/>Schedule</h3>
+                            
                             <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-white">
-                                <Heart size={18} className="text-[#bef264]" fill="rgba(190, 242, 100, 0.2)" />
+                                <ListTodo size={20} className="text-[#bef264]" />
                             </div>
                         </div>
                         
-                        <h3 className="text-2xl font-light text-white leading-tight mb-4">Plan for<br/>the day</h3>
-                        
                         <div className="space-y-3">
-                            <div className="glass-button p-1 pl-1.5 pr-3 rounded-full flex items-center gap-2 w-max">
-                                <div className="w-6 h-6 rounded-full bg-[#bef264] flex items-center justify-center">
-                                    <ListTodo size={12} className="text-black" />
+                            {tasks.length > 0 ? (
+                                tasks.slice(0, 3).map((task, index) => (
+                                    <div key={task.id} className={`glass-button p-1 pl-1.5 pr-3 rounded-full flex items-center gap-2 w-max max-w-full ${index !== 0 ? 'opacity-60' : ''}`}>
+                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${index === 0 ? 'bg-[#bef264]' : 'border border-white/30'}`}>
+                                            {index === 0 ? <ListTodo size={12} className="text-black" /> : <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>}
+                                        </div>
+                                        <span className={`text-[10px] font-bold truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>{task.title}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="flex flex-col items-start gap-2 animate-in fade-in duration-500">
+                                    <span className="text-xs text-gray-500 font-light ml-1">Free for today</span>
+                                    <div className="glass-button px-3 py-2 rounded-full text-[10px] font-bold text-[#bef264] flex items-center gap-1 hover:bg-[#bef264]/10 transition-colors">
+                                        <Plus size={12} /> Add Task
+                                    </div>
                                 </div>
-                                <span className="text-[10px] font-bold text-white">Affirmation</span>
-                            </div>
-                             <div className="glass-button p-1 pl-1.5 pr-3 rounded-full flex items-center gap-2 w-max opacity-60">
-                                <div className="w-6 h-6 rounded-full border border-white/30 flex items-center justify-center">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
-                                </div>
-                                <span className="text-[10px] font-bold text-gray-300">Meditation</span>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>

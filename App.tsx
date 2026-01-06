@@ -97,14 +97,14 @@ const App: React.FC = () => {
       
       {/* Refined Ambient Background Blobs with Animation */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Main Green Glow (Top Left) */}
-        <div className="absolute top-[-10%] left-[-10%] w-[80vw] h-[80vw] bg-[#bef264] rounded-full blur-[140px] opacity-10 mix-blend-screen animate-blob" />
+        {/* Main Green Glow (Top Left) - Increased size/opacity for mobile */}
+        <div className="absolute top-[-20%] left-[-20%] w-[140vw] h-[140vw] md:w-[600px] md:h-[600px] bg-[#bef264] rounded-full blur-[100px] opacity-25 mix-blend-screen animate-blob" />
         
-        {/* Secondary Blue/Green Glow (Bottom Right) */}
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[#22c55e] rounded-full blur-[140px] opacity-[0.08] mix-blend-screen animate-blob animation-delay-2000" />
+        {/* Secondary Blue/Green Glow (Bottom Right) - Increased size/opacity for mobile */}
+        <div className="absolute bottom-[-10%] right-[-20%] w-[120vw] h-[120vw] md:w-[500px] md:h-[500px] bg-[#22c55e] rounded-full blur-[100px] opacity-20 mix-blend-screen animate-blob animation-delay-2000" />
         
         {/* Subtle Middle Accent */}
-        <div className="absolute top-[30%] left-[50%] transform -translate-x-1/2 w-[40vw] h-[40vw] bg-white rounded-full blur-[160px] opacity-[0.03] animate-blob animation-delay-4000" />
+        <div className="absolute top-[40%] left-[50%] transform -translate-x-1/2 w-[100vw] h-[100vw] md:w-[400px] md:h-[400px] bg-white rounded-full blur-[120px] opacity-10 animate-blob animation-delay-4000" />
       </div>
 
       <main className="w-full md:max-w-md mx-auto min-h-screen relative z-10 transition-all duration-300 flex flex-col">
