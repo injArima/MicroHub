@@ -4,7 +4,7 @@ const STORAGE_KEY = 'microhub_sheet_config';
 
 export const getSheetConfig = (): SheetConfig | null => {
     try {
-        const saved = sessionStorage.getItem(STORAGE_KEY);
+        const saved = localStorage.getItem(STORAGE_KEY);
         return saved ? JSON.parse(saved) : null;
     } catch (e) {
         return null;
@@ -67,11 +67,11 @@ export const resetSheet = async (scriptUrl: string, sheetId: string): Promise<{s
 };
 
 export const saveConfig = (config: SheetConfig) => {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
 };
 
 export const disconnectSheet = () => {
-    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
 };
 
 // Data Operations

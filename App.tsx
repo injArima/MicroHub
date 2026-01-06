@@ -64,8 +64,8 @@ const App: React.FC = () => {
     if (isSyncing) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen z-10 relative">
-                <Loader2 className="w-10 h-10 text-[#d9f99d] animate-spin mb-4" />
-                <p className="text-gray-400 text-sm">Syncing...</p>
+                <Loader2 className="w-10 h-10 text-[#bef264] animate-spin mb-4" />
+                <p className="text-gray-400 text-sm font-light">Syncing cloud data...</p>
             </div>
         );
     }
@@ -93,16 +93,21 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#d9f99d] selection:text-black overflow-hidden relative font-sans">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#bef264] selection:text-black overflow-hidden relative font-sans">
       
-      {/* Ambient Background Blobs */}
+      {/* Refined Ambient Background Blobs */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-20%] w-[600px] h-[600px] bg-green-900/20 rounded-full blur-[120px] opacity-60" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#d9f99d]/5 rounded-full blur-[100px] opacity-40" />
-        <div className="absolute top-[40%] left-[20%] w-[300px] h-[300px] bg-blue-900/10 rounded-full blur-[80px] opacity-30" />
+        {/* Main Green Glow (Top Left) */}
+        <div className="absolute top-[-10%] left-[-10%] w-[80vw] h-[80vw] bg-[#bef264] rounded-full blur-[180px] opacity-10 mix-blend-screen" />
+        
+        {/* Secondary Blue/Green Glow (Bottom Right) */}
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[#22c55e] rounded-full blur-[140px] opacity-[0.08] mix-blend-screen" />
+        
+        {/* Subtle Middle Accent */}
+        <div className="absolute top-[30%] left-[50%] transform -translate-x-1/2 w-[40vw] h-[40vw] bg-white rounded-full blur-[160px] opacity-[0.03]" />
       </div>
 
-      <main className="w-full md:max-w-6xl mx-auto min-h-screen relative z-10 backdrop-blur-[1px] transition-all duration-300">
+      <main className="w-full md:max-w-md mx-auto min-h-screen relative z-10 transition-all duration-300 flex flex-col">
         {renderScreen()}
         <BottomNav currentRoute={currentRoute} onNavigate={setCurrentRoute} />
       </main>

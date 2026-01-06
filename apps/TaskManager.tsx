@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Share2, Clock, Plus, Calendar, ArrowLeft, Loader2, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Share2, Clock, Plus, Calendar, ArrowLeft, Loader2, CheckCircle, Circle, ArrowUpRight } from 'lucide-react';
 import { Task, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
 
@@ -62,30 +62,29 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   ];
 
   return (
-    <div className="w-full max-w-5xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
+    <div className="w-full max-w-md mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
             <ArrowLeft size={20} />
         </button>
         <div className="flex items-center gap-3">
-             {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-[#d9f99d]" />}
-             {saveStatus === 'saved' && <CheckCircle size={16} className="text-[#d9f99d]" />}
-            <button className="btn-lime px-4 py-2 rounded-full font-bold text-xs flex items-center gap-2">
-                Manage
-            </button>
+             {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-[#bef264]" />}
+             {saveStatus === 'saved' && <CheckCircle size={16} className="text-[#bef264]" />}
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
+                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=Felix`} alt="User" />
+            </div>
         </div>
       </div>
 
       <div className="mb-8">
-          <h1 className="text-3xl font-light text-white mb-2">My<br/><span className="font-bold text-[#d9f99d]">Tasks</span></h1>
-          <p className="text-gray-400 text-sm">You have {tasks.length} pending tasks</p>
+          <h1 className="text-3xl font-light text-white mb-2">My<br/><span className="font-medium text-[#bef264]">Schedule</span></h1>
       </div>
 
       {/* Date Strip */}
       <div className="flex justify-between gap-3 overflow-x-auto no-scrollbar mb-8 pb-2">
           {dates.map((d, i) => (
-              <div key={i} className={`flex flex-col items-center justify-center min-w-[60px] h-[75px] rounded-[20px] cursor-pointer transition-all border ${d.active ? 'bg-[#d9f99d] border-[#d9f99d] text-black' : 'glass-card border-white/5 text-gray-400 hover:bg-white/5'}`}>
+              <div key={i} className={`flex flex-col items-center justify-center min-w-[56px] h-[72px] rounded-[22px] cursor-pointer transition-all border ${d.active ? 'bg-[#bef264] border-[#bef264] text-black shadow-[0_0_15px_rgba(190,242,100,0.3)]' : 'glass-card border-white/5 text-gray-500 hover:bg-white/5'}`}>
                   {d.label && <span className="text-[9px] font-bold uppercase mb-1 opacity-60">{d.label}</span>}
                   <span className="text-lg font-bold">{d.day}</span>
                   <span className="text-[10px]">{d.mon}</span>
@@ -93,47 +92,43 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
           ))}
       </div>
 
-      {/* Task List Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {tasks.map((task) => (
-            <div key={task.id} className="glass-card p-5 rounded-[28px] relative group hover:bg-white/10 transition-colors">
-                <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-white leading-tight max-w-[70%]">{task.title}</h3>
-                    <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center cursor-pointer hover:bg-white/10">
-                        <Share2 size={14} className="text-gray-400" />
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4 mb-6 text-gray-400 text-xs font-medium">
-                    <div className="flex items-center gap-1.5">
-                        <Calendar size={12} />
-                        <span>{task.date}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                        <Clock size={12} />
-                        <span>{task.time}</span>
-                    </div>
-                </div>
-
-                <div className="flex justify-between items-center">
-                    <div className="flex -space-x-2">
-                        <div className="w-8 h-8 rounded-full bg-white/10 border border-black flex items-center justify-center text-[10px] text-white">AM</div>
-                        <button className="w-8 h-8 rounded-full bg-[#d9f99d] border border-black flex items-center justify-center text-black hover:scale-105 transition-transform">
-                            <Plus size={14} />
-                        </button>
+      {/* Pill-shaped Task List */}
+      <div className="space-y-3">
+        {tasks.map((task, idx) => {
+            const isActive = idx === 0; // Simulate first one being active/checked
+            return (
+                <div key={task.id} className={`
+                    w-full p-1 pl-1.5 pr-4 rounded-full flex items-center gap-3 transition-all cursor-pointer group
+                    ${isActive ? 'bg-[#bef264] text-black shadow-[0_4px_20px_rgba(190,242,100,0.2)]' : 'glass-card text-gray-300 hover:bg-white/5'}
+                `}>
+                    <div className={`
+                        w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors
+                        ${isActive ? 'bg-black text-white' : 'bg-white/5 border border-white/5 group-hover:bg-white/10'}
+                    `}>
+                        {isActive ? <CheckCircle size={20} className="text-[#bef264]" fill="black" /> : <Circle size={20} className="text-gray-500" />}
                     </div>
 
-                    <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/5 text-[#d9f99d] border border-[#d9f99d]/20">
-                        {task.priority}
-                    </span>
+                    <div className="flex-1 min-w-0 py-2">
+                        <h3 className={`text-sm font-bold leading-tight ${isActive ? 'text-black' : 'text-white'}`}>{task.title}</h3>
+                        <p className={`text-[10px] truncate ${isActive ? 'text-black/60' : 'text-gray-500'}`}>
+                            {task.time} • {task.priority}
+                        </p>
+                    </div>
+
+                    <div className={`
+                         w-8 h-8 rounded-full flex items-center justify-center
+                         ${isActive ? 'bg-black/10' : 'bg-white/5'}
+                    `}>
+                         <ArrowUpRight size={14} className={isActive ? 'text-black' : 'text-gray-500'} />
+                    </div>
                 </div>
-            </div>
-        ))}
+            )
+        })}
       </div>
 
        <button 
         onClick={addTask}
-        className="mt-6 w-full py-4 rounded-[24px] btn-lime font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+        className="mt-8 w-full py-4 rounded-[24px] btn-lime font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
        >
           <Plus size={18} /> Add New Task
        </button>
