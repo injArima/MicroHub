@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Home, ListTodo, BookOpen, Film, User } from 'lucide-react';
 import { AppRoute } from '../types';
@@ -15,14 +16,14 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentRoute, onNavigate }) => {
         onClick={() => onNavigate(route)}
         className={`
             relative w-12 h-12 flex items-center justify-center rounded-2xl transition-all duration-300 group
-            ${isActive(route) ? 'text-[#bef264]' : 'text-white/40 hover:text-white'}
+            ${isActive(route) ? 'text-[var(--primary)]' : 'text-white/40 hover:text-white'}
         `}
     >
-      <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive(route) ? 'scale-110 drop-shadow-[0_0_8px_rgba(190,242,100,0.5)]' : 'group-hover:scale-105'}`} strokeWidth={isActive(route) ? 2.5 : 2} />
+      <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive(route) ? 'scale-110 drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]' : 'group-hover:scale-105'}`} strokeWidth={isActive(route) ? 2.5 : 2} />
       
       {/* Active Dot Indicator */}
       {isActive(route) && (
-          <span className="absolute bottom-2.5 w-1 h-1 bg-[#bef264] rounded-full shadow-[0_0_8px_#bef264]"></span>
+          <span className="absolute bottom-2.5 w-1 h-1 bg-[var(--primary)] rounded-full shadow-[0_0_8px_var(--primary)]"></span>
       )}
     </button>
   );

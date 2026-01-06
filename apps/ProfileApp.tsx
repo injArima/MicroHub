@@ -1,17 +1,20 @@
+
 import React, { useState } from 'react';
-import { Database, Loader2, FileSpreadsheet, Server, User as UserIcon, Lock, Key, CheckCircle, AlertTriangle, RefreshCw, Trash2, ArrowRight } from 'lucide-react';
-import { SheetConfig } from '../types';
+import { Database, Loader2, FileSpreadsheet, Server, User as UserIcon, Lock, Key, CheckCircle, AlertTriangle, RefreshCw, Trash2, ArrowRight, Palette, RotateCcw } from 'lucide-react';
+import { SheetConfig, ThemeConfig } from '../types';
 import { saveConfig, disconnectSheet, setupNewUser, checkSheetStatus, loginUser, resetSheet } from '../services/sheet';
 
 interface ProfileAppProps {
     config: SheetConfig | null;
     onConnect: (config: SheetConfig) => void;
     onDisconnect: () => void;
+    theme: ThemeConfig;
+    onUpdateTheme: (theme: ThemeConfig) => void;
 }
 
 type ConnectionStep = 'input' | 'auth_returning' | 'auth_new_success' | 'onboarding';
 
-const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect }) => {
+const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect, theme, onUpdateTheme }) => {
     // State
     const [step, setStep] = useState<ConnectionStep>('input');
     const [scriptUrl, setScriptUrl] = useState('');
@@ -138,18 +141,80 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
         }
     };
 
+    const handleColorChange = (key: keyof ThemeConfig, value: string) => {
+        onUpdateTheme({
+            ...theme,
+            [key]: value
+        });
+    };
+
+    const resetTheme = () => {
+        onUpdateTheme({ primary: '#bef264', secondary: '#d9f99d' });
+    };
+
     return (
         <div className="w-full max-w-md mx-auto min-h-screen pb-32 pt-12 px-6 flex flex-col">
             <div className="flex flex-col items-center mb-8">
                 <div className="w-24 h-24 rounded-full glass-card flex items-center justify-center mb-4 border border-white/10 relative">
-                    {config ? <CheckCircle size={40} className="text-[#d9f99d]" /> : <UserIcon size={40} className="text-gray-400" />}
-                    {config && <div className="absolute inset-0 bg-[#d9f99d]/20 rounded-full blur-xl animate-pulse"></div>}
+                    {config ? <CheckCircle size={40} className="text-[var(--primary)]" /> : <UserIcon size={40} className="text-gray-400" />}
+                    {config && <div className="absolute inset-0 bg-[var(--primary)]/20 rounded-full blur-xl animate-pulse"></div>}
                 </div>
-                <h1 className="text-2xl font-light text-white">Cloud <span className="font-bold text-[#d9f99d]">Sync</span></h1>
-                <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest">{config ? 'Connected' : 'Disconnected'}</p>
+                <h1 className="text-2xl font-light text-white">System <span className="font-bold text-[var(--primary)]">Settings</span></h1>
+            </div>
+
+            {/* Customization Section */}
+            <div className="glass-card rounded-[32px] p-6 mb-6">
+                <div className="flex items-center gap-2 mb-4">
+                    <Palette size={16} className="text-[var(--primary)]" />
+                    <h2 className="text-sm font-bold text-white uppercase tracking-wider">Appearance</h2>
+                </div>
+                
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5">
+                        <span className="text-xs text-gray-300">Primary Color</span>
+                        <div className="flex items-center gap-3">
+                            <span className="text-[10px] font-mono text-gray-500 uppercase">{theme.primary}</span>
+                            <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-lg">
+                                <input 
+                                    type="color" 
+                                    value={theme.primary}
+                                    onChange={(e) => handleColorChange('primary', e.target.value)}
+                                    className="absolute inset-0 w-[150%] h-[150%] -top-[25%] -left-[25%] cursor-pointer p-0 border-0"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5">
+                        <span className="text-xs text-gray-300">Secondary Color</span>
+                        <div className="flex items-center gap-3">
+                            <span className="text-[10px] font-mono text-gray-500 uppercase">{theme.secondary}</span>
+                            <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-lg">
+                                <input 
+                                    type="color" 
+                                    value={theme.secondary}
+                                    onChange={(e) => handleColorChange('secondary', e.target.value)}
+                                    className="absolute inset-0 w-[150%] h-[150%] -top-[25%] -left-[25%] cursor-pointer p-0 border-0"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={resetTheme}
+                        className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-gray-400 flex items-center justify-center gap-2 transition-colors"
+                    >
+                        <RotateCcw size={12} /> Reset to Default
+                    </button>
+                </div>
             </div>
 
             <div className="glass-card rounded-[32px] p-6 relative overflow-hidden">
+                <div className="flex items-center gap-2 mb-4">
+                    <Database size={16} className="text-[var(--primary)]" />
+                    <h2 className="text-sm font-bold text-white uppercase tracking-wider">Cloud Sync</h2>
+                </div>
+
                 {/* Error Banner */}
                 {errorMsg && (
                     <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-4 flex items-center gap-2 text-red-300 text-xs">
@@ -163,9 +228,9 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                         {/* Step 1: Inputs */}
                         {step === 'input' && (
                             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
-                                <p className="text-center text-gray-400 text-xs mb-2">Connect Google Sheet</p>
+                                <p className="text-left text-gray-400 text-xs mb-2">Connect Google Sheet</p>
                                 <div className="space-y-3">
-                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
                                         <Server size={14} className="text-gray-500" />
                                         <input 
                                             value={scriptUrl} 
@@ -174,7 +239,7 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                                             placeholder="Script URL" 
                                         />
                                     </div>
-                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
                                         <FileSpreadsheet size={14} className="text-gray-500" />
                                         <input 
                                             value={sheetId} 
@@ -198,7 +263,7 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                                     <p className="text-gray-500 text-xs mt-1">Let's set up your database.</p>
                                 </div>
                                 
-                                <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
+                                <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
                                     <UserIcon size={14} className="text-gray-500" />
                                     <input 
                                         value={userName} 
@@ -230,8 +295,8 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                                 
                                 {/* Only show input if NOT in reset mode */}
                                 {!showResetConfirm && (
-                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[#d9f99d]/30 transition-colors">
-                                        <Key size={14} className="text-[#d9f99d]" />
+                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
+                                        <Key size={14} className="text-[var(--primary)]" />
                                         <input 
                                             type="text" 
                                             maxLength={6}
@@ -275,7 +340,7 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                         {/* Step 3: New User Success */}
                         {step === 'auth_new_success' && (
                             <div className="space-y-6 text-center animate-in zoom-in duration-300">
-                                <div className="w-12 h-12 bg-[#d9f99d]/20 rounded-full flex items-center justify-center mx-auto text-[#d9f99d]">
+                                <div className="w-12 h-12 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto text-[var(--primary)]">
                                     <CheckCircle size={24} />
                                 </div>
                                 <div>
@@ -285,8 +350,8 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                                     </p>
                                 </div>
                                 
-                                <div className="bg-black/40 p-4 rounded-xl border border-[#d9f99d]/30">
-                                    <p className="text-3xl font-mono text-[#d9f99d] tracking-widest font-bold">{generatedKey}</p>
+                                <div className="bg-black/40 p-4 rounded-xl border border-[var(--primary)]/30">
+                                    <p className="text-3xl font-mono text-[var(--primary)] tracking-widest font-bold">{generatedKey}</p>
                                 </div>
 
                                 <div className="bg-yellow-500/10 p-3 rounded-lg flex gap-2 text-left">
@@ -308,10 +373,10 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                         <div className="mb-6 w-full bg-white/5 p-4 rounded-2xl border border-white/5">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-xs text-gray-500">Database Status</span>
-                                <span className="text-[10px] bg-[#d9f99d]/20 text-[#d9f99d] px-2 py-1 rounded-full font-bold">ACTIVE</span>
+                                <span className="text-[10px] bg-[var(--primary)]/20 text-[var(--primary)] px-2 py-1 rounded-full font-bold">ACTIVE</span>
                             </div>
                             <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#d9f99d] w-full animate-pulse"></div>
+                                <div className="h-full bg-[var(--primary)] w-full animate-pulse"></div>
                             </div>
                             <p className="text-[10px] text-gray-500 mt-2 text-right">Last sync: Just now</p>
                         </div>

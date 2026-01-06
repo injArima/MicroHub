@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, ArrowLeft, Sparkles } from 'lucide-react';
 import { generateText } from '../services/gemini';
@@ -40,8 +41,8 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
             <ArrowLeft size={20} />
         </button>
         <div>
-            <h1 className="text-lg font-bold text-white flex items-center gap-2">Gemini <Sparkles size={14} className="text-[#d9f99d]"/></h1>
-            <p className="text-[10px] text-[#d9f99d] uppercase tracking-wider font-bold">Online</p>
+            <h1 className="text-lg font-bold text-white flex items-center gap-2">Gemini <Sparkles size={14} className="text-[var(--secondary)]"/></h1>
+            <p className="text-[10px] text-[var(--secondary)] uppercase tracking-wider font-bold">Online</p>
         </div>
       </div>
 
@@ -51,7 +52,7 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
             <div className={`p-4 rounded-[20px] max-w-[80%] text-sm leading-relaxed ${
                 msg.role === 'user' 
                   ? 'bg-white/10 text-white rounded-br-none border border-white/5' 
-                  : 'glass-card text-[#d9f99d] rounded-bl-none border border-[#d9f99d]/20'
+                  : 'glass-card text-[var(--secondary)] rounded-bl-none border border-[var(--secondary)]/20'
               }`}>
                 {msg.text}
             </div>
@@ -60,9 +61,9 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
         {isLoading && (
             <div className="flex justify-start">
                  <div className="glass-card px-4 py-3 rounded-[20px] rounded-bl-none flex gap-1 items-center">
-                    <span className="w-1.5 h-1.5 bg-[#d9f99d] rounded-full animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 bg-[#d9f99d] rounded-full animate-bounce delay-75"></span>
-                    <span className="w-1.5 h-1.5 bg-[#d9f99d] rounded-full animate-bounce delay-150"></span>
+                    <span className="w-1.5 h-1.5 bg-[var(--secondary)] rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-[var(--secondary)] rounded-full animate-bounce delay-75"></span>
+                    <span className="w-1.5 h-1.5 bg-[var(--secondary)] rounded-full animate-bounce delay-150"></span>
                 </div>
             </div>
         )}
@@ -70,7 +71,7 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
       </div>
 
       <div className="mt-4">
-        <div className="glass-card rounded-full p-1 pl-4 flex items-center gap-2 focus-within:border-[#d9f99d]/50 transition-colors">
+        <div className="glass-card rounded-full p-1 pl-4 flex items-center gap-2 focus-within:border-[var(--secondary)]/50 transition-colors">
           <input
             type="text"
             value={input}
@@ -82,7 +83,7 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
           <button 
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="w-10 h-10 rounded-full bg-[#d9f99d] flex items-center justify-center text-black hover:scale-105 transition-transform disabled:opacity-50"
+            className="w-10 h-10 rounded-full bg-[var(--secondary)] flex items-center justify-center text-black hover:scale-105 transition-transform disabled:opacity-50"
           >
             <Send size={16} />
           </button>

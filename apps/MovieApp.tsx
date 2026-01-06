@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2 } from 'lucide-react';
 import { Movie, SheetConfig } from '../types';
@@ -60,12 +61,12 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                  <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                     <ArrowLeft size={20} />
                 </button>
-                <div className="bg-[#d9f99d]/10 px-3 py-1 rounded-full border border-[#d9f99d]/20">
-                    <span className="text-[10px] font-bold text-[#d9f99d] uppercase tracking-wider">Cinema Log</span>
+                <div className="bg-[var(--secondary)]/10 px-3 py-1 rounded-full border border-[var(--secondary)]/20">
+                    <span className="text-[10px] font-bold text-[var(--secondary)] uppercase tracking-wider">Cinema Log</span>
                 </div>
             </div>
 
-            <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-6 focus-within:border-[#d9f99d]/50 transition-colors max-w-2xl mx-auto w-full">
+            <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-6 focus-within:border-[var(--secondary)]/50 transition-colors max-w-2xl mx-auto w-full">
                 <Search size={16} className="text-gray-400" />
                 <input
                     type="text"
@@ -78,7 +79,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 <button 
                     onClick={handleAddMovie}
                     disabled={isSearching}
-                    className="w-8 h-8 rounded-full bg-[#d9f99d] flex items-center justify-center text-black hover:scale-105 transition-transform"
+                    className="w-8 h-8 rounded-full bg-[var(--secondary)] flex items-center justify-center text-black hover:scale-105 transition-transform"
                 >
                     {isSearching ? <Loader2 size={14} className="animate-spin" /> : <Plus size={16} />}
                 </button>
@@ -89,7 +90,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                     <button 
                         key={tab}
                         onClick={() => setActiveTab(tab as any)}
-                        className={`flex-1 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeTab === tab ? 'bg-[#d9f99d] text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                        className={`flex-1 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeTab === tab ? 'bg-[var(--secondary)] text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
                     >
                         {tab}
                     </button>
@@ -106,7 +107,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                             <h3 className="font-bold text-white leading-tight mb-1 truncate">{movie.title}</h3>
                             <p className="text-xs text-gray-500 mb-3 truncate">{movie.year} • {movie.director}</p>
                             <div className="flex gap-2">
-                                <button onClick={() => setMovies(prev => prev.map(m => m.id === movie.id ? {...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist'} : m))} className="text-[#d9f99d] text-xs font-bold hover:underline">
+                                <button onClick={() => setMovies(prev => prev.map(m => m.id === movie.id ? {...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist'} : m))} className="text-[var(--secondary)] text-xs font-bold hover:underline">
                                     {movie.status === 'watchlist' ? 'Mark Watched' : 'Rewatch'}
                                 </button>
                                 <button onClick={() => setMovies(prev => prev.filter(m => m.id !== movie.id))} className="text-red-400 text-xs font-bold hover:underline">Delete</button>

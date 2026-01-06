@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,6 +16,13 @@
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --primary: #bef264;
+        --primary-rgb: 190, 242, 100;
+        --secondary: #d9f99d;
+        --secondary-rgb: 217, 249, 157;
+      }
+
       body {
         font-family: 'Inter', sans-serif;
         background-color: #050505;
@@ -57,15 +65,15 @@
       }
 
       .btn-lime {
-        background-color: #bef264;
+        background-color: var(--primary);
         color: #0c0c0c;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 20px rgba(190, 242, 100, 0.3);
+        box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
       }
       .btn-lime:hover {
-        background-color: #d9f99d;
+        background-color: var(--secondary);
         transform: translateY(-1px);
-        box-shadow: 0 8px 25px rgba(190, 242, 100, 0.4);
+        box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
       }
       
       .text-glow {

@@ -1,9 +1,12 @@
+
 export enum AppRoute {
   HOME = 'HOME',
   TASKS = 'TASKS',
   JOURNAL = 'JOURNAL',
   MOVIES = 'MOVIES',
   PROFILE = 'PROFILE',
+  TIMER = 'TIMER',
+  STOPWATCH = 'STOPWATCH',
 }
 
 export interface SheetConfig {
@@ -11,6 +14,11 @@ export interface SheetConfig {
   authKey: string;
   scriptUrl: string;
   connectedAt: string;
+}
+
+export interface ThemeConfig {
+  primary: string;
+  secondary: string;
 }
 
 export interface User {
