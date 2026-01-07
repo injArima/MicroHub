@@ -67,9 +67,11 @@ export const getMovieDetails = async (imdbId: string): Promise<Partial<Movie>> =
 
         // Extract Episodes
         let episodeCount: number | undefined = undefined;
-        if (info['@type'] === 'TVSeries' || info['@type'] === 'TelevisionSeries') {
-            // Try to find episode count in main payload if possible, or just ignore.
-            // Without reliable field, we leave undefined.
+        // Check both 'short' (schema.org) and 'main' (IMDB internal) if available
+        if (detailsData.main?.episodes?.totalEpisodes?.total) {
+            episodeCount = detailsData.main.episodes.totalEpisodes.total;
+        } else if (detailsData.main?.episodes?.episodes?.total) {
+            episodeCount = detailsData.main.episodes.episodes.total;
         }
 
         return {
@@ -97,6 +99,7 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
 };
 
 export const syncMovies = async (config: SheetConfig, movies: Movie[]) => {
+    console.log("Starting Sync...");
     // Transform to Sheet Schema:
     // [ID, Title, Year, Director, Genre (String), Status, Poster URL, Score, Episodes]
 
@@ -112,5 +115,11 @@ export const syncMovies = async (config: SheetConfig, movies: Movie[]) => {
         m.episodeCount ? m.episodeCount.toString() : ""
     ]);
 
-    await syncSheet(config, 'Cinema_Log', sheetData);
+    try {
+        await syncSheet(config, 'Cinema_Log', sheetData);
+        console.log("Sync Complete Success");
+    } catch (e) {
+        console.error("Sync Failed in service:", e);
+        throw e;
+    }
 };

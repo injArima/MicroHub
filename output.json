@@ -1,0 +1,4786 @@
+{
+  "short": {
+    "@context": "https://schema.org",
+    "@type": "TVSeries",
+    "url": "https://www.imdb.com/title/tt0903747/",
+    "name": "Breaking Bad",
+    "image": "https://m.media-amazon.com/images/M/MV5BMzU5ZGYzNmQtMTdhYy00OGRiLTg0NmQtYjVjNzliZTg1ZGE4XkEyXkFqcGc@._V1_.jpg",
+    "description": "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student to secure his family&apos;s future.",
+    "review": {
+      "@type": "Review",
+      "itemReviewed": {
+        "@type": "TVSeries",
+        "url": "https://www.imdb.com/title/tt0903747/"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "KinoKoopaKid"
+      },
+      "dateCreated": "2021-07-30",
+      "inLanguage": "English",
+      "name": "99.1% pure",
+      "reviewBody": "One of the greatest shows ever, the pacing is excellent. The characters are well developed and entertaining. The show ties everything together very neatly. It&apos;s honestly a show that get&apos;s better each time you view it. It&apos;s cathartic to see Walter break bad and how the story unravels is the best way it could have. Very good storytelling, well done to Vince Gilligan.",
+      "reviewRating": {
+        "@type": "Rating",
+        "worstRating": 1,
+        "bestRating": 10,
+        "ratingValue": 10
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingCount": 2458123,
+      "bestRating": 10,
+      "worstRating": 1,
+      "ratingValue": 9.5
+    },
+    "contentRating": "M18",
+    "genre": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "datePublished": "2017-10-05",
+    "keywords": "cancer,chemistry,drug trade,drug,meth lab",
+    "creator": [
+      {
+        "@type": "Organization",
+        "url": "https://www.imdb.com/company/co0212797/"
+      },
+      {
+        "@type": "Organization",
+        "url": "https://www.imdb.com/company/co0071947/"
+      },
+      {
+        "@type": "Organization",
+        "url": "https://www.imdb.com/company/co0086397/"
+      }
+    ],
+    "trailer": {
+      "@type": "VideoObject",
+      "name": "&quot;Say My Name&quot;",
+      "embedUrl": "https://www.imdb.com/video/vi338798873/",
+      "thumbnail": {
+        "@type": "ImageObject",
+        "contentUrl": "https://m.media-amazon.com/images/M/MV5BMTJiMzgwZTktYzZhZC00YzhhLWEzZDUtMGM2NTE4MzQ4NGFmXkEyXkFqcGdeQWpybA@@._V1_.jpg"
+      },
+      "thumbnailUrl": "https://m.media-amazon.com/images/M/MV5BMTJiMzgwZTktYzZhZC00YzhhLWEzZDUtMGM2NTE4MzQ4NGFmXkEyXkFqcGdeQWpybA@@._V1_.jpg",
+      "url": "https://www.imdb.com/video/vi338798873/",
+      "description": "Here&apos;s a look at the final eight episodes of Breaking Bad, which premieres on Sunday, August 11 at 9/8c",
+      "duration": "PT31S",
+      "uploadDate": "2013-08-06T09:15:19Z"
+    }
+  },
+  "imdbId": "tt0903747",
+  "top": {
+    "id": "tt0903747",
+    "productionStatus": {
+      "currentProductionStage": {
+        "id": "released",
+        "text": "Released",
+        "__typename": "ProductionStage"
+      },
+      "productionStatusHistory": [
+        {
+          "status": {
+            "id": "pre_production",
+            "text": "Pre-production",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "released",
+            "text": "Released",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        }
+      ],
+      "restriction": null,
+      "__typename": "ProductionStatusDetails"
+    },
+    "externalLinks": {
+      "total": 258,
+      "__typename": "ExternalLinkConnection"
+    },
+    "metacritic": null,
+    "keywords": {
+      "total": 181,
+      "edges": [
+        {
+          "node": {
+            "text": "cancer",
+            "__typename": "TitleKeyword"
+          },
+          "__typename": "TitleKeywordEdge"
+        },
+        {
+          "node": {
+            "text": "chemistry",
+            "__typename": "TitleKeyword"
+          },
+          "__typename": "TitleKeywordEdge"
+        },
+        {
+          "node": {
+            "text": "drug trade",
+            "__typename": "TitleKeyword"
+          },
+          "__typename": "TitleKeywordEdge"
+        },
+        {
+          "node": {
+            "text": "drug",
+            "__typename": "TitleKeyword"
+          },
+          "__typename": "TitleKeywordEdge"
+        },
+        {
+          "node": {
+            "text": "meth lab",
+            "__typename": "TitleKeyword"
+          },
+          "__typename": "TitleKeywordEdge"
+        }
+      ],
+      "__typename": "TitleKeywordConnection"
+    },
+    "credits": {
+      "total": 1257,
+      "__typename": "CreditConnection"
+    },
+    "engagementStatistics": {
+      "watchlistStatistics": {
+        "displayableCount": {
+          "text": "Added by 1.3M users",
+          "__typename": "LocalizedDisplayableCount"
+        },
+        "__typename": "WatchlistStatistics"
+      },
+      "__typename": "EngagementStatistics"
+    },
+    "titleText": {
+      "text": "Breaking Bad",
+      "__typename": "TitleText"
+    },
+    "titleType": {
+      "displayableProperty": {
+        "value": {
+          "plainText": "TV Series",
+          "__typename": "Markdown"
+        },
+        "__typename": "DisplayableTitleTypeProperty"
+      },
+      "text": "TV Series",
+      "id": "tvSeries",
+      "isSeries": true,
+      "isEpisode": false,
+      "categories": [
+        {
+          "value": "tv",
+          "__typename": "TitleTypeCategory"
+        }
+      ],
+      "canHaveEpisodes": true,
+      "__typename": "TitleType"
+    },
+    "originalTitleText": {
+      "text": "Breaking Bad",
+      "__typename": "TitleText"
+    },
+    "certificate": {
+      "rating": "M18",
+      "__typename": "Certificate"
+    },
+    "releaseYear": {
+      "year": 2008,
+      "endYear": 2013,
+      "__typename": "YearRange"
+    },
+    "releaseDate": {
+      "day": 5,
+      "month": 10,
+      "year": 2017,
+      "country": {
+        "text": "Singapore",
+        "__typename": "LocalizedDisplayableCountry"
+      },
+      "__typename": "ReleaseDate"
+    },
+    "runtime": {
+      "seconds": 2880,
+      "displayableProperty": {
+        "value": {
+          "plainText": "48m",
+          "__typename": "Markdown"
+        },
+        "__typename": "DisplayableTitleRuntimeProperty"
+      },
+      "__typename": "Runtime"
+    },
+    "canRate": {
+      "isRatable": true,
+      "__typename": "CanRate"
+    },
+    "ratingsSummary": {
+      "aggregateRating": 9.5,
+      "voteCount": 2458123,
+      "__typename": "RatingsSummary"
+    },
+    "meterRanking": {
+      "currentRank": 10,
+      "rankChange": {
+        "changeDirection": "DOWN",
+        "difference": 1,
+        "__typename": "MeterRankChange"
+      },
+      "__typename": "TitleMeterRanking"
+    },
+    "series": null,
+    "isAdult": false,
+    "genres": {
+      "genres": [
+        {
+          "text": "Crime",
+          "id": "Crime",
+          "__typename": "Genre"
+        },
+        {
+          "text": "Drama",
+          "id": "Drama",
+          "__typename": "Genre"
+        },
+        {
+          "text": "Thriller",
+          "id": "Thriller",
+          "__typename": "Genre"
+        }
+      ],
+      "__typename": "Genres"
+    },
+    "interests": {
+      "edges": [
+        {
+          "node": {
+            "id": "in0000035",
+            "primaryText": {
+              "text": "Dark Comedy",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000053",
+            "primaryText": {
+              "text": "Drug Crime",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000086",
+            "primaryText": {
+              "text": "Psychological Drama",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000182",
+            "primaryText": {
+              "text": "Psychological Thriller",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000090",
+            "primaryText": {
+              "text": "Tragedy",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000052",
+            "primaryText": {
+              "text": "Crime",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000076",
+            "primaryText": {
+              "text": "Drama",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000186",
+            "primaryText": {
+              "text": "Thriller",
+              "__typename": "InterestText"
+            },
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        }
+      ],
+      "__typename": "InterestConnection"
+    },
+    "plot": {
+      "plotText": {
+        "plainText": "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student to secure his family's future.",
+        "__typename": "Markdown"
+      },
+      "language": {
+        "id": "en-US",
+        "__typename": "DisplayableLanguage"
+      },
+      "__typename": "Plot"
+    },
+    "plotContributionLink": {
+      "url": "https://contribute.imdb.com/updates?update=tt0903747:outlines.add.1.locale~en-US",
+      "__typename": "ContributionLink"
+    },
+    "primaryImage": {
+      "id": "rm3116305665",
+      "width": 2000,
+      "height": 3000,
+      "url": "https://m.media-amazon.com/images/M/MV5BMzU5ZGYzNmQtMTdhYy00OGRiLTg0NmQtYjVjNzliZTg1ZGE4XkEyXkFqcGc@._V1_.jpg",
+      "caption": {
+        "plainText": "Bryan Cranston in Breaking Bad (2008)",
+        "__typename": "Markdown"
+      },
+      "__typename": "Image"
+    },
+    "images": {
+      "total": 2502,
+      "edges": [
+        {
+          "node": {
+            "id": "rm4224482560",
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        }
+      ],
+      "__typename": "ImageConnection"
+    },
+    "videos": {
+      "total": 74,
+      "__typename": "TitleRelatedVideosConnection"
+    },
+    "primaryVideos": {
+      "edges": [
+        {
+          "node": {
+            "id": "vi338798873",
+            "createdDate": "2013-08-06T09:15:19Z",
+            "isMature": false,
+            "runtime": {
+              "value": 31,
+              "__typename": "VideoRuntime"
+            },
+            "name": {
+              "value": "\"Say My Name\"",
+              "language": "en",
+              "__typename": "LocalizedString"
+            },
+            "description": {
+              "value": "Here's a look at the final eight episodes of Breaking Bad, which premieres on Sunday, August 11 at 9/8c",
+              "language": "en",
+              "__typename": "LocalizedString"
+            },
+            "timedTextTracks": [],
+            "recommendedTimedTextTrack": null,
+            "thumbnail": {
+              "url": "https://m.media-amazon.com/images/M/MV5BMTJiMzgwZTktYzZhZC00YzhhLWEzZDUtMGM2NTE4MzQ4NGFmXkEyXkFqcGdeQWpybA@@._V1_.jpg",
+              "height": 1080,
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "primaryTitle": {
+              "id": "tt0903747",
+              "titleText": {
+                "text": "Breaking Bad",
+                "__typename": "TitleText"
+              },
+              "originalTitleText": {
+                "text": "Breaking Bad",
+                "__typename": "TitleText"
+              },
+              "releaseYear": {
+                "year": 2008,
+                "__typename": "YearRange"
+              },
+              "__typename": "Title"
+            },
+            "playbackURLs": [
+              {
+                "displayName": {
+                  "value": "AUTO",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "M3U8",
+                "videoDefinition": "DEF_AUTO",
+                "url": "https://imdb-video.media-imdb.com/vi338798873/hls-1616202355945-master.m3u8?Expires=1767887967&Signature=XbaLUGQzdR5QIIUU7ioCUJ5dqJoZmk1O3l7cM7XADpkVBnw4Qg3y1MK-X8ZnZJXIbemZaZufAR5thFlAhA6sW5cuFGqJAmT5h5I7D8hKvSkz0lvNo6YFYv7DvO-C7wW6lWBbg~ThjAQ6pVnPSt7hHbQVMtmPincI31VCstjrvMc3gijhFEk-eDkYGXBqH0uIV4x2OafD9wM71J79UZIQZtD5R4BlPSnTMSTRIYzSxS~qxbYg2H39Aw2qlTPpRgcgLPa5ipa5m1B85SbRfeH56PaCruzJLwOvvJwBMo3QuTW7ZPrOL-HY3xy-8l3KhnefawrAV~GoMv4KV9VZhDXyBw__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              },
+              {
+                "displayName": {
+                  "value": "SD",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "MP4",
+                "videoDefinition": "DEF_SD",
+                "url": "https://imdb-video.media-imdb.com/vi338798873/1434659454657-dx9ykf-1616202355945.mp4?Expires=1767887967&Signature=gVzG2EvtG3u29Ta~xPuyA-u~9Uk~-~je42Oe9vT-wqI-0NcGWbc44BCKNKXVaueoVfMdpshTlIIdMXn1YZOowDwXXb7-wVQARdAe8R6F9Ujdu8nYlTSUxQXb7NY2W8Po8ai6zTaEZp~qATpYHAqKUgEPbwv4sc7pRQmIC6BGdOR-2oH1rBNkAeYAEu9w1vUrA88KtRyetJZYZun4dgD~Fj9m~~b8GNJab4HqvKVDGWUcea0IrenI-~3t~Log~GIO0iEkoLM9k6XOzgZgpbTde9yDZDhX66F0618jApxD5lfU2MrfY4h9-a22XHT0C4nqAmcXc7TIBvAW4d7pfwvX2w__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              },
+              {
+                "displayName": {
+                  "value": "720p",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "MP4",
+                "videoDefinition": "DEF_720p",
+                "url": "https://imdb-video.media-imdb.com/vi338798873/1434659379400-8cjq25-1616202355945.mp4?Expires=1767887967&Signature=JkLoGSASB~VWGXv71C-ePMhd9xGXgu8eSQLxoDgBbnNXpYJ2Yo74L53FkBUrx5dff9aAUKTVgur3xC5DdjWhrDDUh-LmbaAGSQTdvfhlSymg1dbJDZYrRWNqsWsJ6mrzs3QELCtS9b2HeQehDxpOTZ~HvE5AviaLWvw2mOOP1s1Dr1zx~CsH~FgQ9vUZT4uaGz7xLTfw8lS8Vn78Vs8VbC0pZSykbq3v4VDGFXYQ4aaZrJfTufUsX~Mdo8~BG4ge9b1m8pDNLCrEpnnocPNiy~r8xh8clDv2779WovODE1PyqZ-FoAwgUyL02gSiGK20djeFYsKYg4ROF9AopXJcFA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              },
+              {
+                "displayName": {
+                  "value": "480p",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "MP4",
+                "videoDefinition": "DEF_480p",
+                "url": "https://imdb-video.media-imdb.com/vi338798873/1434659607842-pgv4ql-1616202355944.mp4?Expires=1767887967&Signature=lbhJItcx1u-lB1TIu26hRDYoZus~uJFNwWyr6zni~LDRmGJc3jHX22gK7vetCoPFcy7A2kvPsupRMdKo9HO18PNjzjDWx4aUatt5koqSh85PxbYdn0KO-pxUu39QvcHcocHglyaJsqxGfl5waD9BtInwTxOcsdA1ZSVwLq496n6O4v05c3nWorGgsBtih31sE1sPPK1WVskJmhwpScyrPgUCXaJwUjzpxwXJ-6VwfTLamop7F2oTrZAa~BtWWgCzJBfnTNN5~9wiz0shuEQ35YvPdjmW2yTe-zmqklN6-1oQdUTyB7i0aJZjBPl~s5HOkZTfWLLd-gpNQ8KlFdb1zA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              }
+            ],
+            "contentType": {
+              "id": "amzn1.imdb.video.contenttype.trailer",
+              "displayName": {
+                "value": "Trailer",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "previewURLs": [
+              {
+                "displayName": {
+                  "value": "AUTO",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "M3U8",
+                "videoDefinition": "DEF_AUTO",
+                "url": "https://imdb-video.media-imdb.com/vi338798873/hls-preview-165400d6-1d92-42ec-888e-9464721769a5.m3u8?Expires=1767887967&Signature=DI7Z2sbLn~SPzIvcSVd8QvPH4DS2lDhLKGRn8RASiCVj0cI~PGS90G-sZRHevttW228wPdkhbPaTJgFBfDqH3w3ejt-bKvIPqFSeIYncdZLdyDHAbh5KC9WvPA1xi4yKQQGp-GetVUSj3ggA71ASjl6JMxXkjIPHzRrxlA8A7Z~~Tm7WalpgJGJQe5oiqeYl1cwQbsMPcj34AjT-~1pKs6JzBttu0N7Cq2mjbV-RycECufKsFYRPWQmlkorcEIPAtlgcf2Upb8y3ckF~SWTGHGWweKmQyabxjoyBE5Fmb0Cs1xny2EEZ61rEkKWFOdMl3TD2~~773LgJszQETOyksA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "__typename": "PlaybackURL"
+              }
+            ],
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi2264177689",
+            "createdDate": "2011-07-07T09:36:54Z",
+            "isMature": false,
+            "runtime": {
+              "value": 122,
+              "__typename": "VideoRuntime"
+            },
+            "name": {
+              "value": "Breaking Bad Season Four ",
+              "language": "en",
+              "__typename": "LocalizedString"
+            },
+            "description": {
+              "value": "Catch up on the action with this two-minute preview trailer for the AMC original drama \"Breaking Bad.\"",
+              "language": "en",
+              "__typename": "LocalizedString"
+            },
+            "timedTextTracks": [],
+            "recommendedTimedTextTrack": null,
+            "thumbnail": {
+              "url": "https://m.media-amazon.com/images/M/MV5BMTYwNTc4MjQyMl5BMl5BanBnXkFtZTgwNjcxMjMyMzE@._V1_.jpg",
+              "height": 416,
+              "width": 720,
+              "__typename": "Thumbnail"
+            },
+            "primaryTitle": {
+              "id": "tt0903747",
+              "titleText": {
+                "text": "Breaking Bad",
+                "__typename": "TitleText"
+              },
+              "originalTitleText": {
+                "text": "Breaking Bad",
+                "__typename": "TitleText"
+              },
+              "releaseYear": {
+                "year": 2008,
+                "__typename": "YearRange"
+              },
+              "__typename": "Title"
+            },
+            "playbackURLs": [
+              {
+                "displayName": {
+                  "value": "SD",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "MP4",
+                "videoDefinition": "DEF_SD",
+                "url": "https://imdb-video.media-imdb.com/vi2264177689/1434659454657-dx9ykf-1616200223043.mp4?Expires=1767887967&Signature=G3hgjp5-7XekY50cTz8d3qKVfxta271Cj9mRAoYSJA1YYP-OY-vzQyxVRbb00JNirnRhD5ufP~N9LHDwm3jGaNk-5A0VLuxJLKn~3y7bZBJTiQp-GfjSAejTIi73XlRkbUPDd1FhDnMzCU1mFLpo4zF76sZzNtIu5dmec4FnBrq9WOb17G6FEpkNoWZL3kqlJhm6hOoTXzG8UOA1tnBXMlGNb0RecgYn9dvDayi-aFmuFzN6DrUXFABMpdMnFhOc7I3G6oqx98ih15rS9viQvxYB23PhfwH5ixWlELFt-lyGXLzWlE2zb3ACo~7c5P5qZfcA7hE5HaIlDBsG8j8I5A__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              },
+              {
+                "displayName": {
+                  "value": "AUTO",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "M3U8",
+                "videoDefinition": "DEF_AUTO",
+                "url": "https://imdb-video.media-imdb.com/vi2264177689/hls-1616200223043-master.m3u8?Expires=1767887967&Signature=YQuLIV06f2WS18EaJJarQjWeTYaJdBmEFjMP65doOuNCTxcFkN5KAZpmgr0BdZXiibiEWB~F8VEpVr5rAXq8qFfLlIjSOXYmyBHN1bANmw0c~dl1PyxHTIm1j4sdbxSQWAoN52jm2zS4kSH7WEKfCu2H05gURqQhI6Cn0MQnre~c3wm-pWAWWhLY-kczZ2nkIN08jjF4EPTZ7fTN6Emaw~ccgSU~WT-B14-C9XllR~Zd52T3Hf7BsEi9g675AzQCQ4oAcS5bIwPRtlwvH5n1mZEk6GuP9qWOF1DXYLGxCHACfUdCP09McYUo8GZtdQ2H-JNU1aO2y0IwBsbnkB5mLA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              },
+              {
+                "displayName": {
+                  "value": "480p",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "MP4",
+                "videoDefinition": "DEF_480p",
+                "url": "https://imdb-video.media-imdb.com/vi2264177689/1434659607842-pgv4ql-1616200223043.mp4?Expires=1767887967&Signature=hEi3zYOqFw9PXbustDWFfuifagmnIczPdXmJJ7KtjmkjPwK3WyIVrDvmJ7Qyk0o3cbx9Jdzy8Yn~sMsdZfq7HZFV8owbXKo7S1Hf8VjhjbWFmwYwQsEcxrIKRmgMqO-54CdKFNMNJlkJlPQhOLVwUiLLjT2KRUQsM~3rFCN2VqAZ9SJnKLV8LgKwuoOZ5M0THLiAqJ-q5PqoZMxFQ0pDrxGXJZodxvlA-pO-hsniVqehuVZ4kfUQMwfxQTeMUZvyX~3HUVeD7i6J6e8Pq-sHfZ3BT602P3rmAZYk7L-5W4GeWHmCkwSHVfKlgRxcdM9f4Z9w0KF2CW6HJK7haQ6ieA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "metricDimensions": [
+                  {
+                    "name": "encoder",
+                    "value": "ETS",
+                    "__typename": "MetricDimension"
+                  }
+                ],
+                "__typename": "PlaybackURL"
+              }
+            ],
+            "contentType": {
+              "id": "amzn1.imdb.video.contenttype.trailer",
+              "displayName": {
+                "value": "Trailer",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "previewURLs": [
+              {
+                "displayName": {
+                  "value": "AUTO",
+                  "language": "en-US",
+                  "__typename": "LocalizedString"
+                },
+                "videoMimeType": "M3U8",
+                "videoDefinition": "DEF_AUTO",
+                "url": "https://imdb-video.media-imdb.com/vi2264177689/hls-preview-341f4284-1d1f-4eb3-881d-384b93dbc333.m3u8?Expires=1767887967&Signature=PvdXwCSoU2qkg1ilfsFpdkhbVNUcMpmHcfoVGWl4QxEEVcKOhlpaKWHvQ~uEdFDeRTmzLk7kQEhgdcbhtSSVqJjt1ulgeI3BNdDqJ3UHS04FxDZIqLqPblhI6MN0ruZmIwhpBS305JJLOWMpxD0MFnubYHuvdfpHc~jGO-yvULg5kbi4NpZgs3~zYTeO6V5u4iF7gV-8M3saNZheR3FRMtPnYQVymNVPpaXB2ZoySgrfmNz7UJ~ZaoNKoYL8~doNh2ADiBx6aTvHk-XBZMdGyhoVvwSFJ4vcWsg4drNE-zAJYGCIC5gg0fhjtyca2OGxwYq6Qyh9xghMwIqQVZ9njg__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA",
+                "__typename": "PlaybackURL"
+              }
+            ],
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        }
+      ],
+      "__typename": "VideoConnection"
+    },
+    "principalCreditsV2": [
+      {
+        "totalCredits": 1,
+        "grouping": {
+          "text": "Creator",
+          "groupingId": "amzn1.imdb.concept.name_credit_group.85198717-6c2d-481e-93a5-47858774bcce",
+          "__typename": "CreditGrouping"
+        },
+        "credits": [
+          {
+            "name": {
+              "nameText": {
+                "text": "Vince Gilligan",
+                "__typename": "NameText"
+              },
+              "id": "nm0319213",
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          }
+        ],
+        "__typename": "PrincipalCreditsForGrouping"
+      },
+      {
+        "totalCredits": 422,
+        "grouping": {
+          "text": "Stars",
+          "groupingId": "amzn1.imdb.concept.name_credit_group.7510356e-fde9-438e-b3ad-0099ba6bc8ce",
+          "__typename": "CreditGrouping"
+        },
+        "credits": [
+          {
+            "name": {
+              "nameText": {
+                "text": "Bryan Cranston",
+                "__typename": "NameText"
+              },
+              "id": "nm0186505",
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "nameText": {
+                "text": "Aaron Paul",
+                "__typename": "NameText"
+              },
+              "id": "nm0666739",
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "nameText": {
+                "text": "Anna Gunn",
+                "__typename": "NameText"
+              },
+              "id": "nm0348152",
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          }
+        ],
+        "__typename": "PrincipalCreditsForGrouping"
+      }
+    ],
+    "reviews": {
+      "total": 5739,
+      "__typename": "ReviewsConnection"
+    },
+    "criticReviewsTotal": {
+      "total": 176,
+      "__typename": "ExternalLinkConnection"
+    },
+    "triviaTotal": {
+      "total": 119,
+      "__typename": "TriviaConnection"
+    },
+    "subNavCredits": {
+      "total": 1257,
+      "__typename": "CreditConnection"
+    },
+    "subNavReviews": {
+      "total": 5739,
+      "__typename": "ReviewsConnection"
+    },
+    "subNavTrivia": {
+      "total": 119,
+      "__typename": "TriviaConnection"
+    },
+    "subNavFaqs": {
+      "total": 27,
+      "__typename": "FaqConnection"
+    },
+    "subNavTopQuestions": {
+      "total": 20,
+      "__typename": "AlexaQuestionConnection"
+    },
+    "titleGenres": {
+      "genres": [
+        {
+          "genre": {
+            "text": "Crime",
+            "__typename": "GenreItem"
+          },
+          "__typename": "TitleGenre"
+        },
+        {
+          "genre": {
+            "text": "Drama",
+            "__typename": "GenreItem"
+          },
+          "__typename": "TitleGenre"
+        },
+        {
+          "genre": {
+            "text": "Thriller",
+            "__typename": "GenreItem"
+          },
+          "__typename": "TitleGenre"
+        }
+      ],
+      "__typename": "TitleGenres"
+    },
+    "meta": {
+      "canonicalId": "tt0903747",
+      "publicationStatus": "PUBLISHED",
+      "__typename": "TitleMeta"
+    },
+    "castPageTitle": {
+      "edges": [
+        {
+          "node": {
+            "name": {
+              "id": "nm0186505",
+              "nameText": {
+                "text": "Bryan Cranston",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "Cast"
+          },
+          "__typename": "CreditEdge"
+        },
+        {
+          "node": {
+            "name": {
+              "id": "nm0348152",
+              "nameText": {
+                "text": "Anna Gunn",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "Cast"
+          },
+          "__typename": "CreditEdge"
+        },
+        {
+          "node": {
+            "name": {
+              "id": "nm0666739",
+              "nameText": {
+                "text": "Aaron Paul",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "Cast"
+          },
+          "__typename": "CreditEdge"
+        },
+        {
+          "node": {
+            "name": {
+              "id": "nm1336827",
+              "nameText": {
+                "text": "Betsy Brandt",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "Cast"
+          },
+          "__typename": "CreditEdge"
+        }
+      ],
+      "__typename": "CreditConnection"
+    },
+    "creatorsPageTitle": [
+      {
+        "credits": [
+          {
+            "name": {
+              "id": "nm0319213",
+              "nameText": {
+                "text": "Vince Gilligan",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "Crew"
+          }
+        ],
+        "__typename": "PrincipalCreditsForCategory"
+      }
+    ],
+    "directorsPageTitle": [],
+    "countriesOfOrigin": {
+      "countries": [
+        {
+          "id": "US",
+          "__typename": "CountryOfOrigin"
+        }
+      ],
+      "__typename": "CountriesOfOrigin"
+    },
+    "production": {
+      "edges": [
+        {
+          "node": {
+            "company": {
+              "id": "co0212797",
+              "companyText": {
+                "text": "High Bridge Productions",
+                "__typename": "CompanyText"
+              },
+              "__typename": "Company"
+            },
+            "__typename": "CompanyCredit"
+          },
+          "__typename": "CompanyCreditEdge"
+        },
+        {
+          "node": {
+            "company": {
+              "id": "co0071947",
+              "companyText": {
+                "text": "Gran Via Productions",
+                "__typename": "CompanyText"
+              },
+              "__typename": "Company"
+            },
+            "__typename": "CompanyCredit"
+          },
+          "__typename": "CompanyCreditEdge"
+        },
+        {
+          "node": {
+            "company": {
+              "id": "co0086397",
+              "companyText": {
+                "text": "Sony Pictures Television",
+                "__typename": "CompanyText"
+              },
+              "__typename": "Company"
+            },
+            "__typename": "CompanyCredit"
+          },
+          "__typename": "CompanyCreditEdge"
+        }
+      ],
+      "__typename": "CompanyCreditConnection"
+    },
+    "featuredReviews": {
+      "edges": [
+        {
+          "node": {
+            "author": {
+              "nickName": "KinoKoopaKid",
+              "__typename": "UserProfile"
+            },
+            "summary": {
+              "originalText": "99.1% pure",
+              "__typename": "ReviewSummary"
+            },
+            "text": {
+              "originalText": {
+                "plainText": "One of the greatest shows ever, the pacing is excellent. The characters are well developed and entertaining. The show ties everything together very neatly. It's honestly a show that get's better each time you view it. It's cathartic to see Walter break bad and how the story unravels is the best way it could have. Very good storytelling, well done to Vince Gilligan.",
+                "__typename": "Markdown"
+              },
+              "__typename": "ReviewText"
+            },
+            "authorRating": 10,
+            "submissionDate": "2021-07-30",
+            "__typename": "Review"
+          },
+          "__typename": "ReviewEdge"
+        }
+      ],
+      "__typename": "ReviewsConnection"
+    },
+    "castV2": [
+      {
+        "credits": [
+          {
+            "name": {
+              "id": "nm0186505",
+              "nameText": {
+                "text": "Bryan Cranston",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0666739",
+              "nameText": {
+                "text": "Aaron Paul",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0348152",
+              "nameText": {
+                "text": "Anna Gunn",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0606487",
+              "nameText": {
+                "text": "Dean Norris",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          }
+        ],
+        "__typename": "PrincipalCreditsForGrouping"
+      }
+    ],
+    "crewV2": [
+      {
+        "grouping": {
+          "groupingId": "amzn1.imdb.concept.name_credit_group.85198717-6c2d-481e-93a5-47858774bcce",
+          "__typename": "CreditGrouping"
+        },
+        "credits": [
+          {
+            "name": {
+              "id": "nm0319213",
+              "nameText": {
+                "text": "Vince Gilligan",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          }
+        ],
+        "__typename": "PrincipalCreditsForGrouping"
+      }
+    ],
+    "__typename": "Title"
+  },
+  "main": {
+    "id": "tt0903747",
+    "wins": {
+      "total": 172,
+      "__typename": "AwardNominationConnection"
+    },
+    "nominationsExcludeWins": {
+      "total": 269,
+      "__typename": "AwardNominationConnection"
+    },
+    "prestigiousAwardSummary": {
+      "nominations": 42,
+      "wins": 16,
+      "award": {
+        "text": "Primetime Emmy",
+        "id": "aw0002214",
+        "event": {
+          "id": "ev0000223",
+          "__typename": "AwardsEvent"
+        },
+        "__typename": "AwardDetails"
+      },
+      "__typename": "PrestigiousAwardSummary"
+    },
+    "ratingsSummary": {
+      "topRanking": {
+        "id": "topRatedTv:tt0903747:en_US",
+        "text": {
+          "value": "Top Rated TV",
+          "__typename": "LocalizedString"
+        },
+        "rank": 1,
+        "__typename": "TopRanking"
+      },
+      "__typename": "RatingsSummary",
+      "aggregateRating": 9.5,
+      "voteCount": 2458123,
+      "notificationText": null
+    },
+    "episodes": {
+      "episodes": {
+        "total": 62,
+        "__typename": "EpisodeConnection"
+      },
+      "seasons": [
+        {
+          "number": 1,
+          "__typename": "EpisodesSeason"
+        },
+        {
+          "number": 2,
+          "__typename": "EpisodesSeason"
+        },
+        {
+          "number": 3,
+          "__typename": "EpisodesSeason"
+        },
+        {
+          "number": 4,
+          "__typename": "EpisodesSeason"
+        },
+        {
+          "number": 5,
+          "__typename": "EpisodesSeason"
+        }
+      ],
+      "years": [
+        {
+          "year": 2008,
+          "__typename": "EpisodesYear"
+        },
+        {
+          "year": 2009,
+          "__typename": "EpisodesYear"
+        },
+        {
+          "year": 2010,
+          "__typename": "EpisodesYear"
+        },
+        {
+          "year": 2011,
+          "__typename": "EpisodesYear"
+        },
+        {
+          "year": 2012,
+          "__typename": "EpisodesYear"
+        },
+        {
+          "year": 2013,
+          "__typename": "EpisodesYear"
+        },
+        {
+          "year": 2017,
+          "__typename": "EpisodesYear"
+        }
+      ],
+      "totalEpisodes": {
+        "total": 62,
+        "__typename": "EpisodeConnection"
+      },
+      "unknownSeasonEpisodes": {
+        "total": 0,
+        "__typename": "EpisodeConnection"
+      },
+      "topRated": {
+        "edges": [
+          {
+            "node": {
+              "ratingsSummary": {
+                "aggregateRating": 10,
+                "__typename": "RatingsSummary"
+              },
+              "__typename": "Title"
+            },
+            "__typename": "EpisodeEdge"
+          }
+        ],
+        "__typename": "EpisodeConnection"
+      },
+      "__typename": "Episodes"
+    },
+    "videos": {
+      "total": 74,
+      "__typename": "TitleRelatedVideosConnection"
+    },
+    "videoStrip": {
+      "edges": [
+        {
+          "node": {
+            "id": "vi1191167769",
+            "contentType": {
+              "displayName": {
+                "value": "Promo",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "5 Top-Rated TV Pilot Episodes to Stream Now",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 60,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BOTA1NzUxMDktNjAwNC00ZWIwLTgyMjktZjEwMDRmMjBmYmJlXkEyXkFqcGdeQWplZmZscA@@._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi2624111385",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "All About Jesse Plemons",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 113,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BOGM1MmQwZjctNzE3My00ZmM5LTkwNGItNjAzNzliNzE0OGY5XkEyXkFqcGdeQWFsZWxvZw@@._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi3743007513",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "'Dual' Stars Karen Gillan and Aaron Paul Ask Each Other Anything",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 269,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BOGQzMTI3YjUtYTI3ZS00ZWIzLWE4NzEtMmUyMjllZjIyNGE0XkEyXkFqcGdeQWFsZWxvZw@@._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi2919088921",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "The 8 Most Surprising Moments From \"Breaking Bad\"",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 129,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BMWM4NmM0ODctYzRmNi00ZjBmLTgzYmYtMjE2ODM5MjQ1YjVmXkEyXkFqcGdeQXJoYW5uYWg@._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi76660249",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "Why \"Westworld\" Season 3 Make Us Hopeful for Its Bleak Future",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 255,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BYTVmN2JiMDEtMzcwMi00NDRjLTljNWItMDkyODA1N2RjNmJlXkEyXkFqcGdeQWFsZWxvZw@@._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi3050553113",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "A Guide to the Films of Rian Johnson",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 99,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BYTEzMmNiNTEtMzIyYy00ZThlLWI4NjEtMjYzMjc5M2UwZmNiXkEyXkFqcGdeQW1hZGV0aXNj._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi402046745",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "'El Camino' Cooks Up \"Breaking Bad\" Easter Eggs",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 216,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 1080,
+              "url": "https://m.media-amazon.com/images/M/MV5BNDFkOGRiYmQtYTQ1Mi00NmYyLThkZjctMmI1MjNjNmUwZGVjXkEyXkFqcGdeQWFsZWxvZw@@._V1_.jpg",
+              "width": 1920,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi563455257",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "Sneak Peek: \"Live Free or Die\"",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 114,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 478,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTU2MTI4MTAyMl5BMl5BanBnXkFtZTcwNTE3MjIxOA@@._V1_.jpg",
+              "width": 640,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi3197345305",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "Face Off",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 80,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 480,
+              "url": "https://m.media-amazon.com/images/M/MV5BNjcwMzY2MjY3OV5BMl5BanBnXkFtZTcwNDk0NDc4Ng@@._V1_.jpg",
+              "width": 640,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi3350699801",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "Breaking Bad Exclusive: \"End Times\"",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 97,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 720,
+              "url": "https://m.media-amazon.com/images/M/MV5BMjc4MjM0MjA3NF5BMl5BanBnXkFtZTgwMDU4ODMyMzE@._V1_.jpg",
+              "width": 1280,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi3326254105",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "Sneak Preview: Season Four, Episode 11",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 70,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 480,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTUyOTYyMDU1OV5BMl5BanBnXkFtZTcwMDQyNjQ3Ng@@._V1_.jpg",
+              "width": 640,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        },
+        {
+          "node": {
+            "id": "vi1735171097",
+            "contentType": {
+              "displayName": {
+                "value": "Clip",
+                "__typename": "LocalizedString"
+              },
+              "__typename": "VideoContentType"
+            },
+            "name": {
+              "value": "Sneak Preview: Season Four, Episode 10",
+              "__typename": "LocalizedString"
+            },
+            "runtime": {
+              "value": 163,
+              "__typename": "VideoRuntime"
+            },
+            "thumbnail": {
+              "height": 480,
+              "url": "https://m.media-amazon.com/images/M/MV5BMjE1MTcyNjI3OV5BMl5BanBnXkFtZTcwMjE1OTQ2Ng@@._V1_.jpg",
+              "width": 640,
+              "__typename": "Thumbnail"
+            },
+            "__typename": "Video"
+          },
+          "__typename": "VideoEdge"
+        }
+      ],
+      "__typename": "VideoConnection"
+    },
+    "titleMainImages": {
+      "total": 2502,
+      "edges": [
+        {
+          "node": {
+            "id": "rm4224482560",
+            "url": "https://m.media-amazon.com/images/M/MV5BMjE1OTMwNTA5NV5BMl5BanBnXkFtZTgwMDkzOTA1NjM@._V1_.jpg",
+            "caption": {
+              "plainText": "Bryan Cranston in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1365,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm1867138048",
+            "url": "https://m.media-amazon.com/images/M/MV5BMTczNjY0NDQ4MF5BMl5BanBnXkFtZTgwNTQ2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Aaron Paul in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1365,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm1850360832",
+            "url": "https://m.media-amazon.com/images/M/MV5BMzQwODMxOTg5MF5BMl5BanBnXkFtZTgwNjQ2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Bryan Cranston in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1363,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm1833583616",
+            "url": "https://m.media-amazon.com/images/M/MV5BMTAwNDI2OTczNzFeQTJeQWpwZ15BbWU4MDc0NjE1OTUz._V1_.jpg",
+            "caption": {
+              "plainText": "Aaron Paul and Jesse Plemons in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1360,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm457851904",
+            "url": "https://m.media-amazon.com/images/M/MV5BMTYxOTk1MTY0NF5BMl5BanBnXkFtZTgwMzI2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Bryan Cranston in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1365,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm441074688",
+            "url": "https://m.media-amazon.com/images/M/MV5BMjQ5MTc3NDg3MF5BMl5BanBnXkFtZTgwNTI2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Bryan Cranston in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1367,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm424297472",
+            "url": "https://m.media-amazon.com/images/M/MV5BMTU1MjEwNjQ4MF5BMl5BanBnXkFtZTgwNzI2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Bryan Cranston and Moira Bryg MacDonald in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1367,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm407520256",
+            "url": "https://m.media-amazon.com/images/M/MV5BMjE5ODEzMzg2Nl5BMl5BanBnXkFtZTgwOTI2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Dean Norris and Steven Michael Quezada in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1360,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        },
+        {
+          "node": {
+            "id": "rm1732920320",
+            "url": "https://m.media-amazon.com/images/M/MV5BMjM3NDU3NDM4Nl5BMl5BanBnXkFtZTgwMTM2MTU5NTM@._V1_.jpg",
+            "caption": {
+              "plainText": "Aaron Paul and Jesse Plemons in Breaking Bad (2008)",
+              "__typename": "Markdown"
+            },
+            "height": 1363,
+            "width": 2048,
+            "__typename": "Image"
+          },
+          "__typename": "ImageEdge"
+        }
+      ],
+      "__typename": "ImageConnection"
+    },
+    "productionStatus": {
+      "currentProductionStage": {
+        "id": "released",
+        "text": "Released",
+        "__typename": "ProductionStage"
+      },
+      "productionStatusHistory": [
+        {
+          "status": {
+            "id": "pre_production",
+            "text": "Pre-production",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "filming",
+            "text": "Filming",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        },
+        {
+          "status": {
+            "id": "released",
+            "text": "Released",
+            "__typename": "ProductionStatus"
+          },
+          "__typename": "ProductionStatusHistory"
+        }
+      ],
+      "restriction": null,
+      "__typename": "ProductionStatusDetails"
+    },
+    "primaryImage": {
+      "id": "rm3116305665",
+      "__typename": "Image",
+      "url": "https://m.media-amazon.com/images/M/MV5BMzU5ZGYzNmQtMTdhYy00OGRiLTg0NmQtYjVjNzliZTg1ZGE4XkEyXkFqcGc@._V1_.jpg",
+      "width": 2000,
+      "height": 3000,
+      "caption": {
+        "plainText": "Bryan Cranston in Breaking Bad (2008)",
+        "__typename": "Markdown"
+      }
+    },
+    "inIframeAddLink": {
+      "url": "https://contribute.imdb.com/image/tt0903747/add?bus=imdb&return_url=https%3A%2F%2Fwww.imdb.com%2Fclose_me&site=web",
+      "__typename": "ContributionLink"
+    },
+    "notInIframeAddLink": {
+      "url": "https://contribute.imdb.com/image/tt0903747/add?bus=imdb&return_url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt0903747%2F&site=mobile",
+      "__typename": "ContributionLink"
+    },
+    "titleType": {
+      "id": "tvSeries",
+      "canHaveEpisodes": true,
+      "__typename": "TitleType"
+    },
+    "castV2": [
+      {
+        "grouping": {
+          "groupingId": "amzn1.imdb.concept.name_credit_group.7caf7d16-5db9-4f4f-8864-d4c6e711c686",
+          "text": "Top Cast",
+          "__typename": "CreditGrouping"
+        },
+        "totalCredits": 422,
+        "credits": [
+          {
+            "name": {
+              "id": "nm0186505",
+              "nameText": {
+                "text": "Bryan Cranston",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTA2NjEyMTY4MTVeQTJeQWpwZ15BbWU3MDQ5NDAzNDc@._V1_.jpg",
+                "width": 1369,
+                "height": 2048,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Walter White",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 62,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0666739",
+              "nameText": {
+                "text": "Aaron Paul",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTY1OTY5NjI5NV5BMl5BanBnXkFtZTcwODA4MjM0OA@@._V1_.jpg",
+                "width": 681,
+                "height": 1024,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Jesse Pinkman",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 62,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0348152",
+              "nameText": {
+                "text": "Anna Gunn",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTU0NTk3MDQ3OV5BMl5BanBnXkFtZTcwNDY3NzQ4Mg@@._V1_.jpg",
+                "width": 280,
+                "height": 400,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.7f6d81aa-23aa-4503-844d-38201eb08761",
+                      "text": "Actress",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Skyler White",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 62,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0606487",
+              "nameText": {
+                "text": "Dean Norris",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BZDVhMDliNGMtMmViMi00MDMwLTk5YzctNDg1NGExNWI2ZDQ1XkEyXkFqcGc@._V1_.jpg",
+                "width": 4500,
+                "height": 3000,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Hank Schrader",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 62,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm1336827",
+              "nameText": {
+                "text": "Betsy Brandt",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTU2OTQ3MzcxMV5BMl5BanBnXkFtZTcwMTk2MTk3Mw@@._V1_.jpg",
+                "width": 1354,
+                "height": 2048,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.7f6d81aa-23aa-4503-844d-38201eb08761",
+                      "text": "Actress",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Marie Schrader",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 62,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm2666409",
+              "nameText": {
+                "text": "RJ Mitte",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTgxNDc1OTEwN15BMl5BanBnXkFtZTcwOTQyMTIwOQ@@._V1_.jpg",
+                "width": 1396,
+                "height": 2048,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Walter White, Jr.",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 62,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0644022",
+              "nameText": {
+                "text": "Bob Odenkirk",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BNjc1MDBkMWEtMzNmYy00NjFjLWFmZDktMzRlYThhMGQxZDYwXkEyXkFqcGc@._V1_.jpg",
+                "width": 1359,
+                "height": 1723,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Saul Goodman",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 43,
+              "yearRange": {
+                "year": 2009,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm2366374",
+              "nameText": {
+                "text": "Steven Michael Quezada",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMjU0MGYzYWItODViMi00MjBiLTk0MGQtYTE0NmQ5MjM5Mjc5XkEyXkFqcGc@._V1_CR1,0,883,1325_.jpg",
+                "width": 883,
+                "height": 1325,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Steven Gomez",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 34,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0052186",
+              "nameText": {
+                "text": "Jonathan Banks",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BODI2OTYyOTQ4Nl5BMl5BanBnXkFtZTgwNTM3MTUxNDM@._V1_.jpg",
+                "width": 1362,
+                "height": 2048,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Mike Ehrmantraut",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 28,
+              "yearRange": {
+                "year": 2009,
+                "endYear": 2012,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0002064",
+              "nameText": {
+                "text": "Giancarlo Esposito",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMjEyODM1NjI0OF5BMl5BanBnXkFtZTcwMTE0OTA1Mg@@._V1_.jpg",
+                "width": 281,
+                "height": 400,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Gus Fring",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 26,
+              "yearRange": {
+                "year": 2009,
+                "endYear": 2011,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm1889973",
+              "nameText": {
+                "text": "Charles Baker",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BYmY3Njk5ZmItNDZhOC00ZDg3LTk2NTgtZTMyNzI3YjY3MzJhXkEyXkFqcGc@._V1_.jpg",
+                "width": 3627,
+                "height": 5440,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Skinny Pete",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 15,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0687146",
+              "nameText": {
+                "text": "Jesse Plemons",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMDJkODUwYzgtOGI1ZS00ZWUyLWE0OTEtODUwNDlhMjg2NDQ4XkEyXkFqcGc@._V1_.jpg",
+                "width": 3508,
+                "height": 5262,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Todd",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 13,
+              "yearRange": {
+                "year": 2012,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0184086",
+              "nameText": {
+                "text": "Christopher Cousins",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTYyMTAwMzE4Ml5BMl5BanBnXkFtZTgwOTQ5MDk3MTE@._V1_CR0,0,120,180_.jpg",
+                "width": 120,
+                "height": 180,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Ted Beneke",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 13,
+              "yearRange": {
+                "year": 2009,
+                "endYear": 2012,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0292182",
+              "nameText": {
+                "text": "Laura Fraser",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTgxMDI4NjQzOF5BMl5BanBnXkFtZTgwNjc5MDUxNTE@._V1_.jpg",
+                "width": 1526,
+                "height": 2048,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.7f6d81aa-23aa-4503-844d-38201eb08761",
+                      "text": "Actress",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Lydia Rodarte-Quayle",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 12,
+              "yearRange": {
+                "year": 2012,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm2804503",
+              "nameText": {
+                "text": "Matt Jones",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BNTQ4OGM3MjUtN2Q2Yy00N2JjLTg0MjEtMDA5NjdlNmJkMDZkXkEyXkFqcGc@._V1_CR113,0,989,1483_.jpg",
+                "width": 989,
+                "height": 1483,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Badger",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 12,
+              "yearRange": {
+                "year": 2008,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm0928795",
+              "nameText": {
+                "text": "Michael Shamus Wiles",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BYjA1OTNjYWEtYWIxNS00MGEwLTk5YzktOTU2NTE0Mjc5ZDE5XkEyXkFqcGc@._V1_CR332,1,710,1065_.jpg",
+                "width": 710,
+                "height": 1065,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "ASAC George Merkert",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 11,
+              "yearRange": {
+                "year": 2009,
+                "endYear": 2012,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm1089417",
+              "nameText": {
+                "text": "Lavell Crawford",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMjExNzkyNDYxM15BMl5BanBnXkFtZTgwNjM3NzEyMjE@._V1_.jpg",
+                "width": 500,
+                "height": 375,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.a9ab2a8b-9153-4edb-a27a-7c2346830d77",
+                      "text": "Actor",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Huell",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 11,
+              "yearRange": {
+                "year": 2011,
+                "endYear": 2013,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          },
+          {
+            "name": {
+              "id": "nm1269983",
+              "nameText": {
+                "text": "Krysten Ritter",
+                "__typename": "NameText"
+              },
+              "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BZmUyODcyZGUtMDM0NC00YWMzLTg4ZGEtMGNhNWU2MTIyNjBjXkEyXkFqcGc@._V1_.jpg",
+                "width": 2000,
+                "height": 3000,
+                "__typename": "Image"
+              },
+              "__typename": "Name"
+            },
+            "creditedRoles": {
+              "edges": [
+                {
+                  "node": {
+                    "category": {
+                      "categoryId": "amzn1.imdb.concept.name_credit_category.7f6d81aa-23aa-4503-844d-38201eb08761",
+                      "text": "Actress",
+                      "__typename": "CreditCategory"
+                    },
+                    "attributes": null,
+                    "characters": {
+                      "edges": [
+                        {
+                          "node": {
+                            "name": "Jane Margolis",
+                            "__typename": "Character"
+                          },
+                          "__typename": "CharacterEdge"
+                        }
+                      ],
+                      "__typename": "CharacterConnection"
+                    },
+                    "__typename": "CreditedRole"
+                  },
+                  "__typename": "CreditedRoleEdge"
+                }
+              ],
+              "__typename": "CreditedRoleConnection"
+            },
+            "episodeCredits": {
+              "total": 10,
+              "yearRange": {
+                "year": 2009,
+                "endYear": 2010,
+                "__typename": "YearRange"
+              },
+              "__typename": "EpisodeCreditConnection"
+            },
+            "__typename": "CreditV2"
+          }
+        ],
+        "__typename": "PrincipalCreditsForGrouping"
+      }
+    ],
+    "crewV2": [
+      {
+        "totalCredits": 1,
+        "grouping": {
+          "groupingId": "amzn1.imdb.concept.name_credit_group.85198717-6c2d-481e-93a5-47858774bcce",
+          "text": "Creator",
+          "__typename": "CreditGrouping"
+        },
+        "credits": [
+          {
+            "name": {
+              "id": "nm0319213",
+              "nameText": {
+                "text": "Vince Gilligan",
+                "__typename": "NameText"
+              },
+              "__typename": "Name"
+            },
+            "__typename": "CreditV2"
+          }
+        ],
+        "__typename": "PrincipalCreditsForGrouping"
+      }
+    ],
+    "titleText": {
+      "text": "Breaking Bad",
+      "__typename": "TitleText"
+    },
+    "originalTitleText": {
+      "text": "Breaking Bad",
+      "__typename": "TitleText"
+    },
+    "canRate": {
+      "isRatable": true,
+      "__typename": "CanRate"
+    },
+    "reviews": {
+      "total": 5739,
+      "__typename": "ReviewsConnection"
+    },
+    "aggregateRatingsBreakdown": {
+      "histogram": {
+        "histogramValues": [
+          {
+            "rating": 1,
+            "voteCount": 49342,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 2,
+            "voteCount": 5882,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 3,
+            "voteCount": 6058,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 4,
+            "voteCount": 7730,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 5,
+            "voteCount": 14548,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 6,
+            "voteCount": 25616,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 7,
+            "voteCount": 65244,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 8,
+            "voteCount": 176602,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 9,
+            "voteCount": 459784,
+            "__typename": "HistogramValues"
+          },
+          {
+            "rating": 10,
+            "voteCount": 1647317,
+            "__typename": "HistogramValues"
+          }
+        ],
+        "__typename": "Histogram"
+      },
+      "__typename": "AggregateRatingsBreakdown"
+    },
+    "featuredReviews": {
+      "edges": [
+        {
+          "node": {
+            "id": "rw7178102",
+            "author": {
+              "userId": "ur135021534",
+              "username": {
+                "text": "KinoKoopaKid",
+                "__typename": "UserProfileUsername"
+              },
+              "__typename": "UserProfile"
+            },
+            "summary": {
+              "originalText": "99.1% pure",
+              "__typename": "ReviewSummary"
+            },
+            "text": {
+              "originalText": {
+                "plaidHtml": "One of the greatest shows ever, the pacing is excellent. The characters are well developed and entertaining. The show ties everything together very neatly. It&#39;s honestly a show that get&#39;s better each time you view it. It&#39;s cathartic to see Walter break bad and how the story unravels is the best way it could have. Very good storytelling, well done to Vince Gilligan.",
+                "__typename": "Markdown"
+              },
+              "__typename": "ReviewText"
+            },
+            "title": {
+              "id": "tt0903747",
+              "__typename": "Title"
+            },
+            "authorRating": 10,
+            "spoiler": false,
+            "__typename": "Review"
+          },
+          "__typename": "ReviewEdge"
+        },
+        {
+          "node": {
+            "id": "rw7137780",
+            "author": {
+              "userId": "ur122376478",
+              "username": {
+                "text": "dhanushreddy-14919",
+                "__typename": "UserProfileUsername"
+              },
+              "__typename": "UserProfile"
+            },
+            "summary": {
+              "originalText": "ABSOLUTE PERFECTION!!!!",
+              "__typename": "ReviewSummary"
+            },
+            "text": {
+              "originalText": {
+                "plaidHtml": "Direction- PERFECT!!<br/><br/>Screenplay-PERFECT!!<br/><br/>Writing-PERFECT!!<br/><br/>Score-PERFECT!!<br/><br/>Cinematography-PERFECT!!<br/><br/>Casting-PERFECT!!<br/><br/>Beginning-PERFECT!!<br/><br/>Climax-PERFECT!!<br/><br/>Acting-BEYOND PERFECT!!<br/><br/>Overall-(as I said) ABSOLUTE PERFECTION.",
+                "__typename": "Markdown"
+              },
+              "__typename": "ReviewText"
+            },
+            "title": {
+              "id": "tt0903747",
+              "__typename": "Title"
+            },
+            "authorRating": 10,
+            "spoiler": false,
+            "__typename": "Review"
+          },
+          "__typename": "ReviewEdge"
+        },
+        {
+          "node": {
+            "id": "rw8725086",
+            "author": {
+              "userId": "ur115536310",
+              "username": {
+                "text": "Rob1331",
+                "__typename": "UserProfileUsername"
+              },
+              "__typename": "UserProfile"
+            },
+            "summary": {
+              "originalText": "Absolutely Brilliant!!",
+              "__typename": "ReviewSummary"
+            },
+            "text": {
+              "originalText": {
+                "plaidHtml": "Breaking Bad is every bit as good as everyone says it is. It&#39;s easily one of my favorites shows of all-time and one of the best shows in the history of television. Just read through the reviews and look at the 9.5 rating to see how loved this show really is. The writing and acting is what makes this show so special. I love this show so much that I&#39;ve already watched it all the way through twice already and plan on doing so again sometime in the near future. There&#39;s nothing more I can say about this incredible show that hasn&#39;t already been said so just go watch it. But plan ahead to give yourself enough time because you&#39;re going to want to binge this as quickly as you can. It&#39;s addicting once you start!",
+                "__typename": "Markdown"
+              },
+              "__typename": "ReviewText"
+            },
+            "title": {
+              "id": "tt0903747",
+              "__typename": "Title"
+            },
+            "authorRating": 10,
+            "spoiler": false,
+            "__typename": "Review"
+          },
+          "__typename": "ReviewEdge"
+        },
+        {
+          "node": {
+            "id": "rw4705146",
+            "author": {
+              "userId": "ur100125831",
+              "username": {
+                "text": "bruhperson",
+                "__typename": "UserProfileUsername"
+              },
+              "__typename": "UserProfile"
+            },
+            "summary": {
+              "originalText": "It's ok I guess",
+              "__typename": "ReviewSummary"
+            },
+            "text": {
+              "originalText": {
+                "plaidHtml": "Re-Watched it 7 times and counting. I guess I liked it.",
+                "__typename": "Markdown"
+              },
+              "__typename": "ReviewText"
+            },
+            "title": {
+              "id": "tt0903747",
+              "__typename": "Title"
+            },
+            "authorRating": 10,
+            "spoiler": false,
+            "__typename": "Review"
+          },
+          "__typename": "ReviewEdge"
+        },
+        {
+          "node": {
+            "id": "rw5495416",
+            "author": {
+              "userId": "ur89521583",
+              "username": {
+                "text": "jehuschultz",
+                "__typename": "UserProfileUsername"
+              },
+              "__typename": "UserProfile"
+            },
+            "summary": {
+              "originalText": "The Best",
+              "__typename": "ReviewSummary"
+            },
+            "text": {
+              "originalText": {
+                "plaidHtml": "I cannot stress enough how good this show is. I&#39;ve watched a lot of TV in my life and this show still remains the best show I&#39;ve ever seen.",
+                "__typename": "Markdown"
+              },
+              "__typename": "ReviewText"
+            },
+            "title": {
+              "id": "tt0903747",
+              "__typename": "Title"
+            },
+            "authorRating": 10,
+            "spoiler": false,
+            "__typename": "Review"
+          },
+          "__typename": "ReviewEdge"
+        }
+      ],
+      "__typename": "ReviewsConnection"
+    },
+    "reviewSummary": {
+      "overall": {
+        "medium": {
+          "value": {
+            "plaidHtml": "Reviewers say &#39;Breaking Bad&#39; is celebrated for its intricate storytelling, complex characters, and moral ambiguity. Walter White&#39;s transformation captivates audiences, praised for meticulous writing and compelling arcs. Bryan Cranston and Aaron Paul deliver standout performances. Cinematography, dark humor, and exploration of human nature are frequently highlighted. Often compared to &#39;The Sopranos&#39; and &#39;The Wire&#39;, it is considered a modern TV masterpiece. Minor flaws are noted, but overall quality is exceptional.",
+            "__typename": "Markdown"
+          },
+          "__typename": "LocalizedMarkdown"
+        },
+        "__typename": "TitleReviewSentimentSection"
+      },
+      "themes": [
+        {
+          "themeId": "character-development",
+          "label": {
+            "value": "Character development",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "cinematography",
+          "label": {
+            "value": "Cinematography",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "dark-humor",
+          "label": {
+            "value": "Dark humor",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "dramatic-tension",
+          "label": {
+            "value": "Dramatic tension",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "social-commentary",
+          "label": {
+            "value": "Social commentary",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "suspenseful",
+          "label": {
+            "value": "Suspenseful",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "writing",
+          "label": {
+            "value": "Writing",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "POSITIVE",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "family-dynamics",
+          "label": {
+            "value": "Family dynamics",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "NEUTRAL",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "morality",
+          "label": {
+            "value": "Morality",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "NEUTRAL",
+          "__typename": "TitleReviewTheme"
+        },
+        {
+          "themeId": "pacing",
+          "label": {
+            "value": "Pacing",
+            "__typename": "LocalizedString"
+          },
+          "sentiment": "NEUTRAL",
+          "__typename": "TitleReviewTheme"
+        }
+      ],
+      "__typename": "TitleReviewSummary"
+    },
+    "isAdult": false,
+    "moreLikeThisTitles": {
+      "edges": [
+        {
+          "node": {
+            "id": "tt3032476",
+            "titleText": {
+              "text": "Better Call Saul",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Better Call Saul",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm3582663425",
+              "width": 3240,
+              "height": 4800,
+              "url": "https://m.media-amazon.com/images/M/MV5BNDdjNTEzMjMtYjM3Mi00NzQ3LWFlNWMtZjdmYWU3ZDkzMjk1XkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Bob Odenkirk in Better Call Saul (2015)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2015,
+              "endYear": 2022,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 9,
+              "voteCount": 793677,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 2700,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "M18",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt0944947",
+            "titleText": {
+              "text": "Game of Thrones",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Game of Thrones",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm2903373057",
+              "width": 550,
+              "height": 824,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTNhMDJmNmYtNDQ5OS00ODdlLWE0ZDAtZTgyYTIwNDY3OTU3XkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Game of Thrones (2011)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2011,
+              "endYear": 2019,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 9.2,
+              "voteCount": 2522690,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3600,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "M18",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Action",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Adventure",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt7366338",
+            "titleText": {
+              "text": "Chernobyl",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvMiniSeries",
+              "text": "TV Mini Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Mini Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Chernobyl",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm2271110656",
+              "width": 1382,
+              "height": 2048,
+              "url": "https://m.media-amazon.com/images/M/MV5BNzU0OTI4YTQtNGQ1ZS00ZjA4LTg3MTMtZjkyZWNjN2RiZDJmXkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Chernobyl (2019)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2019,
+              "endYear": 2019,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 9.3,
+              "voteCount": 1002810,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3600,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "M18",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "History",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Thriller",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt0773262",
+            "titleText": {
+              "text": "Dexter",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Dexter",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm4013496576",
+              "width": 1275,
+              "height": 1650,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTQ3YmQ4YzMtOTkyZC00YmM5LThhZjEtM2E0MjFkNTc0OGJhXkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Michael C. Hall in Dexter (2006)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2006,
+              "endYear": 2013,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.6,
+              "voteCount": 904325,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3600,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "R21",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Mystery",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt1190634",
+            "titleText": {
+              "text": "The Boys",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "The Boys",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm1546577409",
+              "width": 1000,
+              "height": 1419,
+              "url": "https://m.media-amazon.com/images/M/MV5BM2ExOWM2ZjctYzAyMS00NjVlLTk2MTAtMzA2YjIxNzE4MjFhXkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Laz Alonso, Karl Urban, Jack Quaid, Tomer Capone, and Karen Fukuhara in The Boys (2019)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2019,
+              "endYear": 2026,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.6,
+              "voteCount": 825642,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3600,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "R21",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Action",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Comedy",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt2442560",
+            "titleText": {
+              "text": "Peaky Blinders",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Peaky Blinders",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm2767251969",
+              "width": 1100,
+              "height": 1650,
+              "url": "https://m.media-amazon.com/images/M/MV5BY2ZiNWIxMDMtZDAzOC00NjVmLWFjYTUtZmE4YWViODJkYzhjXkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Cillian Murphy in Peaky Blinders (2013)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2013,
+              "endYear": 2022,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.7,
+              "voteCount": 748097,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3600,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "R21",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt9243946",
+            "titleText": {
+              "text": "El Camino: A Breaking Bad Movie",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "movie",
+              "text": "Movie",
+              "canHaveEpisodes": false,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "El Camino",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm3380647169",
+              "width": 960,
+              "height": 1200,
+              "url": "https://m.media-amazon.com/images/M/MV5BYTYxMjI2YzUtODQ5Mi00M2JmLTlmNzItOTlkM2MyM2ExM2RlXkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Aaron Paul in El Camino: A Breaking Bad Movie (2019)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2019,
+              "endYear": null,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 7.3,
+              "voteCount": 332467,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 7320,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "M18",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Thriller",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt1520211",
+            "titleText": {
+              "text": "The Walking Dead",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "The Walking Dead",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm3421721345",
+              "width": 2000,
+              "height": 3000,
+              "url": "https://m.media-amazon.com/images/M/MV5BYWQwMGRhNGEtZTNhMy00MzVjLWJhMjItYjcwMDljMTkyNTg2XkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Andrew Lincoln in The Walking Dead (2010)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2010,
+              "endYear": 2022,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.1,
+              "voteCount": 1176650,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 2700,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "NC16",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Horror",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Thriller",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt0141842",
+            "titleText": {
+              "text": "The Sopranos",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "The Sopranos",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm4054074881",
+              "width": 1366,
+              "height": 2048,
+              "url": "https://m.media-amazon.com/images/M/MV5BMjRmMTNiMTQtMDg1ZS00MGM1LWE1MGUtYjEzMGFjNWUzOWRkXkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Lorraine Bracco, James Gandolfini, Edie Falco, Steven Van Zandt, Dominic Chianese, Robert Iler, Michael Imperioli, Steve Schirripa, Jamie-Lynn Sigler, Tony Sirico, and Aida Turturro in The Sopranos (1999)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 1999,
+              "endYear": 2007,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 9.2,
+              "voteCount": 560258,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3300,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "M18",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt0455275",
+            "titleText": {
+              "text": "Prison Break",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Prison Break",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm3065549824",
+              "width": 513,
+              "height": 755,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTg3NTkwNzAxOF5BMl5BanBnXkFtZTcwMjM1NjI5MQ@@._V1_.jpg",
+              "caption": {
+                "plainText": "Michael Rapaport, Muse Watson, Stacy Keach, Paul Adelstein, Barbara Eve Harris, Wentworth Miller, Dominic Purcell, Leon Russom, Wade Williams, Amaury Nolasco, and Marshall Allman in Prison Break (2005)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2005,
+              "endYear": 2017,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.3,
+              "voteCount": 653921,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 2640,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "NC16",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Action",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt0816692",
+            "titleText": {
+              "text": "Interstellar",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "movie",
+              "text": "Movie",
+              "canHaveEpisodes": false,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Interstellar",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm4043724800",
+              "width": 2430,
+              "height": 3600,
+              "url": "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Matthew McConaughey in Interstellar (2014)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2014,
+              "endYear": null,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.7,
+              "voteCount": 2458000,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 10140,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "PG13",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Adventure",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Sci-Fi",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        },
+        {
+          "node": {
+            "id": "tt5753856",
+            "titleText": {
+              "text": "Dark",
+              "__typename": "TitleText"
+            },
+            "titleType": {
+              "id": "tvSeries",
+              "text": "TV Series",
+              "canHaveEpisodes": true,
+              "displayableProperty": {
+                "value": {
+                  "plainText": "TV Series",
+                  "__typename": "Markdown"
+                },
+                "__typename": "DisplayableTitleTypeProperty"
+              },
+              "__typename": "TitleType"
+            },
+            "originalTitleText": {
+              "text": "Dark",
+              "__typename": "TitleText"
+            },
+            "primaryImage": {
+              "id": "rm11245569",
+              "width": 1080,
+              "height": 1920,
+              "url": "https://m.media-amazon.com/images/M/MV5BOWJjMGViY2UtNTAzNS00ZGFjLWFkNTMtMDBiMDMyZTM1NTY3XkEyXkFqcGc@._V1_.jpg",
+              "caption": {
+                "plainText": "Louis Hofmann in Dark (2017)",
+                "__typename": "Markdown"
+              },
+              "__typename": "Image"
+            },
+            "releaseYear": {
+              "year": 2017,
+              "endYear": 2020,
+              "__typename": "YearRange"
+            },
+            "ratingsSummary": {
+              "aggregateRating": 8.7,
+              "voteCount": 522935,
+              "__typename": "RatingsSummary"
+            },
+            "runtime": {
+              "seconds": 3600,
+              "__typename": "Runtime"
+            },
+            "certificate": {
+              "rating": "M18",
+              "__typename": "Certificate"
+            },
+            "canRate": {
+              "isRatable": true,
+              "__typename": "CanRate"
+            },
+            "titleGenres": {
+              "genres": [
+                {
+                  "genre": {
+                    "text": "Crime",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Drama",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                },
+                {
+                  "genre": {
+                    "text": "Mystery",
+                    "__typename": "GenreItem"
+                  },
+                  "__typename": "TitleGenre"
+                }
+              ],
+              "__typename": "TitleGenres"
+            },
+            "__typename": "Title"
+          },
+          "__typename": "MoreLikeThisEdge"
+        }
+      ],
+      "__typename": "MoreLikeThisConnection"
+    },
+    "relatedInterests": {
+      "edges": [
+        {
+          "node": {
+            "id": "in0000035",
+            "primaryText": {
+              "text": "Dark Comedy",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Phoebe Waller-Bridge and Sian Clifford in Fleabag (2016)",
+                "__typename": "Markdown"
+              },
+              "width": 2048,
+              "height": 1365,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTkxOTA2OTgzM15BMl5BanBnXkFtZTgwOTgzMzI5NzM@._V1_.jpg",
+              "id": "rm1650353664",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000053",
+            "primaryText": {
+              "text": "Drug Crime",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Wendell Pierce and Dominic West in The Wire (2002)",
+                "__typename": "Markdown"
+              },
+              "width": 1998,
+              "height": 1332,
+              "url": "https://m.media-amazon.com/images/M/MV5BOTgzOGM5YTUtZWE4MS00OTgwLTllZDctMTkwMTBmNzM1NzA3XkEyXkFqcGc@._V1_.jpg",
+              "id": "rm370784001",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000086",
+            "primaryText": {
+              "text": "Psychological Drama",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Jim Carrey and Kate Winslet in Eternal Sunshine of the Spotless Mind (2004)",
+                "__typename": "Markdown"
+              },
+              "width": 2048,
+              "height": 1330,
+              "url": "https://m.media-amazon.com/images/M/MV5BODkyMTYzNDExNl5BMl5BanBnXkFtZTcwNTAwOTMyMw@@._V1_.jpg",
+              "id": "rm2820312832",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000182",
+            "primaryText": {
+              "text": "Psychological Thriller",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Rosamund Pike in Gone Girl (2014)",
+                "__typename": "Markdown"
+              },
+              "width": 2160,
+              "height": 919,
+              "url": "https://m.media-amazon.com/images/M/MV5BN2I4MDk2ODQtZjU3YS00Zjk5LThlNDMtYjljNjY4NzdjODBkXkEyXkFqcGc@._V1_.jpg",
+              "id": "rm3826692865",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000090",
+            "primaryText": {
+              "text": "Tragedy",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Casey Affleck and Michelle Williams in Manchester by the Sea (2016)",
+                "__typename": "Markdown"
+              },
+              "width": 2048,
+              "height": 1365,
+              "url": "https://m.media-amazon.com/images/M/MV5BMTc4MTQxMTIwMl5BMl5BanBnXkFtZTgwNzM2NzE4OTE@._V1_.jpg",
+              "id": "rm20121856",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000052",
+            "primaryText": {
+              "text": "Crime",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "James Gandolfini, Edie Falco, Sharon Angela, Max Casella, Dan Grimaldi, Joe Perrino, Donna Pescow, Jamie-Lynn Sigler, Tony Sirico, and Michael Drayer in The Sopranos (1999)",
+                "__typename": "Markdown"
+              },
+              "width": 1500,
+              "height": 999,
+              "url": "https://m.media-amazon.com/images/M/MV5BY2M4MTFlOWMtYzhiYS00OGI3LTg0ODItODk3ODVjMzIyMmMyXkEyXkFqcGc@._V1_.jpg",
+              "id": "rm558082817",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000076",
+            "primaryText": {
+              "text": "Drama",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Naomie Harris, Mahershala Ali, Janelle Monáe, André Holland, Herman Caheej McGloun, Edson Jean, Alex R. Hibbert, and Tanisha Cidel in Moonlight (2016)",
+                "__typename": "Markdown"
+              },
+              "width": 5760,
+              "height": 3840,
+              "url": "https://m.media-amazon.com/images/M/MV5BN2MxZmYzMDItYzNkMS00YWY1LWIzNDktNTI3YTQxMGNjZjEzXkEyXkFqcGc@._V1_.jpg",
+              "id": "rm1359216640",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        },
+        {
+          "node": {
+            "id": "in0000186",
+            "primaryText": {
+              "text": "Thriller",
+              "__typename": "InterestText"
+            },
+            "primaryImage": {
+              "caption": {
+                "plainText": "Cho Yeo-jeong in Parasite (2019)",
+                "__typename": "Markdown"
+              },
+              "width": 1920,
+              "height": 804,
+              "url": "https://m.media-amazon.com/images/M/MV5BMWM3ZjRhMDQtZDUzYi00NWY0LThhMDQtZTM2MjZmNjRlMTRmXkEyXkFqcGc@._V1_.jpg",
+              "id": "rm564176897",
+              "__typename": "Image"
+            },
+            "visibilityLevel": "PUBLIC",
+            "__typename": "Interest"
+          },
+          "__typename": "InterestEdge"
+        }
+      ],
+      "__typename": "InterestConnection"
+    },
+    "triviaTotal": {
+      "total": 119,
+      "__typename": "TriviaConnection"
+    },
+    "trivia": {
+      "edges": [
+        {
+          "node": {
+            "text": {
+              "plaidHtml": "Jesse Pinkman was originally slated to be written out by the 9th episode. During the hiatus caused by the writers&#39; strike, creator <a class=\"ipc-md-link ipc-md-link--entity\" href=\"/name/nm0319213/?ref_=dyk_trv\">Vince Gilligan</a>, impressed by <a class=\"ipc-md-link ipc-md-link--entity\" href=\"/name/nm0666739/?ref_=dyk_trv\">Aaron Paul</a>&#39;s portrayal of Jesse as well as everybody just liking Paul, decided to reinstate the character and have Jesse&#39;s fate be given to another character in the finale of the first season.",
+              "__typename": "Markdown"
+            },
+            "trademark": null,
+            "relatedNames": null,
+            "__typename": "TitleTrivia"
+          },
+          "__typename": "TriviaEdge"
+        }
+      ],
+      "__typename": "TriviaConnection"
+    },
+    "goofsTotal": {
+      "total": 8,
+      "__typename": "GoofConnection"
+    },
+    "goofs": {
+      "edges": [
+        {
+          "node": {
+            "text": {
+              "plaidHtml": "In the opening credits, letters in the names of the cast and crew are highlighted in green to represent chemical element symbols. However, the &quot;Ch&quot; in <a class=\"ipc-md-link ipc-md-link--entity\" href=\"/name/nm0806252/?ref_=dyk_gf\">Michael Slovis</a>&#39; name was highlighted in several early episodes, even though Ch is not a chemical element symbol. In later episodes, only the &quot;C&quot; (for Carbon) is highlighted.",
+              "__typename": "Markdown"
+            },
+            "__typename": "Goof"
+          },
+          "__typename": "GoofEdge"
+        }
+      ],
+      "__typename": "GoofConnection"
+    },
+    "quotesTotal": {
+      "total": 26,
+      "__typename": "TitleQuoteConnection"
+    },
+    "quotes": {
+      "edges": [
+        {
+          "node": {
+            "lines": [
+              {
+                "characters": [
+                  {
+                    "character": "Walter White",
+                    "name": {
+                      "id": "nm0186505",
+                      "__typename": "Name"
+                    },
+                    "__typename": "TitleQuoteCharacter"
+                  }
+                ],
+                "text": "Who are you talking to right now? Who is it you think you see? Do you know how much I make a year? I mean, even if I told you, you wouldn't believe it. Do you know what would happen if I suddenly decided to stop going into work? A business big enough that it could be listed on the NASDAQ goes belly up. Disappears. It ceases to exist, without me. No, you clearly don't know who you're talking to, so let me clue you in. I am not in danger, Skyler. I AM the danger. A guy opens his door and gets shot, and you think that of me? No! I am the one who knocks!",
+                "stageDirection": null,
+                "__typename": "TitleQuoteLine"
+              }
+            ],
+            "__typename": "TitleQuote"
+          },
+          "__typename": "TitleQuoteEdge"
+        }
+      ],
+      "__typename": "TitleQuoteConnection"
+    },
+    "crazyCredits": {
+      "edges": [
+        {
+          "node": {
+            "text": {
+              "plaidHtml": "Opening credits use chemical symbols from the periodic table of elements as part of names : bromine (Br), and barium (Ba) for the title, none for creator <a class=\"ipc-md-link ipc-md-link--entity\" href=\"/name/nm0319213/?ref_=dyk_cc\">Vince Gilligan</a> (except when he gets a V for Vanadium), one for cast and crew members.",
+              "__typename": "Markdown"
+            },
+            "__typename": "CrazyCredit"
+          },
+          "__typename": "CrazyCreditEdge"
+        }
+      ],
+      "__typename": "CrazyCreditConnection"
+    },
+    "alternateVersions": {
+      "total": 1,
+      "edges": [
+        {
+          "node": {
+            "text": {
+              "plaidHtml": "All episodes were rerun on an on-demand cable channel in some areas, without commercials but with additional scenes not included on AMC.",
+              "__typename": "Markdown"
+            },
+            "__typename": "AlternateVersion"
+          },
+          "__typename": "AlternateVersionEdge"
+        }
+      ],
+      "__typename": "AlternateVersionConnection"
+    },
+    "connections": {
+      "edges": [
+        {
+          "node": {
+            "associatedTitle": {
+              "id": "tt3302110",
+              "releaseYear": {
+                "year": 2013,
+                "__typename": "YearRange"
+              },
+              "titleText": {
+                "text": "Breaking Bad/Walking Dead Mash-Up",
+                "__typename": "TitleText"
+              },
+              "originalTitleText": {
+                "text": "Breaking Bad/Walking Dead Mash-Up",
+                "__typename": "TitleText"
+              },
+              "series": {
+                "series": {
+                  "titleText": {
+                    "text": "CollegeHumor Originals",
+                    "__typename": "TitleText"
+                  },
+                  "originalTitleText": {
+                    "text": "CollegeHumor Originals",
+                    "__typename": "TitleText"
+                  },
+                  "__typename": "Title"
+                },
+                "__typename": "Series"
+              },
+              "__typename": "Title"
+            },
+            "category": {
+              "text": "Edited into",
+              "__typename": "TitleConnectionCategory"
+            },
+            "__typename": "TitleConnection"
+          },
+          "__typename": "TitleConnectionEdge"
+        }
+      ],
+      "__typename": "TitleConnectionConnection"
+    },
+    "soundtrack": {
+      "edges": [
+        {
+          "node": {
+            "text": "Dead Fingers Talking",
+            "comments": [
+              {
+                "plaidHtml": "by Working in a Nuclear Free City",
+                "__typename": "Markdown"
+              }
+            ],
+            "__typename": "Track"
+          },
+          "__typename": "SoundtrackEdge"
+        }
+      ],
+      "__typename": "SoundtrackConnection"
+    },
+    "topQuestions": {
+      "total": 20,
+      "edges": [
+        {
+          "node": {
+            "attributeId": "number-of-seasons",
+            "question": {
+              "plainText": "How many seasons does Breaking Bad have?",
+              "__typename": "Markdown"
+            },
+            "__typename": "AlexaQuestion"
+          },
+          "__typename": "AlexaQuestionEdge"
+        }
+      ],
+      "__typename": "AlexaQuestionConnection"
+    },
+    "faqs": {
+      "total": 3,
+      "edges": [
+        {
+          "node": {
+            "id": "fq0109467",
+            "question": {
+              "plainText": "What is the thing with ABQ?",
+              "__typename": "Markdown"
+            },
+            "__typename": "Faq"
+          },
+          "__typename": "FaqEdge"
+        },
+        {
+          "node": {
+            "id": "fq0034462",
+            "question": {
+              "plainText": "Is it true that there are different versions of the pilot?",
+              "__typename": "Markdown"
+            },
+            "__typename": "Faq"
+          },
+          "__typename": "FaqEdge"
+        },
+        {
+          "node": {
+            "id": "fq0034459",
+            "question": {
+              "plainText": "What are the list of songs from the series finale?",
+              "__typename": "Markdown"
+            },
+            "__typename": "Faq"
+          },
+          "__typename": "FaqEdge"
+        }
+      ],
+      "__typename": "FaqConnection"
+    },
+    "releaseDate": {
+      "day": 5,
+      "month": 10,
+      "year": 2017,
+      "country": {
+        "id": "SG",
+        "text": "Singapore",
+        "__typename": "LocalizedDisplayableCountry"
+      },
+      "__typename": "ReleaseDate"
+    },
+    "countriesDetails": {
+      "countries": [
+        {
+          "id": "US",
+          "text": "United States",
+          "__typename": "CountryOfOrigin"
+        }
+      ],
+      "__typename": "CountriesOfOrigin"
+    },
+    "detailsExternalLinks": {
+      "edges": [
+        {
+          "node": {
+            "url": "https://www.facebook.com/BreakingBad",
+            "label": "Official Facebook",
+            "externalLinkRegion": null,
+            "__typename": "ExternalLink"
+          },
+          "__typename": "ExternalLinkEdge"
+        },
+        {
+          "node": {
+            "url": "https://www.instagram.com/breakingbad/",
+            "label": "Official Instagram",
+            "externalLinkRegion": null,
+            "__typename": "ExternalLink"
+          },
+          "__typename": "ExternalLinkEdge"
+        }
+      ],
+      "total": 5,
+      "__typename": "ExternalLinkConnection"
+    },
+    "spokenLanguages": {
+      "spokenLanguages": [
+        {
+          "id": "en",
+          "text": "English",
+          "__typename": "SpokenLanguage"
+        },
+        {
+          "id": "es",
+          "text": "Spanish",
+          "__typename": "SpokenLanguage"
+        }
+      ],
+      "__typename": "SpokenLanguages"
+    },
+    "akas": {
+      "edges": [
+        {
+          "node": {
+            "text": "Biến Chất",
+            "__typename": "Aka"
+          },
+          "__typename": "AkaEdge"
+        }
+      ],
+      "__typename": "AkaConnection"
+    },
+    "filmingLocations": {
+      "edges": [
+        {
+          "node": {
+            "text": "3828 Piermont Dr NE, Albuquerque, New Mexico, USA",
+            "location": "3828 Piermont Dr NE, Albuquerque, New Mexico, USA",
+            "attributes": [
+              {
+                "text": "Walter White's House",
+                "__typename": "DisplayableAttribute"
+              }
+            ],
+            "__typename": "FilmingLocation"
+          },
+          "__typename": "FilmingLocationEdge"
+        }
+      ],
+      "total": 26,
+      "__typename": "FilmingLocationConnection"
+    },
+    "production": {
+      "edges": [
+        {
+          "node": {
+            "company": {
+              "id": "co0212797",
+              "companyText": {
+                "text": "High Bridge Productions",
+                "__typename": "CompanyText"
+              },
+              "__typename": "Company"
+            },
+            "__typename": "CompanyCredit"
+          },
+          "__typename": "CompanyCreditEdge"
+        },
+        {
+          "node": {
+            "company": {
+              "id": "co0071947",
+              "companyText": {
+                "text": "Gran Via Productions",
+                "__typename": "CompanyText"
+              },
+              "__typename": "Company"
+            },
+            "__typename": "CompanyCredit"
+          },
+          "__typename": "CompanyCreditEdge"
+        },
+        {
+          "node": {
+            "company": {
+              "id": "co0086397",
+              "companyText": {
+                "text": "Sony Pictures Television",
+                "__typename": "CompanyText"
+              },
+              "__typename": "Company"
+            },
+            "__typename": "CompanyCredit"
+          },
+          "__typename": "CompanyCreditEdge"
+        }
+      ],
+      "__typename": "CompanyCreditConnection"
+    },
+    "companies": {
+      "total": 106,
+      "__typename": "CompanyCreditConnection"
+    },
+    "productionBudget": null,
+    "lifetimeGross": null,
+    "openingWeekendGross": null,
+    "worldwideGross": null,
+    "technicalSpecifications": {
+      "soundMixes": {
+        "items": [
+          {
+            "id": "dolby_digital",
+            "text": "Dolby Digital",
+            "attributes": [],
+            "__typename": "SoundMix"
+          }
+        ],
+        "__typename": "SoundMixes"
+      },
+      "aspectRatios": {
+        "items": [],
+        "__typename": "AspectRatios"
+      },
+      "colorations": {
+        "items": [
+          {
+            "conceptId": "color",
+            "text": "Color",
+            "attributes": [],
+            "__typename": "Coloration"
+          }
+        ],
+        "__typename": "Colorations"
+      },
+      "__typename": "TechnicalSpecifications"
+    },
+    "runtime": {
+      "displayableProperty": {
+        "value": {
+          "plainText": "48m",
+          "__typename": "Markdown"
+        },
+        "__typename": "DisplayableTitleRuntimeProperty"
+      },
+      "seconds": 2880,
+      "__typename": "Runtime"
+    },
+    "series": null,
+    "__typename": "Title"
+  }
+}

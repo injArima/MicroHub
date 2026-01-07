@@ -18,6 +18,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const [showResults, setShowResults] = useState(false);
     const [selectedMovies, setSelectedMovies] = useState<Set<string>>(new Set());
     const [isManageMode, setIsManageMode] = useState(false);
+    const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
 
     // Load from local storage on mount
     useEffect(() => {
@@ -30,8 +31,18 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     useEffect(() => {
         localStorage.setItem('microhub_movies', JSON.stringify(movies));
         if (sheetConfig && movies.length > 0) {
-            // Use the specialized sync function
-            const timeout = setTimeout(() => syncMovies(sheetConfig, movies).catch(console.error), 2000);
+            setSyncStatus('syncing');
+            const timeout = setTimeout(() => {
+                syncMovies(sheetConfig, movies)
+                    .then(() => {
+                        setSyncStatus('success');
+                        setTimeout(() => setSyncStatus('idle'), 3000);
+                    })
+                    .catch((e) => {
+                        console.error("Sync hook failed:", e);
+                        setSyncStatus('error');
+                    });
+            }, 2000);
             return () => clearTimeout(timeout);
         }
     }, [movies, sheetConfig]);
@@ -121,8 +132,11 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                     </div>
                 ) : (
                     <div className="flex gap-2 items-center">
-                        <div className="bg-[var(--secondary)]/10 px-3 py-1 rounded-full border border-[var(--secondary)]/20">
+                        <div className="bg-[var(--secondary)]/10 px-3 py-1 rounded-full border border-[var(--secondary)]/20 flex items-center gap-2">
                             <span className="text-[10px] font-bold text-[var(--secondary)] uppercase tracking-wider">Cinema Log</span>
+                            {syncStatus === 'syncing' && <Loader2 size={10} className="animate-spin text-[var(--secondary)]" />}
+                            {syncStatus === 'error' && <span className="w-2 h-2 rounded-full bg-red-500" title="Sync Failed"></span>}
+                            {syncStatus === 'success' && <span className="w-2 h-2 rounded-full bg-green-500" title="Synced"></span>}
                         </div>
                         <button onClick={() => setIsManageMode(true)} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10">
                             <Check size={18} />

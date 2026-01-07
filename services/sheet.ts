@@ -12,7 +12,7 @@ export const getSheetConfig = (): SheetConfig | null => {
 };
 
 // 1. Check if user is New or Returning
-export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Promise<{status: 'new_user' | 'returning_user' | 'error', userName?: string, message?: string}> => {
+export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Promise<{ status: 'new_user' | 'returning_user' | 'error', userName?: string, message?: string }> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
@@ -26,7 +26,7 @@ export const checkSheetStatus = async (scriptUrl: string, sheetId: string): Prom
 };
 
 // 2. Setup New User
-export const setupNewUser = async (scriptUrl: string, sheetId: string, userName: string): Promise<{status: 'success' | 'error', rawKey?: string, message?: string}> => {
+export const setupNewUser = async (scriptUrl: string, sheetId: string, userName: string): Promise<{ status: 'success' | 'error', rawKey?: string, message?: string }> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
@@ -40,7 +40,7 @@ export const setupNewUser = async (scriptUrl: string, sheetId: string, userName:
 };
 
 // 3. Login Returning User
-export const loginUser = async (scriptUrl: string, sheetId: string, authKey: string): Promise<{status: 'success' | 'error', message?: string}> => {
+export const loginUser = async (scriptUrl: string, sheetId: string, authKey: string): Promise<{ status: 'success' | 'error', message?: string }> => {
     try {
         const response = await fetch(scriptUrl, {
             method: 'POST',
@@ -54,11 +54,11 @@ export const loginUser = async (scriptUrl: string, sheetId: string, authKey: str
 };
 
 // 4. Reset/Wipe Sheet (No Auth required for lost key scenario)
-export const resetSheet = async (scriptUrl: string, sheetId: string): Promise<{status: 'success' | 'error', message?: string}> => {
+export const resetSheet = async (scriptUrl: string, sheetId: string): Promise<{ status: 'success' | 'error', message?: string }> => {
     try {
         const response = await fetch(scriptUrl, {
-             method: 'POST',
-             body: JSON.stringify({ action: 'reset_sheet', sheetId })
+            method: 'POST',
+            body: JSON.stringify({ action: 'reset_sheet', sheetId })
         });
         return await response.json();
     } catch (e: any) {
@@ -80,11 +80,11 @@ export const fetchCloudData = async (config: SheetConfig): Promise<Partial<AppDa
         const url = `${config.scriptUrl}?sheetId=${config.sheetId}&authKey=${config.authKey}`;
         const response = await fetch(url);
         const json = await response.json();
-        
+
         if (json.status === 'success') {
             return json.data;
         } else {
-             throw new Error(json.message || "Fetch failed");
+            throw new Error(json.message || "Fetch failed");
         }
     } catch (e: any) {
         console.error("Fetch Error", e);
@@ -110,6 +110,7 @@ export const syncSheet = async (config: SheetConfig, sheetName: string, data: an
         }
     } catch (e: any) {
         console.error(`Sync Error (${sheetName})`, e);
+        console.error("Sheet Config:", { ...config, authKey: "***" }); // Log config (masked) for debug
         throw new Error(e.message || "Network Error");
     }
 };
