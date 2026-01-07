@@ -61,6 +61,8 @@ export interface Movie {
   plot: string;
   status: 'watchlist' | 'watched';
   posterUrl?: string;
+  score?: string;
+  episodeCount?: number;
 }
 
 export interface ChatMessage {

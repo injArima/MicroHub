@@ -57,6 +57,8 @@ MicroHub currently operates on a **Serverless-frontend** model where Google Shee
     5.  `Genre`: Comma-separated string.
     6.  `Status`: 'watchlist' | 'watched'.
     7.  `Poster URL`: Link to image resource.
+    8.  `Score`: IMDb rating.
+    9.  `Episodes`: Number of episodes (if series).
 
 #### D. System Config (`App_Config` Sheet)
 *   **Purpose**: Stores authentication and user metadata.
