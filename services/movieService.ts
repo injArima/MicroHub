@@ -1,25 +1,34 @@
-import { Movie, SheetConfig } from '../types';
+import { Movie, SheetConfig, SearchResult } from '../types';
 import { syncSheet } from './sheet';
 
 const IMDB_API_BASE = 'https://search.imdbot.workers.dev';
 
-export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
+export const searchMovieCandidates = async (query: string): Promise<SearchResult[]> => {
     try {
-        // Step 1: Search for the movie
         const searchRes = await fetch(`${IMDB_API_BASE}/?q=${encodeURIComponent(query)}`);
-
         if (!searchRes.ok) throw new Error("Search service unavailable");
 
         const searchData = await searchRes.json();
-
         if (!searchData.description || searchData.description.length === 0) {
-            throw new Error("Movie not found");
+            return [];
         }
 
-        const firstResult = searchData.description[0];
-        const imdbId = firstResult["#IMDB_ID"];
+        return searchData.description.map((item: any) => ({
+            imdbId: item["#IMDB_ID"] || "",
+            title: item["#TITLE"] || "Unknown",
+            year: item["#YEAR"] ? item["#YEAR"].toString() : "",
+            posterUrl: item["#IMG_POSTER"] || "",
+            type: item["#RANK"] ? "Movie/TV" : "Unknown" // API doesn't always give clear type in search list
+        }));
+    } catch (e) {
+        console.error("Search candidates error:", e);
+        return [];
+    }
+};
 
-        // Step 2: Get details
+export const getMovieDetails = async (imdbId: string): Promise<Partial<Movie>> => {
+    try {
+        // Step 1: Get Details directly by ID
         const detailsRes = await fetch(`${IMDB_API_BASE}/?tt=${imdbId}`);
 
         let info: any = {};
@@ -27,7 +36,12 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
         if (detailsRes.ok) {
             detailsData = await detailsRes.json();
             info = detailsData.short || {};
+        } else {
+            throw new Error("Failed to fetch details");
         }
+
+        // Refetch basic info if needed or rely on what we have. 
+        // We use what we can from 'short' and 'main'.
 
         // Extract Director
         let director = "Unknown";
@@ -40,7 +54,7 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
         }
 
         // Extract Year
-        const year = info.datePublished ? info.datePublished.split('-')[0] : (firstResult["#YEAR"] || "Unknown").toString();
+        const year = info.datePublished ? info.datePublished.split('-')[0] : "Unknown";
 
         // Extract Genre
         let genre: string[] = ["Unknown"];
@@ -51,41 +65,35 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
         // Extract Score
         const score = info.aggregateRating?.ratingValue ? info.aggregateRating.ratingValue.toString() : "";
 
-        // Extract Episodes (basic heuristic based on availability)
-        // The API might return it in different ways, but for now we look for generic series indicators if explicit count isn't there.
-        // IMDBot isn't always perfect with episode counts in the 'short' payload, but let's try.
+        // Extract Episodes
         let episodeCount: number | undefined = undefined;
         if (info['@type'] === 'TVSeries' || info['@type'] === 'TelevisionSeries') {
-            // Sometimes it's in totalEpisodes, sometimes we have to guess or leave it 0
-            // For this free API, we might not get exact count easily in the 'short' body.
-            // We'll leave undefined if we can't find it, or check main payload if needed.
-            // If the API returns it in a specific field:
-            if (detailsData?.main?.totalSeasons) {
-                // Convert seasons to string if needed, but user asked for episodes. 
-                // Without a dedicated episodes endpoint, we might just default to undefined or 
-                // if the user is okay with seasons? 
-                // Let's stick to "undefined" if we can't get exact episode count, 
-                // but often it's not in the simple view.
-            }
+            // Try to find episode count in main payload if possible, or just ignore.
+            // Without reliable field, we leave undefined.
         }
 
         return {
-            title: info.name || firstResult["#TITLE"],
+            title: info.name || "Unknown",
             year: year,
             director: director,
             genre: genre,
             plot: info.description || "No plot available.",
-            posterUrl: info.image || firstResult["#IMG_POSTER"],
+            posterUrl: info.image || "",
             score: score,
             episodeCount: episodeCount
         };
 
     } catch (error: any) {
-        if (error.message !== "Movie not found") {
-            console.warn("Movie Search Warning:", error.message);
-        }
+        console.warn("Get Movie Details Details:", error.message);
         throw error;
     }
+};
+
+// Deprecated or Wrapper for backward compatibility if needed, but we will switch MovieApp to use the above two.
+export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
+    const candidates = await searchMovieCandidates(query);
+    if (candidates.length === 0) throw new Error("Movie not found");
+    return getMovieDetails(candidates[0].imdbId);
 };
 
 export const syncMovies = async (config: SheetConfig, movies: Movie[]) => {

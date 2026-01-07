@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2 } from 'lucide-react';
 import { Movie, SheetConfig } from '../types';
-import { searchMovie, syncMovies } from '../services/movieService';
+import { searchMovieCandidates, getMovieDetails, syncMovies } from '../services/movieService';
 
 interface MovieAppProps {
     onBack: () => void;
@@ -14,6 +14,8 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [activeTab, setActiveTab] = useState<'watchlist' | 'watched'>('watchlist');
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [showResults, setShowResults] = useState(false);
 
     // Load from local storage on mount
     useEffect(() => {
@@ -32,12 +34,26 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
         }
     }, [movies, sheetConfig]);
 
-    const handleAddMovie = async () => {
+    const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         setIsSearching(true);
-
+        setShowResults(false);
         try {
-            const result = await searchMovie(searchQuery);
+            const results = await searchMovieCandidates(searchQuery);
+            setSearchResults(results);
+            setShowResults(true);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsSearching(false);
+        }
+    }
+
+    const handleSelectMovie = async (imdbId: string) => {
+        setIsSearching(true);
+        setShowResults(false);
+        try {
+            const result = await getMovieDetails(imdbId);
             const newMovie: Movie = {
                 id: Date.now().toString(),
                 title: result.title || "Unknown",
@@ -54,7 +70,7 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
             setSearchQuery('');
         } catch (e) {
             console.error(e);
-            alert("Movie not found");
+            alert("Failed to load movie details");
         } finally {
             setIsSearching(false);
         }
@@ -73,23 +89,59 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 </div>
             </div>
 
-            <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-6 focus-within:border-[var(--secondary)]/50 transition-colors max-w-2xl mx-auto w-full">
-                <Search size={16} className="text-gray-400" />
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAddMovie()}
-                    placeholder="Search movie..."
-                    className="flex-1 bg-transparent text-white outline-none text-sm h-8"
-                />
-                <button
-                    onClick={handleAddMovie}
-                    disabled={isSearching}
-                    className="w-8 h-8 rounded-full bg-[var(--secondary)] flex items-center justify-center text-black hover:scale-105 transition-transform"
-                >
-                    {isSearching ? <Loader2 size={14} className="animate-spin" /> : <Plus size={16} />}
-                </button>
+            <div className="relative max-w-2xl mx-auto w-full z-20">
+                <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-2 focus-within:border-[var(--secondary)]/50 transition-colors w-full">
+                    <Search size={16} className="text-gray-400" />
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                        placeholder="Search movie..."
+                        className="flex-1 bg-transparent text-white outline-none text-sm h-8"
+                    />
+                    <button
+                        onClick={handleSearch}
+                        disabled={isSearching}
+                        className="w-8 h-8 rounded-full bg-[var(--secondary)] flex items-center justify-center text-black hover:scale-105 transition-transform"
+                    >
+                        {isSearching ? <Loader2 size={14} className="animate-spin" /> : <Plus size={16} />}
+                    </button>
+                </div>
+
+                {/* Dropdown Results */}
+                {showResults && searchResults.length > 0 && (
+                    <div className="absolute top-14 left-0 right-0 glass-card rounded-2xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-top-2 max-h-96 overflow-y-auto">
+                        <div className="p-2">
+                            <div className="flex justify-between items-center px-2 py-1 mb-2">
+                                <span className="text-xs font-bold text-gray-400">Select a title</span>
+                                <button onClick={() => setShowResults(false)} className="text-xs text-gray-500 hover:text-white">Close</button>
+                            </div>
+                            {searchResults.map((item) => (
+                                <button
+                                    key={item.imdbId}
+                                    onClick={() => handleSelectMovie(item.imdbId)}
+                                    className="w-full text-left flex items-center gap-3 p-2 hover:bg-white/10 rounded-xl transition-colors group"
+                                >
+                                    <div className="w-10 h-14 bg-black/50 rounded overflow-hidden flex-shrink-0">
+                                        {item.posterUrl ? (
+                                            <img src={item.posterUrl} className="w-full h-full object-cover" alt="" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-xs text-gray-600">N/A</div>
+                                        )}
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-sm font-bold text-white truncate group-hover:text-[var(--secondary)] transition-colors">{item.title}</p>
+                                        <p className="text-xs text-gray-500">{item.year} • {item.type}</p>
+                                    </div>
+                                    <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[var(--secondary)] group-hover:bg-[var(--secondary)] transition-colors">
+                                        <Plus size={12} className="text-transparent group-hover:text-black" />
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="flex glass-card p-1 rounded-full mb-6 max-w-md mx-auto w-full">

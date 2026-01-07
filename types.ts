@@ -65,6 +65,14 @@ export interface Movie {
   episodeCount?: number;
 }
 
+export interface SearchResult {
+  imdbId: string;
+  title: string;
+  year: string;
+  posterUrl: string;
+  type: string;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'model';
