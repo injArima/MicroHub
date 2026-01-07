@@ -1,7 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ListTodo, BookOpen, Film, ArrowUpRight, PlayCircle, Plus, Timer, Watch } from 'lucide-react';
 import { AppRoute, SheetConfig, Task } from '../types';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 interface HomeHubProps {
     onNavigate: (route: AppRoute) => void;
@@ -13,6 +15,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
     const [greeting, setGreeting] = useState('');
     const [tasks, setTasks] = useState<Task[]>([]);
     const isConnected = !!config;
+    const container = useRef(null);
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -31,11 +34,33 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
         }
     }, []);
 
+    useGSAP(() => {
+        const tl = gsap.timeline();
+        
+        // Header Animation
+        tl.from('.home-header', {
+            y: -20,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power3.out'
+        });
+
+        // Grid Items Stagger
+        tl.from('.app-card', {
+            y: 40,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'back.out(1.2)',
+        }, "-=0.4");
+        
+    }, { scope: container });
+
     return (
-        <div className="w-full min-h-screen pb-32 px-6 pt-14 flex flex-col">
+        <div ref={container} className="w-full min-h-screen pb-32 px-6 pt-14 flex flex-col">
             
             {/* Header Section */}
-            <div className="mb-8 animate-in slide-in-from-top-4 duration-700">
+            <div className="home-header mb-8">
                  <span className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 mb-2 ${isConnected ? 'text-[var(--primary)]' : 'text-red-400'}`}>
                     <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-[var(--primary)] animate-pulse' : 'bg-red-500'}`}></span>
                     MicroHub OS
@@ -52,7 +77,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                 {/* Large Task Card - Vertical on Left */}
                 <div 
                     onClick={() => onNavigate(AppRoute.TASKS)}
-                    className="col-span-1 row-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden min-h-[320px] group"
+                    className="app-card col-span-1 row-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden min-h-[320px] group"
                 >
                     <div className="relative z-10 w-full">
                         {/* Header with Title Left and Icon Right */}
@@ -75,7 +100,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                                     </div>
                                 ))
                             ) : (
-                                <div className="flex flex-col items-start gap-2 animate-in fade-in duration-500">
+                                <div className="flex flex-col items-start gap-2">
                                     <span className="text-xs text-gray-500 font-light ml-1">Free for today</span>
                                     <div className="glass-button px-3 py-2 rounded-full text-[10px] font-bold text-[var(--primary)] flex items-center gap-1 hover:bg-[var(--primary)]/10 transition-colors">
                                         <Plus size={12} /> Add Task
@@ -91,7 +116,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                     {/* Journal Card (Gradient) */}
                     <div 
                         onClick={() => onNavigate(AppRoute.JOURNAL)}
-                        className="aspect-square rounded-[32px] p-5 flex flex-col justify-between cursor-pointer group relative overflow-hidden transition-transform hover:scale-[1.02]"
+                        className="app-card aspect-square rounded-[32px] p-5 flex flex-col justify-between cursor-pointer group relative overflow-hidden transition-transform hover:scale-[1.02]"
                         style={{
                             background: 'linear-gradient(135deg, rgba(var(--primary-rgb), 0.15) 0%, rgba(var(--primary-rgb), 0.05) 100%)',
                             border: '1px solid rgba(var(--primary-rgb), 0.2)'
@@ -117,7 +142,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                     {/* Cinema Card (Darker) */}
                     <div 
                          onClick={() => onNavigate(AppRoute.MOVIES)}
-                         className="aspect-square glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden"
+                         className="app-card aspect-square glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden"
                     >
                         <div className="flex justify-between items-start">
                             <h3 className="text-lg font-medium text-white leading-tight">Cinema<br/>Log</h3>
@@ -137,7 +162,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
                 {/* Bottom Wide Card - Time App (Consolidated) */}
                 <div 
                     onClick={() => onNavigate(AppRoute.TIMER)}
-                    className="col-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex items-center justify-between cursor-pointer group mt-2"
+                    className="app-card col-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex items-center justify-between cursor-pointer group mt-2"
                 >
                     <div className="flex items-center gap-4">
                          <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center text-white border border-white/5">

@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Home, ListTodo, BookOpen, Film, User } from 'lucide-react';
 import { AppRoute } from '../types';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 interface BottomNavProps {
   currentRoute: AppRoute;
@@ -9,7 +11,21 @@ interface BottomNavProps {
 }
 
 const BottomNav: React.FC<BottomNavProps> = ({ currentRoute, onNavigate }) => {
+  const container = useRef(null);
+  
   const isActive = (route: AppRoute) => currentRoute === route;
+
+  // Animate active icon when currentRoute changes
+  useGSAP(() => {
+    // Select the active icon svg
+    const activeIcon = document.querySelector('.nav-icon-active');
+    if (activeIcon) {
+        gsap.fromTo(activeIcon, 
+            { scale: 0.8, rotation: -15 },
+            { scale: 1.1, rotation: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" }
+        );
+    }
+  }, { scope: container, dependencies: [currentRoute] });
 
   const NavButton = ({ route, icon: Icon }: { route: AppRoute; icon: any }) => (
     <button 
@@ -19,17 +35,20 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentRoute, onNavigate }) => {
             ${isActive(route) ? 'text-[var(--primary)]' : 'text-white/40 hover:text-white'}
         `}
     >
-      <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive(route) ? 'scale-110 drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]' : 'group-hover:scale-105'}`} strokeWidth={isActive(route) ? 2.5 : 2} />
+      <Icon 
+        className={`w-5 h-5 transition-transform duration-300 ${isActive(route) ? 'nav-icon-active drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]' : 'group-hover:scale-105'}`} 
+        strokeWidth={isActive(route) ? 2.5 : 2} 
+      />
       
-      {/* Active Dot Indicator */}
+      {/* Active Dot Indicator - Animated via CSS transition mainly, but GSAP handles the icon pop */}
       {isActive(route) && (
-          <span className="absolute bottom-2.5 w-1 h-1 bg-[var(--primary)] rounded-full shadow-[0_0_8px_var(--primary)]"></span>
+          <span className="absolute bottom-2.5 w-1 h-1 bg-[var(--primary)] rounded-full shadow-[0_0_8px_var(--primary)] animate-in fade-in zoom-in duration-300"></span>
       )}
     </button>
   );
 
   return (
-    <div className="fixed bottom-8 left-0 right-0 px-6 z-50 flex justify-center pointer-events-none">
+    <div ref={container} className="fixed bottom-8 left-0 right-0 px-6 z-50 flex justify-center pointer-events-none">
       <div className="glass-panel rounded-[32px] px-3 py-2 pointer-events-auto flex items-center gap-2 bg-[#0a0a0a]/80 backdrop-blur-xl border-white/10 shadow-2xl">
         
         <NavButton route={AppRoute.HOME} icon={Home} />

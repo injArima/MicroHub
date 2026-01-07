@@ -1,9 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, RefreshCw } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { JournalEntry, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 interface JournalAppProps {
     onBack: () => void;
@@ -33,10 +35,32 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     const [isPreview, setIsPreview] = useState(false);
 
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+    
+    const container = useRef(null);
 
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     }, [entries]);
+
+    useGSAP(() => {
+        if (view === 'list') {
+             gsap.from('.journal-card', {
+                y: 30,
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.5,
+                ease: 'power2.out',
+                clearProps: 'all'
+            });
+        } else {
+             gsap.from('.editor-container', {
+                scale: 0.95,
+                opacity: 0,
+                duration: 0.4,
+                ease: 'power2.out'
+             });
+        }
+    }, { scope: container, dependencies: [view] }); // Re-run when view changes
 
     const handleSave = async () => {
         const newEntry: JournalEntry = {
@@ -68,7 +92,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
 
     if (view === 'editor') {
         return (
-            <div className="w-full max-w-4xl mx-auto min-h-screen pb-6 flex flex-col pt-8 px-6">
+            <div ref={container} className="editor-container w-full max-w-4xl mx-auto min-h-screen pb-6 flex flex-col pt-8 px-6">
                 <div className="flex justify-between items-center mb-6">
                     <button onClick={() => setView('list')} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                         <ArrowLeft size={20} />
@@ -114,7 +138,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     }
 
     return (
-        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
+        <div ref={container} className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
             <div className="flex justify-between items-center mb-8">
                 <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                     <ArrowLeft size={20} />
@@ -126,7 +150,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
                 <h1 className="text-3xl font-light text-white mb-2">Daily<br/><span className="font-bold text-[var(--secondary)]">Journal</span></h1>
             </div>
 
-            <div onClick={() => openEditor()} className="bg-[var(--secondary)] rounded-[28px] p-6 mb-8 relative overflow-hidden group cursor-pointer transition-transform active:scale-[0.99] hover:brightness-110">
+            <div onClick={() => openEditor()} className="journal-card bg-[var(--secondary)] rounded-[28px] p-6 mb-8 relative overflow-hidden group cursor-pointer transition-transform active:scale-[0.99] hover:brightness-110">
                 <h2 className="text-xl font-bold text-black mb-1">New Entry</h2>
                 <p className="text-black/70 text-xs font-medium">Write something for today.</p>
                 <div className="absolute right-4 bottom-4 w-10 h-10 bg-black/10 rounded-full flex items-center justify-center text-black">
@@ -136,7 +160,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {entries.map(entry => (
-                    <div key={entry.id} onClick={() => openEditor(entry)} className="glass-card p-5 rounded-[24px] cursor-pointer hover:bg-white/10 transition-colors flex flex-col h-full">
+                    <div key={entry.id} onClick={() => openEditor(entry)} className="journal-card glass-card p-5 rounded-[24px] cursor-pointer hover:bg-white/10 transition-colors flex flex-col h-full">
                         <div className="flex justify-between mb-2">
                             <span className="text-[10px] bg-white/5 text-[var(--secondary)] px-2 py-0.5 rounded-full uppercase font-bold tracking-wider">{entry.tags[0]}</span>
                             <span className="text-xs text-gray-500">{entry.date}</span>
