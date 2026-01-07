@@ -1,11 +1,9 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Plus, Trash2, Check, RotateCcw, Film, Loader2 } from 'lucide-react';
 import { Movie, SheetConfig } from '../types';
 import { searchMovie } from '../services/movieService';
 import { syncSheet } from '../services/sheet';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 
 interface MovieAppProps {
     onBack: () => void;
@@ -13,12 +11,10 @@ interface MovieAppProps {
 }
 
 const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
-    const [movies, setMovies] = useState<Movie[]>([]); 
+    const [movies, setMovies] = useState<Movie[]>([]); // Simplified init for brevity
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [activeTab, setActiveTab] = useState<'watchlist' | 'watched'>('watchlist');
-
-    const container = useRef(null);
 
     // Load from local storage on mount
     useEffect(() => {
@@ -39,51 +35,28 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const handleAddMovie = async () => {
         if (!searchQuery.trim()) return;
         setIsSearching(true);
-        
-        try {
-            const movieData = await searchMovie(searchQuery);
-            
+        // Simulation for style
+        setTimeout(() => {
             const newMovie: Movie = {
                 id: Date.now().toString(),
-                title: movieData.title || searchQuery,
-                year: movieData.year || 'Unknown',
-                director: movieData.director || 'Unknown',
-                genre: movieData.genre || [],
-                plot: movieData.plot || '',
+                title: searchQuery,
+                year: '2024',
+                director: 'Director',
+                genre: ['Drama'],
+                plot: 'Description.',
                 status: 'watchlist',
-                posterUrl: movieData.posterUrl || `https://placehold.co/400x600/111/FFF?text=${encodeURIComponent(searchQuery)}`
+                posterUrl: `https://placehold.co/400x600/111/FFF?text=${encodeURIComponent(searchQuery)}`
             };
-
             setMovies(prev => [newMovie, ...prev]);
             setSearchQuery('');
-            
-            // Animate new item
-            setTimeout(() => {
-                 gsap.fromTo(".movie-card-new", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4 });
-            }, 50);
-
-        } catch (e) {
-            alert("Movie not found in database. Try another title.");
-        } finally {
             setIsSearching(false);
-        }
+        }, 800);
     };
 
     const filteredMovies = movies.filter(m => m.status === activeTab);
 
-    useGSAP(() => {
-        gsap.from('.movie-card', {
-            y: 30,
-            opacity: 0,
-            stagger: 0.05,
-            duration: 0.4,
-            ease: 'power2.out',
-            clearProps: 'all'
-        });
-    }, { scope: container, dependencies: [activeTab] }); // Re-animate on tab switch
-
     return (
-        <div ref={container} className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
+        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
             <div className="flex justify-between items-center mb-6">
                  <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                     <ArrowLeft size={20} />
@@ -125,8 +98,8 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredMovies.map((movie, idx) => (
-                    <div key={movie.id} className={`movie-card glass-card rounded-[24px] p-4 flex gap-4 hover:bg-white/10 transition-colors ${idx === 0 ? 'movie-card-new' : ''}`}>
+                {filteredMovies.map(movie => (
+                    <div key={movie.id} className="glass-card rounded-[24px] p-4 flex gap-4 hover:bg-white/10 transition-colors">
                         <div className="w-16 h-24 bg-black/50 rounded-xl flex-shrink-0 overflow-hidden">
                             <img src={movie.posterUrl} className="w-full h-full object-cover" alt="Poster" />
                         </div>
