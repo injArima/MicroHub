@@ -1,67 +1,29 @@
+
 import { Movie } from '../types';
 
-const IMDB_API_BASE = 'https://search.imdbot.workers.dev';
+const DB_URL = 'https://raw.githubusercontent.com/theapache64/movie_db/master/data/movies.json';
 
 export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
     try {
-        // Step 1: Search for the movie
-        const searchRes = await fetch(`${IMDB_API_BASE}/?q=${encodeURIComponent(query)}`);
+        const res = await fetch(DB_URL);
+        if (!res.ok) throw new Error("Database unavailable");
         
-        if (!searchRes.ok) throw new Error("Search service unavailable");
+        const data: any[] = await res.json();
+        // Simple case-insensitive search
+        const found = data.find((m: any) => m.title.toLowerCase().includes(query.toLowerCase()));
         
-        const searchData = await searchRes.json();
-        
-        if (!searchData.description || searchData.description.length === 0) {
-            // Throwing a standard error that the UI handles as "Not Found"
-            throw new Error("Movie not found");
-        }
-
-        const firstResult = searchData.description[0];
-        const imdbId = firstResult["#IMDB_ID"];
-
-        // Step 2: Get details
-        const detailsRes = await fetch(`${IMDB_API_BASE}/?tt=${imdbId}`);
-        
-        let info: any = {};
-        if (detailsRes.ok) {
-            const detailsData = await detailsRes.json();
-            info = detailsData.short || {};
-        }
-
-        // Extract Director
-        let director = "Unknown";
-        if (info.director) {
-            if (Array.isArray(info.director)) {
-                director = info.director[0]?.name || "Unknown";
-            } else {
-                director = info.director?.name || "Unknown";
-            }
-        }
-
-        // Extract Year
-        const year = info.datePublished ? info.datePublished.split('-')[0] : (firstResult["#YEAR"] || "Unknown").toString();
-
-        // Extract Genre
-        let genre: string[] = ["Unknown"];
-        if (info.genre) {
-            genre = Array.isArray(info.genre) ? info.genre : [info.genre];
-        }
+        if (!found) throw new Error("Movie not found");
 
         return {
-            title: info.name || firstResult["#TITLE"],
-            year: year,
-            director: director,
-            genre: genre,
-            plot: info.description || "No plot available.",
-            posterUrl: info.image || firstResult["#IMG_POSTER"]
+            title: found.title,
+            year: found.year ? found.year.toString() : 'Unknown',
+            director: found.director || 'Unknown',
+            genre: found.genre || [],
+            plot: found.plot || 'No description available',
+            posterUrl: found.posterUrl
         };
-
     } catch (error: any) {
-        // If it's a "Movie not found" error, just rethrow it for the UI to handle.
-        // If it's something else, log it for debugging but still throw.
-        if (error.message !== "Movie not found") {
-             console.warn("Movie Search Warning:", error.message);
-        }
+        console.warn("Search Error:", error);
         throw error;
     }
 };
