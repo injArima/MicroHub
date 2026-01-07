@@ -160,8 +160,18 @@ function handleSyncSheet(ss, providedKey, targetSheetName, data) {
     mapper = j => [j.id, j.date, j.title, j.content, Array.isArray(j.tags) ? j.tags.join(',') : j.tags];
   } 
   else if (targetSheetName === 'Cinema_Log') {
-    headers = ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL'];
-    mapper = m => [m.id, m.title, m.year, m.director, Array.isArray(m.genre) ? m.genre.join(',') : m.genre, m.status, m.posterUrl];
+    headers = ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL', 'Score', 'Episodes'];
+    mapper = m => [
+      m.id, 
+      m.title, 
+      m.year, 
+      m.director, 
+      Array.isArray(m.genre) ? m.genre.join(',') : m.genre, 
+      m.status, 
+      m.posterUrl || '',
+      m.score || '',
+      m.episodeCount ? m.episodeCount.toString() : ''
+    ];
   } 
   else {
     throw new Error("Unknown Target Sheet: " + targetSheetName);
@@ -174,7 +184,7 @@ function handleSyncSheet(ss, providedKey, targetSheetName, data) {
 function handleSyncPull(ss) {
   const tasks = readSheetData(ss, 'Task_Tracker', ['id', 'title', 'description', 'priority', 'status', 'createdAt', 'completedAt']);
   const journal = readSheetData(ss, 'Journal_Notes', ['id', 'date', 'title', 'content', 'tags']);
-  const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl']);
+  const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl', 'score', 'episodeCount']);
   
   // Get User Name from Config
   const configSheet = ss.getSheetByName('App_Config');
@@ -182,7 +192,13 @@ function handleSyncPull(ss) {
 
   // Data Clean up (Strings to Arrays)
   const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.toString().split(',') : []}));
-  const formattedMovies = movies.map(m => ({...m, genre: m.genre ? m.genre.toString().split(',') : [], posterUrl: m.posterUrl || ''}));
+  const formattedMovies = movies.map(m => ({
+    ...m, 
+    genre: m.genre ? m.genre.toString().split(',') : [], 
+    posterUrl: m.posterUrl || '',
+    score: m.score || '',
+    episodeCount: m.episodeCount ? parseInt(m.episodeCount) : undefined
+  }));
   
   return response({
     status: 'success',
@@ -201,7 +217,7 @@ function setupSubSheets(ss) {
   const definitions = [
     { name: 'Task_Tracker', headers: ['ID', 'Title', 'Description', 'Priority', 'Status', 'Created At', 'Completed At'] },
     { name: 'Journal_Notes', headers: ['ID', 'Date', 'Title', 'Content', 'Tags'] },
-    { name: 'Cinema_Log', headers: ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL'] }
+    { name: 'Cinema_Log', headers: ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL', 'Score', 'Episodes'] }
   ];
 
   definitions.forEach(def => {

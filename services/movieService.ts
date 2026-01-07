@@ -100,23 +100,11 @@ export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
 
 export const syncMovies = async (config: SheetConfig, movies: Movie[]) => {
     console.log("Starting Sync...");
-    // Transform to Sheet Schema:
-    // [ID, Title, Year, Director, Genre (String), Status, Poster URL, Score, Episodes]
-
-    const sheetData = movies.map(m => [
-        m.id,
-        m.title,
-        m.year,
-        m.director,
-        m.genre.join(', '),
-        m.status,
-        m.posterUrl || "",
-        m.score || "",
-        m.episodeCount ? m.episodeCount.toString() : ""
-    ]);
+    // We pass the raw objects to the backend, which handles the mapping mapping to columns.
+    // This matches the pattern in TaskManager and allows the backend to be the source of truth for schema.
 
     try {
-        await syncSheet(config, 'Cinema_Log', sheetData);
+        await syncSheet(config, 'Cinema_Log', movies);
         console.log("Sync Complete Success");
     } catch (e) {
         console.error("Sync Failed in service:", e);
