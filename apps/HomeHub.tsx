@@ -38,8 +38,9 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
         <div className="w-full min-h-screen pb-32 px-6 pt-14 flex flex-col relative">
 
             {/* Version Badge - Top Right */}
-            <div className="absolute top-6 right-6 z-50">
-                <span className="text-[10px] font-mono text-white/20 hover:text-white/40 transition-colors cursor-default select-none">
+            {/* Version Badge - Top Right */}
+            <div className="absolute top-4 right-4 z-50 animate-in fade-in duration-1000 delay-500">
+                <span className="text-[10px] font-mono text-white/50 bg-white/10 px-2 py-1 rounded-full border border-white/5 hover:bg-white/20 transition-colors cursor-default select-none backdrop-blur-md">
                     v{version}
                 </span>
             </div>
