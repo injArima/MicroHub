@@ -114,10 +114,10 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   const visibleTasks = filteredTasks.filter(t => t.status === activePipeline);
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-screen pb-32 pt-6 px-4 flex flex-col">
+    <div className="w-full max-w-md mx-auto min-h-screen pb-32 px-4 flex flex-col">
       
       {/* 1. Header & Intelligence Dashboard */}
-      <div className="mb-6 sticky top-0 bg-[#050505]/80 backdrop-blur-md z-30 pt-2 pb-2">
+      <div className="mb-6 sticky top-0 z-40 -mx-4 px-4 pt-6 pb-4 bg-black/30 backdrop-blur-2xl border-b border-white/5 shadow-2xl shadow-black/20 transition-all">
         <div className="flex justify-between items-center mb-4">
             <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                 <ArrowLeft size={20} />
@@ -132,7 +132,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
         </div>
 
         {/* Analytics Bar */}
-        <div className="glass-card rounded-[24px] p-4 flex items-center justify-between shadow-lg relative overflow-hidden">
+        <div className="glass-card rounded-[24px] p-4 flex items-center justify-between shadow-lg relative overflow-hidden bg-white/5">
              {/* Productivity Ring */}
              <div className="flex items-center gap-4">
                  <div className="relative w-14 h-14 flex items-center justify-center">
