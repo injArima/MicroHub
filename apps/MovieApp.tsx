@@ -16,6 +16,8 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     const [activeTab, setActiveTab] = useState<'watchlist' | 'watched'>('watchlist');
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [showResults, setShowResults] = useState(false);
+    const [selectedMovies, setSelectedMovies] = useState<Set<string>>(new Set());
+    const [isManageMode, setIsManageMode] = useState(false);
 
     // Load from local storage on mount
     useEffect(() => {
@@ -76,6 +78,30 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
         }
     };
 
+    const toggleSelection = (id: string) => {
+        const newSet = new Set(selectedMovies);
+        if (newSet.has(id)) {
+            newSet.delete(id);
+        } else {
+            newSet.add(id);
+        }
+        setSelectedMovies(newSet);
+    };
+
+    const handleBulkDelete = () => {
+        if (window.confirm(`Delete ${selectedMovies.size} movies?`)) {
+            setMovies(prev => prev.filter(m => !selectedMovies.has(m.id)));
+            setSelectedMovies(new Set());
+            setIsManageMode(false);
+        }
+    };
+
+    const handleBulkStatus = (status: 'watchlist' | 'watched') => {
+        setMovies(prev => prev.map(m => selectedMovies.has(m.id) ? { ...m, status } : m));
+        setSelectedMovies(new Set());
+        setIsManageMode(false);
+    };
+
     const filteredMovies = movies.filter(m => m.status === activeTab);
 
     return (
@@ -84,12 +110,28 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                 <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
                     <ArrowLeft size={20} />
                 </button>
-                <div className="bg-[var(--secondary)]/10 px-3 py-1 rounded-full border border-[var(--secondary)]/20">
-                    <span className="text-[10px] font-bold text-[var(--secondary)] uppercase tracking-wider">Cinema Log</span>
-                </div>
+
+                {isManageMode ? (
+                    <div className="flex gap-2">
+                        <button onClick={() => setIsManageMode(false)} className="px-4 py-2 rounded-full glass-card text-xs font-bold hover:bg-white/10">Cancel</button>
+                        <button onClick={handleBulkDelete} disabled={selectedMovies.size === 0} className="px-4 py-2 rounded-full bg-red-500/20 text-red-500 border border-red-500/50 text-xs font-bold hover:bg-red-500/30 disabled:opacity-50">Delete ({selectedMovies.size})</button>
+                        <button onClick={() => handleBulkStatus(activeTab === 'watchlist' ? 'watched' : 'watchlist')} disabled={selectedMovies.size === 0} className="px-4 py-2 rounded-full bg-[var(--secondary)] text-black text-xs font-bold hover:opacity-90 disabled:opacity-50">
+                            Move to {activeTab === 'watchlist' ? 'Watched' : 'Watchlist'}
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex gap-2 items-center">
+                        <div className="bg-[var(--secondary)]/10 px-3 py-1 rounded-full border border-[var(--secondary)]/20">
+                            <span className="text-[10px] font-bold text-[var(--secondary)] uppercase tracking-wider">Cinema Log</span>
+                        </div>
+                        <button onClick={() => setIsManageMode(true)} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10">
+                            <Check size={18} />
+                        </button>
+                    </div>
+                )}
             </div>
 
-            <div className="relative max-w-2xl mx-auto w-full z-20">
+            <div className="relative max-w-2xl mx-auto w-full z-20 mb-6">
                 <div className="glass-card rounded-full p-2 pl-4 flex items-center gap-2 mb-2 focus-within:border-[var(--secondary)]/50 transition-colors w-full">
                     <Search size={16} className="text-gray-400" />
                     <input
@@ -99,19 +141,20 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         placeholder="Search movie..."
                         className="flex-1 bg-transparent text-white outline-none text-sm h-8"
+                        disabled={isManageMode}
                     />
                     <button
                         onClick={handleSearch}
-                        disabled={isSearching}
-                        className="w-8 h-8 rounded-full bg-[var(--secondary)] flex items-center justify-center text-black hover:scale-105 transition-transform"
+                        disabled={isSearching || isManageMode}
+                        className="w-8 h-8 rounded-full bg-[var(--secondary)] flex items-center justify-center text-black hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
                     >
                         {isSearching ? <Loader2 size={14} className="animate-spin" /> : <Plus size={16} />}
                     </button>
                 </div>
 
                 {/* Dropdown Results */}
-                {showResults && searchResults.length > 0 && (
-                    <div className="absolute top-14 left-0 right-0 glass-card rounded-2xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-top-2 max-h-96 overflow-y-auto">
+                {showResults && searchResults.length > 0 && !isManageMode && (
+                    <div className="absolute top-14 left-0 right-0 glass-card rounded-2xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-top-2 max-h-96 overflow-y-auto z-50">
                         <div className="p-2">
                             <div className="flex justify-between items-center px-2 py-1 mb-2">
                                 <span className="text-xs font-bold text-gray-400">Select a title</span>
@@ -149,41 +192,64 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab as any)}
-                        className={`flex-1 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${activeTab === tab ? 'bg-[var(--secondary)] text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                        disabled={isManageMode}
+                        className={`flex-1 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all disabled:opacity-50 ${activeTab === tab ? 'bg-[var(--secondary)] text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
                     >
                         {tab}
                     </button>
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredMovies.map(movie => (
-                    <div key={movie.id} className="glass-card rounded-[24px] p-4 flex gap-4 hover:bg-white/10 transition-colors">
-                        <div className="w-16 h-24 bg-black/50 rounded-xl flex-shrink-0 overflow-hidden relative">
-                            <img src={movie.posterUrl} className="w-full h-full object-cover" alt="Poster" />
-                            {movie.score && (
-                                <div className="absolute top-1 right-1 bg-black/70 text-[var(--secondary)] text-[8px] font-bold px-1.5 py-0.5 rounded-full backdrop-blur-sm border border-[var(--secondary)]/30">
-                                    ★ {movie.score}
-                                </div>
-                            )}
-                        </div>
-                        <div className="flex-1 flex flex-col justify-center min-w-0">
-                            <h3 className="font-bold text-white leading-tight mb-1 truncate" title={movie.title}>{movie.title}</h3>
-                            <p className="text-xs text-gray-500 mb-3 truncate">
-                                {movie.year} • {movie.director}
-                                {movie.episodeCount && (
-                                    <span className="ml-2 text-[var(--secondary)]">• {movie.episodeCount} eps</span>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {filteredMovies.map(movie => {
+                    const isSelected = selectedMovies.has(movie.id);
+                    return (
+                        <div
+                            key={movie.id}
+                            onClick={() => isManageMode && toggleSelection(movie.id)}
+                            className={`glass-card rounded-[24px] p-3 flex flex-col gap-3 transition-all relative group cursor-pointer ${isSelected ? 'ring-2 ring-[var(--secondary)]' : 'hover:bg-white/5'}`}
+                        >
+                            <div className="w-full aspect-[2/3] bg-black/50 rounded-xl overflow-hidden relative">
+                                <img src={movie.posterUrl} className="w-full h-full object-cover" alt="Poster" />
+                                {movie.score && (
+                                    <div className="absolute top-2 right-2 bg-black/70 text-[var(--secondary)] text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm border border-[var(--secondary)]/30">
+                                        ★ {movie.score}
+                                    </div>
                                 )}
-                            </p>
-                            <div className="flex gap-2">
-                                <button onClick={() => setMovies(prev => prev.map(m => m.id === movie.id ? { ...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist' } : m))} className="text-[var(--secondary)] text-xs font-bold hover:underline">
-                                    {movie.status === 'watchlist' ? 'Mark Watched' : 'Rewatch'}
-                                </button>
-                                <button onClick={() => setMovies(prev => prev.filter(m => m.id !== movie.id))} className="text-red-400 text-xs font-bold hover:underline">Delete</button>
+                                {isManageMode && (
+                                    <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${isSelected ? 'bg-[var(--secondary)] border-[var(--secondary)]' : 'border-white'}`}>
+                                            {isSelected && <Check size={16} className="text-black" />}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex items-start justify-between gap-2">
+                                <div className="min-w-0 flex-1">
+                                    <h3 className="font-bold text-white text-sm leading-tight mb-1 line-clamp-2" title={movie.title}>{movie.title}</h3>
+                                    <p className="text-[10px] text-gray-500">
+                                        {movie.year}
+                                        {movie.episodeCount && (
+                                            <span className="ml-1 text-[var(--secondary)]">• {movie.episodeCount} eps</span>
+                                        )}
+                                    </p>
+                                </div>
+                                {!isManageMode && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setMovies(prev => prev.map(m => m.id === movie.id ? { ...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist' } : m));
+                                        }}
+                                        className={`w-8 h-8 rounded-full flex items-center justify-center border transition-colors ${movie.status === 'watched' ? 'bg-[var(--secondary)] border-[var(--secondary)] text-black' : 'border-gray-600 text-gray-400 hover:border-white hover:text-white'}`}
+                                    >
+                                        <Check size={14} />
+                                    </button>
+                                )}
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
