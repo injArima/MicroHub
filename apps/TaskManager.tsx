@@ -1,10 +1,8 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, ArrowLeft, Loader2, CheckCircle, Circle, ArrowUpRight, ArrowRight, Trash2, Box, Activity, CheckSquare, BarChart3, AlertCircle } from 'lucide-react';
 import { Task, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 
 interface TaskManagerProps {
     onBack: () => void;
@@ -33,9 +31,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newPriority, setNewPriority] = useState<'High' | 'Medium' | 'Low'>('Medium');
-
-  const container = useRef(null);
-  const ringRef = useRef<SVGCircleElement>(null);
 
   useEffect(() => {
       localStorage.setItem('microhub_tasks', JSON.stringify(tasks));
@@ -73,9 +68,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
     setIsInputExpanded(false);
     setIsDirty(true);
     if(navigator.vibrate) navigator.vibrate(50);
-    
-    // Animate the specific new task entry (quick hack, ideally use ref but this forces re-render/re-anim)
-    gsap.fromTo(".task-item-new", { opacity: 0, height: 0 }, { opacity: 1, height: 'auto', duration: 0.3 });
   };
 
   const moveTask = (taskId: string, newStatus: 'Backlog' | 'Active' | 'Archive') => {
@@ -94,8 +86,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   };
 
   const deleteTask = (taskId: string) => {
-    // Animate out before deleting state? 
-    // For simplicity with react state, we just delete and let the list re-render.
     setTasks(prev => prev.filter(t => t.id !== taskId));
     setIsDirty(true);
   };
@@ -109,9 +99,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   const completedTasks = filteredTasks.filter(t => t.status === 'Archive').length;
   const activeTasks = filteredTasks.filter(t => t.status === 'Active').length;
   const productivityScore = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
-  
-  const circumference = 2 * Math.PI * 24;
-  const dashOffset = circumference * (1 - productivityScore / 100);
 
   // --- RENDERING HELPERS ---
 
@@ -126,35 +113,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
 
   const visibleTasks = filteredTasks.filter(t => t.status === activePipeline);
 
-  // --- ANIMATIONS ---
-  useGSAP(() => {
-    // Animate Tasks Stagger
-    gsap.fromTo('.task-card', 
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.05, duration: 0.4, ease: 'power2.out', clearProps: 'all' }
-    );
-    
-    // Animate Ring
-    if(ringRef.current) {
-        gsap.to(ringRef.current, {
-            strokeDashoffset: dashOffset,
-            duration: 1.5,
-            ease: 'power3.out'
-        });
-    }
-
-  }, { scope: container, dependencies: [activePipeline, filterPriority] }); // Re-run when list changes
-
-  // Animate Input Expansion
-  useGSAP(() => {
-      if(isInputExpanded) {
-          gsap.fromTo('.input-expanded', { height: 0, opacity: 0 }, { height: 'auto', opacity: 1, duration: 0.3, ease: 'power2.out' });
-      }
-  }, { scope: container, dependencies: [isInputExpanded] });
-
-
   return (
-    <div ref={container} className="w-full max-w-md mx-auto min-h-screen pb-32 px-4 flex flex-col">
+    <div className="w-full max-w-md mx-auto min-h-screen pb-32 px-4 flex flex-col">
       
       {/* 1. Header & Intelligence Dashboard */}
       <div className="mb-6 sticky top-0 z-40 -mx-4 px-4 pt-6 pb-4 bg-black/30 backdrop-blur-2xl border-b border-white/5 shadow-2xl shadow-black/20 transition-all">
@@ -178,13 +138,10 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                  <div className="relative w-14 h-14 flex items-center justify-center">
                     <svg className="w-full h-full transform -rotate-90">
                         <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-white/5" />
-                        <circle 
-                            ref={ringRef}
-                            cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" 
-                            strokeDasharray={circumference} 
-                            // Initial state for GSAP to animate from, or fallback
-                            strokeDashoffset={circumference}
-                            className="text-[var(--primary)]" 
+                        <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" 
+                            strokeDasharray={2 * Math.PI * 24} 
+                            strokeDashoffset={2 * Math.PI * 24 * (1 - productivityScore / 100)} 
+                            className="text-[var(--primary)] transition-all duration-1000 ease-out" 
                             strokeLinecap="round"
                         />
                     </svg>
@@ -240,7 +197,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
           </div>
           
           {isInputExpanded && (
-              <div className="input-expanded px-3 pb-3 overflow-hidden">
+              <div className="px-3 pb-3 animate-in fade-in slide-in-from-top-2">
                   <textarea 
                       value={newDesc}
                       onChange={(e) => setNewDesc(e.target.value)}
@@ -299,7 +256,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
               visibleTasks.map((task) => (
                   <div 
                     key={task.id} 
-                    className="task-card glass-card p-4 rounded-[24px] group border-l-[3px] border-l-transparent hover:bg-white/5 transition-all"
+                    className="glass-card p-4 rounded-[24px] group animate-in slide-in-from-bottom-2 duration-300 border-l-[3px] border-l-transparent hover:bg-white/5 transition-all"
                     style={{ borderLeftColor: task.priority === 'High' ? '#f87171' : task.priority === 'Medium' ? 'var(--primary)' : 'transparent' }}
                   >
                       <div className="flex justify-between items-start mb-2">
