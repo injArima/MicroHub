@@ -21,6 +21,12 @@ export interface ThemeConfig {
   secondary: string;
 }
 
+export interface ApiSettings {
+  movieProvider: 'tmdb' | 'gemini';
+  tmdbApiKey: string;
+  geminiApiKey: string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -31,11 +37,11 @@ export interface User {
 export interface Task {
   id: string;
   title: string;
-  date: string;
-  time: string;
+  description: string;
   priority: 'High' | 'Medium' | 'Low';
-  team: string[];
-  colorTheme: 'lime' | 'yellow' | 'red' | 'blue';
+  status: 'Backlog' | 'Active' | 'Archive';
+  createdAt: string;
+  completedAt?: string;
 }
 
 export interface JournalEntry {

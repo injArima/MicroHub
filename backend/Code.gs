@@ -1,3 +1,4 @@
+
 // DEPLOYMENT INSTRUCTIONS:
 // 1. Paste this code into a new Google Apps Script project.
 // 2. Deploy as Web App -> Execute as: Me -> Access: Anyone.
@@ -151,8 +152,8 @@ function handleSyncSheet(ss, providedKey, targetSheetName, data) {
   let mapper = null;
 
   if (targetSheetName === 'Task_Tracker') {
-    headers = ['ID', 'Title', 'Date', 'Time', 'Priority', 'Theme'];
-    mapper = t => [t.id, t.title, t.date, t.time, t.priority, t.colorTheme];
+    headers = ['ID', 'Title', 'Description', 'Priority', 'Status', 'Created At', 'Completed At'];
+    mapper = t => [t.id, t.title, t.description, t.priority, t.status, t.createdAt, t.completedAt || ''];
   } 
   else if (targetSheetName === 'Journal_Notes') {
     headers = ['ID', 'Date', 'Title', 'Content', 'Tags'];
@@ -171,7 +172,7 @@ function handleSyncSheet(ss, providedKey, targetSheetName, data) {
 }
 
 function handleSyncPull(ss) {
-  const tasks = readSheetData(ss, 'Task_Tracker', ['id', 'title', 'date', 'time', 'priority', 'colorTheme']);
+  const tasks = readSheetData(ss, 'Task_Tracker', ['id', 'title', 'description', 'priority', 'status', 'createdAt', 'completedAt']);
   const journal = readSheetData(ss, 'Journal_Notes', ['id', 'date', 'title', 'content', 'tags']);
   const movies = readSheetData(ss, 'Cinema_Log', ['id', 'title', 'year', 'director', 'genre', 'status', 'posterUrl']);
   
@@ -182,12 +183,11 @@ function handleSyncPull(ss) {
   // Data Clean up (Strings to Arrays)
   const formattedJournal = journal.map(j => ({...j, tags: j.tags ? j.tags.toString().split(',') : []}));
   const formattedMovies = movies.map(m => ({...m, genre: m.genre ? m.genre.toString().split(',') : [], posterUrl: m.posterUrl || ''}));
-  const formattedTasks = tasks.map(t => ({...t, team: [], colorTheme: t.colorTheme || 'yellow'}));
-
+  
   return response({
     status: 'success',
     data: {
-      tasks: formattedTasks,
+      tasks: tasks,
       journal: formattedJournal,
       movies: formattedMovies,
       user: { name: storedName }
@@ -199,7 +199,7 @@ function handleSyncPull(ss) {
 
 function setupSubSheets(ss) {
   const definitions = [
-    { name: 'Task_Tracker', headers: ['ID', 'Title', 'Date', 'Time', 'Priority', 'Theme'] },
+    { name: 'Task_Tracker', headers: ['ID', 'Title', 'Description', 'Priority', 'Status', 'Created At', 'Completed At'] },
     { name: 'Journal_Notes', headers: ['ID', 'Date', 'Title', 'Content', 'Tags'] },
     { name: 'Cinema_Log', headers: ['ID', 'Title', 'Year', 'Director', 'Genre', 'Status', 'Poster URL'] }
   ];
@@ -244,7 +244,12 @@ function readSheetData(ss, sheetName, keys) {
   return data.map(row => {
     let obj = {};
     keys.forEach((key, index) => {
-      obj[key] = row[index];
+      let val = row[index];
+      // Convert Google Script Date objects to ISO strings if needed
+      if (Object.prototype.toString.call(val) === '[object Date]') {
+         val = val.toISOString();
+      }
+      obj[key] = val;
     });
     return obj;
   });
