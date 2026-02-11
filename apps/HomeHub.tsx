@@ -1,10 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { ListTodo, BookOpen, Film, ArrowUpRight, PlayCircle, Plus, Timer, Watch } from 'lucide-react';
+import { ListTodo, BookOpen, Film, ArrowUpRight, PlayCircle, Plus, Timer, Zap } from 'lucide-react';
 import { AppRoute, SheetConfig, Task } from '../types';
-import pkg from '../../package.json';
-
-const { version } = pkg;
 
 interface HomeHubProps {
     onNavigate: (route: AppRoute) => void;
@@ -13,21 +10,14 @@ interface HomeHubProps {
 }
 
 const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
-    const [greeting, setGreeting] = useState('');
     const [tasks, setTasks] = useState<Task[]>([]);
     const isConnected = !!config;
 
     useEffect(() => {
-        const hour = new Date().getHours();
-        if (hour < 12) setGreeting('Good Morning');
-        else if (hour < 18) setGreeting('Good Afternoon');
-        else setGreeting('Good Evening');
-
-        // Load tasks for preview
         try {
-            const saved = localStorage.getItem('microhub_tasks');
-            if (saved) {
-                setTasks(JSON.parse(saved));
+            const stored = localStorage.getItem('microhub_tasks');
+            if (stored) {
+                setTasks(JSON.parse(stored));
             }
         } catch (e) {
             console.error("Failed to load tasks", e);
@@ -35,138 +25,109 @@ const HomeHub: React.FC<HomeHubProps> = ({ onNavigate, config, userName }) => {
     }, []);
 
     return (
-        <div className="w-full min-h-screen pb-32 px-6 pt-14 flex flex-col relative">
-
-            {/* Version Badge - Top Right */}
-            {/* Version Badge - Top Right */}
-            <div className="absolute top-4 right-4 z-50 animate-in fade-in duration-1000 delay-500">
-                <span className="text-[10px] font-mono text-white/50 bg-white/10 px-2 py-1 rounded-full border border-white/5 hover:bg-white/20 transition-colors cursor-default select-none backdrop-blur-md">
-                    v{version}
-                </span>
-            </div>
-
+        <div className="w-full min-h-screen pb-32 px-6 pt-10 flex flex-col">
+            
             {/* Header Section */}
-            <div className="mb-8 animate-in slide-in-from-top-4 duration-700">
-                <span className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 mb-2 ${isConnected ? 'text-[var(--primary)]' : 'text-red-400'}`}>
-                    <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-[var(--primary)] animate-pulse' : 'bg-red-500'}`}></span>
-                    MicroHub OS
-                </span>
-                <h1 className="text-[42px] font-thin text-white leading-[1.1] tracking-tight">
-                    My practical <br />
-                    <span className="font-normal text-white">plan</span>
+            <div className="mb-8">
+                <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-3 h-3 border-2 border-black rounded-full ${isConnected ? 'bg-black' : 'bg-transparent'}`}></div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-black">
+                        MicroHub OS {isConnected ? 'Online' : 'Offline'}
+                    </span>
+                </div>
+                <h1 className="text-4xl font-black text-black leading-none tracking-tighter">
+                    HELLO,<br />
+                    {userName.toUpperCase()}.
                 </h1>
             </div>
 
             {/* Apps Grid */}
             <div className="grid grid-cols-2 gap-4">
-
-                {/* Large Task Card - Vertical on Left */}
-                <div
+                
+                {/* Tasks Card */}
+                <div 
                     onClick={() => onNavigate(AppRoute.TASKS)}
-                    className="col-span-1 row-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden min-h-[320px] group"
+                    className="col-span-1 row-span-2 contra-card contra-card-hover p-4 flex flex-col justify-between cursor-pointer min-h-[300px]"
                 >
-                    <div className="relative z-10 w-full">
-                        {/* Header with Title Left and Icon Right */}
-                        <div className="flex justify-between items-start mb-6">
-                            <h3 className="text-2xl font-light text-white leading-tight">My<br />Schedule</h3>
-
-                            <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 text-white">
-                                <ListTodo size={20} className="text-[var(--primary)]" />
+                    <div>
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center bg-[#f0f0f0]">
+                                <ListTodo size={20} className="text-black" />
                             </div>
                         </div>
-
-                        <div className="space-y-3">
-                            {tasks.length > 0 ? (
-                                tasks.slice(0, 3).map((task, index) => (
-                                    <div key={task.id} className={`glass-button p-1 pl-1.5 pr-3 rounded-full flex items-center gap-2 w-max max-w-full ${index !== 0 ? 'opacity-60' : ''}`}>
-                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${index === 0 ? 'bg-[var(--primary)]' : 'border border-white/30'}`}>
-                                            {index === 0 ? <ListTodo size={12} className="text-black" /> : <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>}
-                                        </div>
-                                        <span className={`text-[10px] font-bold truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>{task.title}</span>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="flex flex-col items-start gap-2 animate-in fade-in duration-500">
-                                    <span className="text-xs text-gray-500 font-light ml-1">Free for today</span>
-                                    <div className="glass-button px-3 py-2 rounded-full text-[10px] font-bold text-[var(--primary)] flex items-center gap-1 hover:bg-[var(--primary)]/10 transition-colors">
-                                        <Plus size={12} /> Add Task
-                                    </div>
+                        <h3 className="text-2xl font-black text-black leading-tight uppercase">Tasks</h3>
+                        <p className="text-xs font-bold text-gray-500 mt-1">{tasks.length} PENDING</p>
+                    </div>
+                    
+                    <div className="space-y-2 mt-4">
+                        {tasks.length > 0 ? (
+                            tasks.slice(0, 3).map((task, index) => (
+                                <div key={task.id} className="border-2 border-black rounded-lg p-2 bg-white flex items-center gap-2 shadow-[2px_2px_0px_0px_#000]">
+                                    <div className={`w-3 h-3 border-2 border-black rounded-sm ${index === 0 ? 'bg-black' : 'bg-white'}`}></div>
+                                    <span className="text-[10px] font-bold truncate text-black">{task.title}</span>
                                 </div>
-                            )}
-                        </div>
+                            ))
+                        ) : (
+                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center">
+                                <span className="text-[10px] font-bold text-gray-400">NO TASKS</span>
+                            </div>
+                        )}
+                        <button className="w-full py-2 border-2 border-black rounded-lg text-[10px] font-black hover:bg-black hover:text-white transition-colors uppercase">
+                            + New Task
+                        </button>
                     </div>
                 </div>
 
-                {/* Right Column Stack */}
+                {/* Right Column */}
                 <div className="col-span-1 flex flex-col gap-4">
-                    {/* Journal Card (Gradient) */}
-                    <div
+                    {/* Journal Card */}
+                    <div 
                         onClick={() => onNavigate(AppRoute.JOURNAL)}
-                        className="aspect-square rounded-[32px] p-5 flex flex-col justify-between cursor-pointer group relative overflow-hidden transition-transform hover:scale-[1.02]"
-                        style={{
-                            background: 'linear-gradient(135deg, rgba(var(--primary-rgb), 0.15) 0%, rgba(var(--primary-rgb), 0.05) 100%)',
-                            border: '1px solid rgba(var(--primary-rgb), 0.2)'
-                        }}
+                        className="contra-card contra-card-hover aspect-square p-4 flex flex-col justify-between cursor-pointer bg-[var(--primary)]"
                     >
-                        <div className="flex justify-between items-start z-10">
-                            <h3 className="text-lg font-medium text-white leading-tight">Daily<br />Journal</h3>
+                         <div className="flex justify-between items-start">
+                            <h3 className="text-xl font-black text-black uppercase leading-none">Daily<br/>Log</h3>
+                            <ArrowUpRight size={20} className="text-black" />
                         </div>
-
-                        {/* Wavy Decoration */}
-                        <div className="absolute inset-0 opacity-30 pointer-events-none">
-                            <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 140 60" preserveAspectRatio="none">
-                                <path d="M0,30 C40,10 80,50 140,20 L140,60 L0,60 Z" fill="var(--primary)" fillOpacity="0.3" />
-                                <path d="M0,45 C40,25 80,65 140,35 L140,60 L0,60 Z" fill="var(--primary)" fillOpacity="0.5" />
-                            </svg>
-                        </div>
-
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] z-10 flex items-center gap-1">
-                            7 Day Series <ArrowUpRight size={10} />
-                        </div>
+                        <BookOpen size={24} className="text-black mt-auto" strokeWidth={2.5}/>
                     </div>
 
-                    {/* Cinema Card (Darker) */}
-                    <div
-                        onClick={() => onNavigate(AppRoute.MOVIES)}
-                        className="aspect-square glass-card glass-card-hover rounded-[32px] p-5 flex flex-col justify-between cursor-pointer relative overflow-hidden"
+                    {/* Cinema Card */}
+                    <div 
+                         onClick={() => onNavigate(AppRoute.MOVIES)}
+                         className="contra-card contra-card-hover aspect-square p-4 flex flex-col justify-between cursor-pointer bg-white"
                     >
                         <div className="flex justify-between items-start">
-                            <h3 className="text-lg font-medium text-white leading-tight">Cinema<br />Log</h3>
-                            <PlayCircle size={20} className="text-[var(--primary)]" />
+                            <h3 className="text-xl font-black text-black uppercase leading-none">Watch<br/>List</h3>
                         </div>
-
-                        <div className="flex items-center gap-2 mt-auto">
-                            <div className="flex -space-x-2">
-                                <div className="w-6 h-6 rounded-full bg-white/20 border border-black" />
-                                <div className="w-6 h-6 rounded-full bg-white/10 border border-black" />
-                            </div>
-                            <span className="text-[10px] text-gray-400">+12</span>
+                        <div className="flex items-center justify-between mt-auto">
+                            <Film size={24} className="text-black" strokeWidth={2.5}/>
+                            <span className="text-lg font-black text-black">+4</span>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Wide Card - Time App (Consolidated) */}
-                <div
+                {/* Timer App */}
+                <div 
                     onClick={() => onNavigate(AppRoute.TIMER)}
-                    className="col-span-2 glass-card glass-card-hover rounded-[32px] p-5 flex items-center justify-between cursor-pointer group mt-2"
+                    className="col-span-2 contra-card contra-card-hover p-4 flex items-center justify-between cursor-pointer"
                 >
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center text-white border border-white/5">
-                            <Timer size={20} className="text-[var(--primary)]" />
+                         <div className="w-12 h-12 border-2 border-black rounded-full flex items-center justify-center bg-black text-white">
+                            <Timer size={24} />
                         </div>
                         <div>
-                            <h3 className="text-lg font-medium text-white leading-tight">Time</h3>
+                            <h3 className="text-xl font-black text-black uppercase">Focus Timer</h3>
                             <div className="flex gap-2">
-                                <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-gray-300">Timer</span>
-                                <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-gray-300">Stopwatch</span>
+                                <span className="text-[10px] border border-black px-2 py-0.5 rounded-full font-bold">25:00</span>
+                                <span className="text-[10px] border border-black px-2 py-0.5 rounded-full font-bold">STOPWATCH</span>
                             </div>
                         </div>
                     </div>
-                    <div className="w-10 h-10 rounded-full btn-lime flex items-center justify-center">
-                        <ArrowUpRight size={18} />
+                    <div className="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center hover:bg-black hover:text-white transition-colors">
+                         <Zap size={20} fill="currentColor" />
                     </div>
                 </div>
-
             </div>
         </div>
     );

@@ -1,47 +1,32 @@
-import { Movie, SheetConfig, SearchResult } from '../types';
-import { syncSheet } from './sheet';
+import { Movie } from '../types';
 
 const IMDB_API_BASE = 'https://search.imdbot.workers.dev';
 
-export const searchMovieCandidates = async (query: string): Promise<SearchResult[]> => {
+export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
     try {
+        // Step 1: Search for the movie
         const searchRes = await fetch(`${IMDB_API_BASE}/?q=${encodeURIComponent(query)}`);
+        
         if (!searchRes.ok) throw new Error("Search service unavailable");
-
+        
         const searchData = await searchRes.json();
+        
         if (!searchData.description || searchData.description.length === 0) {
-            return [];
+            // Throwing a standard error that the UI handles as "Not Found"
+            throw new Error("Movie not found");
         }
 
-        return searchData.description.map((item: any) => ({
-            imdbId: item["#IMDB_ID"] || "",
-            title: item["#TITLE"] || "Unknown",
-            year: item["#YEAR"] ? item["#YEAR"].toString() : "",
-            posterUrl: item["#IMG_POSTER"] || "",
-            type: item["#RANK"] ? "Movie/TV" : "Unknown" // API doesn't always give clear type in search list
-        }));
-    } catch (e) {
-        console.error("Search candidates error:", e);
-        return [];
-    }
-};
+        const firstResult = searchData.description[0];
+        const imdbId = firstResult["#IMDB_ID"];
 
-export const getMovieDetails = async (imdbId: string): Promise<Partial<Movie>> => {
-    try {
-        // Step 1: Get Details directly by ID
+        // Step 2: Get details
         const detailsRes = await fetch(`${IMDB_API_BASE}/?tt=${imdbId}`);
-
+        
         let info: any = {};
-        let detailsData: any = {};
         if (detailsRes.ok) {
-            detailsData = await detailsRes.json();
+            const detailsData = await detailsRes.json();
             info = detailsData.short || {};
-        } else {
-            throw new Error("Failed to fetch details");
         }
-
-        // Refetch basic info if needed or rely on what we have. 
-        // We use what we can from 'short' and 'main'.
 
         // Extract Director
         let director = "Unknown";
@@ -54,7 +39,7 @@ export const getMovieDetails = async (imdbId: string): Promise<Partial<Movie>> =
         }
 
         // Extract Year
-        const year = info.datePublished ? info.datePublished.split('-')[0] : "Unknown";
+        const year = info.datePublished ? info.datePublished.split('-')[0] : (firstResult["#YEAR"] || "Unknown").toString();
 
         // Extract Genre
         let genre: string[] = ["Unknown"];
@@ -62,52 +47,21 @@ export const getMovieDetails = async (imdbId: string): Promise<Partial<Movie>> =
             genre = Array.isArray(info.genre) ? info.genre : [info.genre];
         }
 
-        // Extract Score
-        const score = info.aggregateRating?.ratingValue ? info.aggregateRating.ratingValue.toString() : "";
-
-        // Extract Episodes
-        let episodeCount: number | undefined = undefined;
-        // Check both 'short' (schema.org) and 'main' (IMDB internal) if available
-        if (detailsData.main?.episodes?.totalEpisodes?.total) {
-            episodeCount = detailsData.main.episodes.totalEpisodes.total;
-        } else if (detailsData.main?.episodes?.episodes?.total) {
-            episodeCount = detailsData.main.episodes.episodes.total;
-        }
-
         return {
-            title: info.name || "Unknown",
+            title: info.name || firstResult["#TITLE"],
             year: year,
             director: director,
             genre: genre,
             plot: info.description || "No plot available.",
-            posterUrl: info.image || "",
-            score: score,
-            episodeCount: episodeCount
+            posterUrl: info.image || firstResult["#IMG_POSTER"]
         };
 
     } catch (error: any) {
-        console.warn("Get Movie Details Details:", error.message);
+        // If it's a "Movie not found" error, just rethrow it for the UI to handle.
+        // If it's something else, log it for debugging but still throw.
+        if (error.message !== "Movie not found") {
+             console.warn("Movie Search Warning:", error.message);
+        }
         throw error;
-    }
-};
-
-// Deprecated or Wrapper for backward compatibility if needed, but we will switch MovieApp to use the above two.
-export const searchMovie = async (query: string): Promise<Partial<Movie>> => {
-    const candidates = await searchMovieCandidates(query);
-    if (candidates.length === 0) throw new Error("Movie not found");
-    return getMovieDetails(candidates[0].imdbId);
-};
-
-export const syncMovies = async (config: SheetConfig, movies: Movie[]) => {
-    console.log("Starting Sync...");
-    // We pass the raw objects to the backend, which handles the mapping mapping to columns.
-    // This matches the pattern in TaskManager and allows the backend to be the source of truth for schema.
-
-    try {
-        await syncSheet(config, 'Cinema_Log', movies);
-        console.log("Sync Complete Success");
-    } catch (e) {
-        console.error("Sync Failed in service:", e);
-        throw e;
     }
 };

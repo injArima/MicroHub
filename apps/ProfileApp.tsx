@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Database, Loader2, FileSpreadsheet, Server, User as UserIcon, Lock, Key, CheckCircle, AlertTriangle, RefreshCw, Trash2, ArrowRight, Palette, RotateCcw } from 'lucide-react';
+import { Database, Loader2, FileSpreadsheet, Server, User as UserIcon, Key, CheckCircle, AlertTriangle, RotateCcw, Trash2, ArrowRight, Palette } from 'lucide-react';
 import { SheetConfig, ThemeConfig } from '../types';
 import { saveConfig, disconnectSheet, setupNewUser, checkSheetStatus, loginUser, resetSheet } from '../services/sheet';
 
@@ -27,197 +27,109 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
     const [errorMsg, setErrorMsg] = useState('');
     const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-    // Step 1: Check Status
+    // ... (Keep existing logic functions: handleCheckConnection, performSetup, handleLogin, handleReset, finishSetup) ...
     const handleCheckConnection = async () => {
-        if (!scriptUrl.trim() || !sheetId.trim()) {
-            setErrorMsg("Enter URL and ID");
-            return;
-        }
-        setIsLoading(true);
-        setErrorMsg('');
-
+        if (!scriptUrl.trim() || !sheetId.trim()) { setErrorMsg("Enter URL and ID"); return; }
+        setIsLoading(true); setErrorMsg('');
         try {
             const statusRes = await checkSheetStatus(scriptUrl, sheetId);
-            
             if (statusRes.status === 'returning_user') {
-                if (statusRes.userName) {
-                     localStorage.setItem('microhub_username', statusRes.userName);
-                }
+                if (statusRes.userName) localStorage.setItem('microhub_username', statusRes.userName);
                 setStep('auth_returning');
             } else if (statusRes.status === 'new_user') {
                 setStep('onboarding');
             } else {
                 setErrorMsg(statusRes.message || "Connection failed");
             }
-        } catch (e: any) {
-            setErrorMsg(e.message);
-        } finally {
-            setIsLoading(false);
-        }
+        } catch (e: any) { setErrorMsg(e.message); } finally { setIsLoading(false); }
     };
 
     const performSetup = async () => {
-        if (!userName.trim()) {
-            setErrorMsg("Please enter your name");
-            return;
-        }
+        if (!userName.trim()) { setErrorMsg("Enter name"); return; }
         setIsLoading(true);
         try {
             const setupRes = await setupNewUser(scriptUrl, sheetId, userName);
             if (setupRes.status === 'success' && setupRes.rawKey) {
-                // Save name immediately for instant UI update
                 localStorage.setItem('microhub_username', userName);
-                
                 setGeneratedKey(setupRes.rawKey);
                 setStep('auth_new_success');
-                
-                const newConfig: SheetConfig = { 
-                    scriptUrl, sheetId, authKey: setupRes.rawKey, connectedAt: new Date().toISOString() 
-                };
+                const newConfig: SheetConfig = { scriptUrl, sheetId, authKey: setupRes.rawKey, connectedAt: new Date().toISOString() };
                 saveConfig(newConfig);
-            } else {
-                setErrorMsg("Setup Failed: " + setupRes.message);
-            }
-        } catch (e: any) {
-            setErrorMsg(e.message);
-        } finally {
-            setIsLoading(false);
-        }
+            } else { setErrorMsg(setupRes.message || "Setup Failed"); }
+        } catch (e: any) { setErrorMsg(e.message); } finally { setIsLoading(false); }
     };
 
-    // Step 2: Login Existing User
     const handleLogin = async () => {
-        if (!accessKey.trim() || accessKey.length !== 6) {
-            setErrorMsg("Invalid Key format");
-            return;
-        }
+        if (!accessKey.trim()) return;
         setIsLoading(true);
         try {
             const loginRes = await loginUser(scriptUrl, sheetId, accessKey);
             if (loginRes.status === 'success') {
-                const newConfig: SheetConfig = { 
-                    scriptUrl, sheetId, authKey: accessKey, connectedAt: new Date().toISOString() 
-                };
+                const newConfig: SheetConfig = { scriptUrl, sheetId, authKey: accessKey, connectedAt: new Date().toISOString() };
                 saveConfig(newConfig);
                 onConnect(newConfig);
-            } else {
-                setErrorMsg(loginRes.message || "Invalid Key");
-            }
-        } catch (e: any) {
-            setErrorMsg(e.message);
-        } finally {
-            setIsLoading(false);
-        }
+            } else { setErrorMsg(loginRes.message || "Invalid Key"); }
+        } catch (e: any) { setErrorMsg(e.message); } finally { setIsLoading(false); }
     };
 
-    // Step 2.5: Wipe and Reset
     const handleReset = async () => {
         setIsLoading(true);
         try {
             const resetRes = await resetSheet(scriptUrl, sheetId);
             if (resetRes.status === 'success') {
-                // After reset, go to onboarding to ask for name
-                setShowResetConfirm(false);
-                setAccessKey('');
-                setUserName('');
-                setStep('onboarding');
-            } else {
-                setErrorMsg(resetRes.message || "Reset failed");
-            }
-        } catch (e: any) {
-            setErrorMsg(e.message);
-        } finally {
-            setIsLoading(false);
-        }
+                setShowResetConfirm(false); setAccessKey(''); setUserName(''); setStep('onboarding');
+            } else { setErrorMsg(resetRes.message || "Reset failed"); }
+        } catch (e: any) { setErrorMsg(e.message); } finally { setIsLoading(false); }
     };
 
-    // Step 3: Finish New User Setup
     const finishSetup = () => {
         if (generatedKey) {
-            const newConfig: SheetConfig = { 
-                scriptUrl, sheetId, authKey: generatedKey, connectedAt: new Date().toISOString() 
-            };
+            const newConfig: SheetConfig = { scriptUrl, sheetId, authKey: generatedKey, connectedAt: new Date().toISOString() };
             onConnect(newConfig);
         }
     };
 
     const handleColorChange = (key: keyof ThemeConfig, value: string) => {
-        onUpdateTheme({
-            ...theme,
-            [key]: value
-        });
-    };
-
-    const resetTheme = () => {
-        onUpdateTheme({ primary: '#bef264', secondary: '#d9f99d' });
+        onUpdateTheme({ ...theme, [key]: value });
     };
 
     return (
-        <div className="w-full max-w-md mx-auto min-h-screen pb-32 pt-12 px-6 flex flex-col">
+        <div className="w-full max-w-md mx-auto min-h-screen pb-32 pt-12 px-6 flex flex-col bg-white">
             <div className="flex flex-col items-center mb-8">
-                <div className="w-24 h-24 rounded-full glass-card flex items-center justify-center mb-4 border border-white/10 relative">
-                    {config ? <CheckCircle size={40} className="text-[var(--primary)]" /> : <UserIcon size={40} className="text-gray-400" />}
-                    {config && <div className="absolute inset-0 bg-[var(--primary)]/20 rounded-full blur-xl animate-pulse"></div>}
+                <div className="w-24 h-24 rounded-full border-2 border-black flex items-center justify-center mb-4 bg-gray-50 shadow-[4px_4px_0px_0px_#000]">
+                    {config ? <CheckCircle size={40} className="text-black" /> : <UserIcon size={40} className="text-black" />}
                 </div>
-                <h1 className="text-2xl font-light text-white">System <span className="font-bold text-[var(--primary)]">Settings</span></h1>
+                <h1 className="text-3xl font-black text-black uppercase tracking-tighter">System<br/>Config</h1>
             </div>
 
-            {/* Customization Section */}
-            <div className="glass-card rounded-[32px] p-6 mb-6">
-                <div className="flex items-center gap-2 mb-4">
-                    <Palette size={16} className="text-[var(--primary)]" />
-                    <h2 className="text-sm font-bold text-white uppercase tracking-wider">Appearance</h2>
+            {/* Customization */}
+            <div className="contra-card p-6 mb-6">
+                <div className="flex items-center gap-2 mb-4 border-b-2 border-black pb-2">
+                    <Palette size={16} className="text-black" />
+                    <h2 className="text-sm font-black text-black uppercase">Theme Accent</h2>
                 </div>
                 
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5">
-                        <span className="text-xs text-gray-300">Primary Color</span>
-                        <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-mono text-gray-500 uppercase">{theme.primary}</span>
-                            <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-lg">
-                                <input 
-                                    type="color" 
-                                    value={theme.primary}
-                                    onChange={(e) => handleColorChange('primary', e.target.value)}
-                                    className="absolute inset-0 w-[150%] h-[150%] -top-[25%] -left-[25%] cursor-pointer p-0 border-0"
-                                />
-                            </div>
-                        </div>
+                <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-black uppercase">Primary Color</span>
+                    <div className="relative w-8 h-8 rounded-full border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_#000]">
+                        <input 
+                            type="color" 
+                            value={theme.primary}
+                            onChange={(e) => handleColorChange('primary', e.target.value)}
+                            className="absolute inset-0 w-[150%] h-[150%] -top-[25%] -left-[25%] cursor-pointer p-0 border-0"
+                        />
                     </div>
-
-                    <div className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5">
-                        <span className="text-xs text-gray-300">Secondary Color</span>
-                        <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-mono text-gray-500 uppercase">{theme.secondary}</span>
-                            <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-lg">
-                                <input 
-                                    type="color" 
-                                    value={theme.secondary}
-                                    onChange={(e) => handleColorChange('secondary', e.target.value)}
-                                    className="absolute inset-0 w-[150%] h-[150%] -top-[25%] -left-[25%] cursor-pointer p-0 border-0"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <button 
-                        onClick={resetTheme}
-                        className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-gray-400 flex items-center justify-center gap-2 transition-colors"
-                    >
-                        <RotateCcw size={12} /> Reset to Default
-                    </button>
                 </div>
             </div>
 
-            <div className="glass-card rounded-[32px] p-6 relative overflow-hidden">
-                <div className="flex items-center gap-2 mb-4">
-                    <Database size={16} className="text-[var(--primary)]" />
-                    <h2 className="text-sm font-bold text-white uppercase tracking-wider">Cloud Sync</h2>
+            <div className="contra-card p-6 relative overflow-hidden">
+                <div className="flex items-center gap-2 mb-4 border-b-2 border-black pb-2">
+                    <Database size={16} className="text-black" />
+                    <h2 className="text-sm font-black text-black uppercase">Data Link</h2>
                 </div>
 
-                {/* Error Banner */}
                 {errorMsg && (
-                    <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-4 flex items-center gap-2 text-red-300 text-xs">
+                    <div className="bg-red-100 border-2 border-red-500 p-2 rounded-lg mb-4 flex items-center gap-2 text-red-600 text-xs font-bold">
                         <AlertTriangle size={14} />
                         {errorMsg}
                     </div>
@@ -225,84 +137,74 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
 
                 {!config ? (
                     <>
-                        {/* Step 1: Inputs */}
                         {step === 'input' && (
-                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
-                                <p className="text-left text-gray-400 text-xs mb-2">Connect Google Sheet</p>
+                            <div className="space-y-4 animate-in fade-in">
+                                <p className="text-left text-black text-xs font-bold uppercase">Connect Google Sheet</p>
                                 <div className="space-y-3">
-                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
-                                        <Server size={14} className="text-gray-500" />
+                                    <div className="contra-input flex items-center gap-2">
+                                        <Server size={14} className="text-black" />
                                         <input 
                                             value={scriptUrl} 
                                             onChange={e => setScriptUrl(e.target.value)}
-                                            className="bg-transparent text-white outline-none text-xs w-full h-10 placeholder:text-gray-600"
-                                            placeholder="Script URL" 
+                                            className="bg-transparent outline-none text-xs w-full font-mono placeholder:text-gray-400"
+                                            placeholder="SCRIPT URL..." 
                                         />
                                     </div>
-                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
-                                        <FileSpreadsheet size={14} className="text-gray-500" />
+                                    <div className="contra-input flex items-center gap-2">
+                                        <FileSpreadsheet size={14} className="text-black" />
                                         <input 
                                             value={sheetId} 
                                             onChange={e => setSheetId(e.target.value)}
-                                            className="bg-transparent text-white outline-none text-xs w-full h-10 placeholder:text-gray-600"
-                                            placeholder="Sheet ID" 
+                                            className="bg-transparent outline-none text-xs w-full font-mono placeholder:text-gray-400"
+                                            placeholder="SHEET ID..." 
                                         />
                                     </div>
-                                    <button onClick={handleCheckConnection} disabled={isLoading} className="w-full h-12 btn-lime rounded-full font-bold text-sm flex items-center justify-center gap-2 mt-2">
+                                    <button onClick={handleCheckConnection} disabled={isLoading} className="contra-btn w-full h-12 text-sm uppercase">
                                         {isLoading ? <Loader2 className="animate-spin" /> : 'Check Connection'}
                                     </button>
                                 </div>
                             </div>
                         )}
 
-                        {/* Step 1.5: Onboarding (Ask Name) */}
                         {step === 'onboarding' && (
-                            <div className="space-y-4 animate-in fade-in slide-in-from-right-8">
+                            <div className="space-y-4 animate-in fade-in">
                                 <div className="text-center mb-4">
-                                    <h3 className="text-white font-bold">Welcome</h3>
-                                    <p className="text-gray-500 text-xs mt-1">Let's set up your database.</p>
+                                    <h3 className="text-black font-black uppercase">Init Protocol</h3>
                                 </div>
                                 
-                                <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
-                                    <UserIcon size={14} className="text-gray-500" />
+                                <div className="contra-input flex items-center gap-2">
+                                    <UserIcon size={14} className="text-black" />
                                     <input 
                                         value={userName} 
                                         onChange={e => setUserName(e.target.value)}
-                                        className="bg-transparent text-white outline-none text-sm w-full h-10 placeholder:text-gray-600"
-                                        placeholder="What should we call you?" 
+                                        className="bg-transparent outline-none text-sm w-full font-bold uppercase placeholder:text-gray-400"
+                                        placeholder="USER ID..." 
                                     />
                                 </div>
                                 
-                                <button onClick={performSetup} disabled={isLoading} className="w-full h-12 btn-lime rounded-full font-bold text-sm flex items-center justify-center gap-2">
-                                    {isLoading ? <Loader2 className="animate-spin" /> : <>Create Database <ArrowRight size={14}/></>}
+                                <button onClick={performSetup} disabled={isLoading} className="contra-btn w-full h-12 text-sm uppercase">
+                                    {isLoading ? <Loader2 className="animate-spin" /> : 'Create Database'}
                                 </button>
                                 
-                                <button onClick={() => setStep('input')} className="w-full py-2 text-gray-500 text-[10px] hover:text-white">
-                                    Cancel
-                                </button>
+                                <button onClick={() => setStep('input')} className="w-full text-xs font-bold underline">Cancel</button>
                             </div>
                         )}
 
-                        {/* Step 2: Returning User Auth */}
                         {step === 'auth_returning' && (
-                            <div className="space-y-4 animate-in fade-in slide-in-from-right-8">
+                            <div className="space-y-4 animate-in fade-in">
                                 <div className="text-center mb-4">
-                                    <h3 className="text-white font-bold">Welcome Back</h3>
-                                    <p className="text-gray-500 text-xs mt-1">
-                                        {showResetConfirm ? 'This will ERASE ALL DATA to start fresh.' : 'This sheet is protected. Enter your key.'}
-                                    </p>
+                                    <h3 className="text-black font-black uppercase">{showResetConfirm ? 'HARD RESET' : 'SECURITY CHECK'}</h3>
                                 </div>
                                 
-                                {/* Only show input if NOT in reset mode */}
                                 {!showResetConfirm && (
-                                    <div className="bg-black/20 p-1 rounded-[20px] flex items-center gap-3 px-4 border border-white/5 focus-within:border-[var(--primary)]/30 transition-colors">
-                                        <Key size={14} className="text-[var(--primary)]" />
+                                    <div className="contra-input flex items-center gap-2 border-black bg-gray-100">
+                                        <Key size={14} className="text-black" />
                                         <input 
                                             type="text" 
                                             maxLength={6}
                                             value={accessKey} 
                                             onChange={e => setAccessKey(e.target.value.replace(/[^0-9]/g, ''))}
-                                            className="bg-transparent text-white outline-none text-lg w-full h-12 placeholder:text-gray-700 tracking-[0.5em] font-mono text-center"
+                                            className="bg-transparent outline-none text-lg w-full font-mono tracking-[0.5em] text-center"
                                             placeholder="000000" 
                                         />
                                     </div>
@@ -310,25 +212,23 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                                 
                                 {showResetConfirm ? (
                                     <div className="space-y-3">
-                                        <div className="bg-red-500/10 p-3 rounded-xl border border-red-500/20 text-red-300 text-[10px] leading-relaxed">
-                                            Warning: This action cannot be undone. All tasks, journals, and logs will be permanently deleted from the Google Sheet.
+                                        <div className="bg-red-500 text-white p-3 rounded-lg border-2 border-black text-xs font-bold uppercase">
+                                            Warning: Irreversible data loss imminent.
                                         </div>
-                                        <button onClick={handleReset} disabled={isLoading} className="w-full h-12 bg-red-500 text-white rounded-full font-bold text-sm flex items-center justify-center gap-2">
-                                            {isLoading ? <Loader2 className="animate-spin" /> : 'Yes, Delete Everything'}
+                                        <button onClick={handleReset} disabled={isLoading} className="w-full h-12 bg-red-600 text-white border-2 border-black rounded-full font-black text-sm shadow-[4px_4px_0px_0px_#000]">
+                                            {isLoading ? <Loader2 className="animate-spin" /> : 'CONFIRM WIPE'}
                                         </button>
-                                        <button onClick={() => setShowResetConfirm(false)} className="w-full h-12 bg-white/5 rounded-full font-bold text-sm text-gray-400">
-                                            Cancel
-                                        </button>
+                                        <button onClick={() => setShowResetConfirm(false)} className="w-full h-12 font-bold text-sm">Cancel</button>
                                     </div>
                                 ) : (
                                     <>
-                                        <button onClick={handleLogin} disabled={isLoading} className="w-full h-12 btn-lime rounded-full font-bold text-sm flex items-center justify-center gap-2">
+                                        <button onClick={handleLogin} disabled={isLoading} className="contra-btn w-full h-12 text-sm uppercase">
                                             {isLoading ? <Loader2 className="animate-spin" /> : 'Unlock & Sync'}
                                         </button>
                                         
                                         <div className="pt-2 flex justify-between items-center px-1">
-                                            <button onClick={() => setStep('input')} className="text-gray-500 text-[10px] hover:text-white">Back</button>
-                                            <button onClick={() => setShowResetConfirm(true)} className="text-red-400/50 text-[10px] hover:text-red-400 flex items-center gap-1">
+                                            <button onClick={() => setStep('input')} className="text-xs font-bold underline">Back</button>
+                                            <button onClick={() => setShowResetConfirm(true)} className="text-red-600 text-[10px] font-black uppercase flex items-center gap-1">
                                                 <Trash2 size={10} /> Lost Key?
                                             </button>
                                         </div>
@@ -337,61 +237,34 @@ const ProfileApp: React.FC<ProfileAppProps> = ({ config, onConnect, onDisconnect
                             </div>
                         )}
 
-                        {/* Step 3: New User Success */}
                         {step === 'auth_new_success' && (
-                            <div className="space-y-6 text-center animate-in zoom-in duration-300">
-                                <div className="w-12 h-12 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto text-[var(--primary)]">
-                                    <CheckCircle size={24} />
+                            <div className="space-y-6 text-center animate-in zoom-in">
+                                <h3 className="text-black font-black uppercase">Access Granted</h3>
+                                <div className="bg-gray-100 p-4 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000]">
+                                    <p className="text-3xl font-mono text-black tracking-widest font-bold">{generatedKey}</p>
                                 </div>
-                                <div>
-                                    <h3 className="text-white font-bold text-lg">Setup Complete!</h3>
-                                    <p className="text-gray-400 text-xs mt-2 max-w-[200px] mx-auto">
-                                        This is your Access Key. Save it to connect other devices.
-                                    </p>
-                                </div>
-                                
-                                <div className="bg-black/40 p-4 rounded-xl border border-[var(--primary)]/30">
-                                    <p className="text-3xl font-mono text-[var(--primary)] tracking-widest font-bold">{generatedKey}</p>
-                                </div>
-
-                                <div className="bg-yellow-500/10 p-3 rounded-lg flex gap-2 text-left">
-                                    <AlertTriangle size={16} className="text-yellow-500 flex-shrink-0 mt-0.5" />
-                                    <p className="text-[10px] text-yellow-200/70">
-                                        We will not show this key again. If you lose it, you may lose access to your data on other devices.
-                                    </p>
-                                </div>
-
-                                <button onClick={finishSetup} className="w-full h-12 btn-lime rounded-full font-bold text-sm">
-                                    I've Saved It, Continue
-                                </button>
+                                <p className="text-xs font-bold text-red-500 uppercase">Save this key securely.</p>
+                                <button onClick={finishSetup} className="contra-btn w-full h-12 text-sm uppercase">Continue</button>
                             </div>
                         )}
                     </>
                 ) : (
-                    // Connected State
                     <div className="flex flex-col items-center">
-                        <div className="mb-6 w-full bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <div className="mb-6 w-full bg-gray-50 p-4 rounded-xl border-2 border-black">
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-xs text-gray-500">Database Status</span>
-                                <span className="text-[10px] bg-[var(--primary)]/20 text-[var(--primary)] px-2 py-1 rounded-full font-bold">ACTIVE</span>
+                                <span className="text-xs font-bold text-black uppercase">Status</span>
+                                <span className="text-[10px] bg-[#bef264] border border-black px-2 py-0.5 rounded-full font-black">ONLINE</span>
                             </div>
-                            <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-                                <div className="h-full bg-[var(--primary)] w-full animate-pulse"></div>
+                            <div className="h-2 w-full bg-white border border-black rounded-full overflow-hidden">
+                                <div className="h-full bg-black w-full animate-pulse"></div>
                             </div>
-                            <p className="text-[10px] text-gray-500 mt-2 text-right">Last sync: Just now</p>
                         </div>
                         
-                        <button onClick={() => { disconnectSheet(); onDisconnect(); setStep('input'); }} className="w-full h-12 bg-red-500/10 border border-red-500/30 text-red-400 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors">
-                            Disconnect Database
+                        <button onClick={() => { disconnectSheet(); onDisconnect(); setStep('input'); }} className="w-full h-12 border-2 border-red-500 text-red-600 rounded-full font-black text-sm flex items-center justify-center gap-2 hover:bg-red-50 transition-colors uppercase">
+                            Disconnect
                         </button>
                     </div>
                 )}
-            </div>
-            
-            <div className="mt-8 text-center px-4">
-                 <p className="text-[10px] text-gray-600 leading-relaxed">
-                    MicroHub stores data directly on your Google Sheet. No external servers are used.
-                 </p>
             </div>
         </div>
     );

@@ -61,16 +61,6 @@ export interface Movie {
   plot: string;
   status: 'watchlist' | 'watched';
   posterUrl?: string;
-  score?: string;
-  episodeCount?: number;
-}
-
-export interface SearchResult {
-  imdbId: string;
-  title: string;
-  year: string;
-  posterUrl: string;
-  type: string;
 }
 
 export interface ChatMessage {

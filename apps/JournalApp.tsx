@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Save, Eye, Edit2, Calendar, ChevronLeft, Loader2, CheckCircle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Plus, Save, Eye, Edit2, Loader2, PenTool } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { JournalEntry, SheetConfig } from '../types';
 import { syncSheet } from '../services/sheet';
@@ -14,10 +14,10 @@ const STORAGE_KEY = 'microhub_journal_entries';
 const DEFAULT_ENTRIES: JournalEntry[] = [
     {
         id: '1',
-        title: 'Reflections',
-        content: '# Daily Reflection\n\nToday was a day of focus. I prioritized my mental clarity over noise.\n\n- [x] Morning meditation\n- [ ] Reading',
+        title: 'Initial Log',
+        content: '# System Start\n\nAll systems nominal.',
         date: '28 Feb',
-        tags: ['Mindset']
+        tags: ['LOG']
     }
 ];
 
@@ -31,7 +31,6 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [isPreview, setIsPreview] = useState(false);
-
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
 
     useEffect(() => {
@@ -41,10 +40,10 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     const handleSave = async () => {
         const newEntry: JournalEntry = {
             id: activeEntry?.id || Date.now().toString(),
-            title: title || 'Untitled',
+            title: title || 'UNTITLED',
             content: content,
             date: activeEntry?.date || new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
-            tags: activeEntry?.tags || ['Note']
+            tags: activeEntry?.tags || ['NOTE']
         };
         
         setEntries(prev => activeEntry ? prev.map(e => e.id === activeEntry.id ? newEntry : e) : [newEntry, ...prev]);
@@ -61,49 +60,48 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
         setActiveEntry(entry || null);
         setTitle(entry?.title || '');
         setContent(entry?.content || '');
-        // Open in preview mode if entry exists, otherwise edit mode
-        setIsPreview(!!entry);
+        setIsPreview(false);
         setView('editor');
     };
 
     if (view === 'editor') {
         return (
-            <div className="w-full max-w-4xl mx-auto min-h-screen pb-6 flex flex-col pt-8 px-6">
+            <div className="w-full max-w-4xl mx-auto min-h-screen pb-6 flex flex-col pt-8 px-6 bg-white">
                 <div className="flex justify-between items-center mb-6">
-                    <button onClick={() => setView('list')} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
-                        <ArrowLeft size={20} />
+                    <button onClick={() => setView('list')} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+                        <ArrowLeft size={20} strokeWidth={2.5}/>
                     </button>
                     
                     <div className="flex items-center gap-2">
                          <button 
                             onClick={() => setIsPreview(!isPreview)} 
-                            className={`w-10 h-10 rounded-full glass-card flex items-center justify-center transition-colors ${isPreview ? 'bg-[var(--secondary)] text-black' : 'text-white hover:bg-white/10'}`}
+                            className={`w-10 h-10 rounded-full border-2 border-black flex items-center justify-center transition-all ${isPreview ? 'bg-black text-white' : 'bg-white text-black'}`}
                         >
                             {isPreview ? <Edit2 size={16} /> : <Eye size={16} />}
                         </button>
-                        <button onClick={handleSave} className="btn-lime px-6 py-2 rounded-full font-bold text-xs flex items-center gap-2 h-10">
-                            <Save size={14} /> Save
+                        <button onClick={handleSave} className="contra-btn px-6 py-2 h-10 text-xs">
+                            <Save size={14} className="mr-2"/> SAVE
                         </button>
                     </div>
                 </div>
                 
                 <input 
-                    className="bg-transparent text-3xl font-light text-white placeholder:text-gray-600 outline-none w-full mb-6"
-                    placeholder="Title..."
+                    className="bg-transparent text-3xl font-black text-black placeholder:text-gray-300 outline-none w-full mb-6 uppercase tracking-tight"
+                    placeholder="TITLE..."
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                 />
                 
-                <div className="flex-1 glass-card rounded-[24px] overflow-hidden relative flex flex-col">
+                <div className="flex-1 contra-card p-0 overflow-hidden relative flex flex-col min-h-[50vh]">
                     {isPreview ? (
-                        <div className="flex-1 p-6 overflow-y-auto prose prose-invert prose-sm max-w-none">
+                        <div className="flex-1 p-6 overflow-y-auto prose prose-neutral max-w-none">
                             <ReactMarkdown>{content}</ReactMarkdown>
-                            {!content && <p className="text-gray-600 italic">Nothing to preview...</p>}
+                            {!content && <p className="text-gray-400 italic">No content...</p>}
                         </div>
                     ) : (
                         <textarea 
-                            className="flex-1 w-full h-full p-6 bg-transparent text-gray-300 outline-none resize-none font-light leading-relaxed text-sm placeholder:text-gray-700"
-                            placeholder="Write your thoughts (Markdown supported)..."
+                            className="flex-1 w-full h-full p-6 bg-transparent text-black outline-none resize-none font-mono text-sm leading-relaxed placeholder:text-gray-300"
+                            placeholder="START TYPING..."
                             value={content}
                             onChange={e => setContent(e.target.value)}
                         />
@@ -114,46 +112,32 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     }
 
     return (
-        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-8 px-6 flex flex-col">
+        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-10 px-6 flex flex-col bg-white">
             <div className="flex justify-between items-center mb-8">
-                <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
-                    <ArrowLeft size={20} />
+                <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+                    <ArrowLeft size={20} strokeWidth={2.5}/>
                 </button>
-                {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-[var(--secondary)]" />}
+                {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-black" />}
             </div>
 
-            <div className="mb-8">
-                <h1 className="text-3xl font-light text-white mb-2">Daily<br/><span className="font-bold text-[var(--secondary)]">Journal</span></h1>
+            <div className="mb-8 border-b-2 border-black pb-4">
+                <h1 className="text-4xl font-black text-black uppercase tracking-tighter">Daily<br/>Log</h1>
             </div>
 
-            <div onClick={() => openEditor()} className="bg-[var(--secondary)] rounded-[28px] p-6 mb-8 relative overflow-hidden group cursor-pointer transition-transform active:scale-[0.99] hover:brightness-110">
-                <h2 className="text-xl font-bold text-black mb-1">New Entry</h2>
-                <p className="text-black/70 text-xs font-medium">Write something for today.</p>
-                <div className="absolute right-4 bottom-4 w-10 h-10 bg-black/10 rounded-full flex items-center justify-center text-black">
-                    <Plus size={20} />
-                </div>
+            <div onClick={() => openEditor()} className="contra-btn-outline w-full py-4 mb-8 flex items-center justify-center gap-2 cursor-pointer bg-black text-white border-black hover:bg-gray-900">
+                <Plus size={20} /> <span className="font-black">NEW ENTRY</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {entries.map(entry => (
-                    <div key={entry.id} onClick={() => openEditor(entry)} className="glass-card p-5 rounded-[24px] cursor-pointer hover:bg-white/10 transition-colors flex flex-col h-full">
-                        <div className="flex justify-between mb-2">
-                            <span className="text-[10px] bg-white/5 text-[var(--secondary)] px-2 py-0.5 rounded-full uppercase font-bold tracking-wider">{entry.tags[0]}</span>
-                            <span className="text-xs text-gray-500">{entry.date}</span>
+                    <div key={entry.id} onClick={() => openEditor(entry)} className="contra-card contra-card-hover p-5 cursor-pointer flex flex-col h-full min-h-[200px]">
+                        <div className="flex justify-between mb-4 border-b-2 border-gray-100 pb-2">
+                            <span className="text-[10px] bg-black text-white px-2 py-0.5 rounded-sm uppercase font-bold">{entry.tags[0]}</span>
+                            <span className="text-xs font-mono font-bold text-gray-500">{entry.date}</span>
                         </div>
-                        <h3 className="text-white font-bold mb-2 text-lg leading-tight">{entry.title}</h3>
-                        <div className="text-gray-400 text-xs line-clamp-3 leading-relaxed opacity-70 flex-1">
-                             <ReactMarkdown 
-                                components={{
-                                    p: ({node, ...props}) => <span className="mr-1" {...props} />,
-                                    h1: ({node, ...props}) => <span className="font-bold mr-1" {...props} />,
-                                    h2: ({node, ...props}) => <span className="font-bold mr-1" {...props} />,
-                                    h3: ({node, ...props}) => <span className="font-bold mr-1" {...props} />,
-                                    li: ({node, ...props}) => <span className="mr-1" {...props} />,
-                                }}
-                                allowedElements={['p', 'h1', 'h2', 'h3', 'li', 'strong', 'em', 'span']}
-                                unwrapDisallowed={true}
-                             >
+                        <h3 className="text-black font-black mb-2 text-xl leading-tight uppercase truncate">{entry.title}</h3>
+                        <div className="text-gray-600 text-xs line-clamp-4 leading-relaxed font-mono opacity-80 flex-1">
+                             <ReactMarkdown allowedElements={['p', 'strong', 'em']} unwrapDisallowed={true}>
                                 {entry.content}
                              </ReactMarkdown>
                         </div>

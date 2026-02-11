@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Play, Pause, RotateCcw, Flag, Timer, Watch, CheckCircle, Plus, Minus } from 'lucide-react';
-import { ThemeConfig } from '../types';
+import { ArrowLeft, Play, Pause, RotateCcw, Flag, Plus } from 'lucide-react';
 
 interface TimeAppProps {
     onBack: () => void;
@@ -10,13 +9,10 @@ interface TimeAppProps {
 
 const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
     const [mode, setMode] = useState<'timer' | 'stopwatch'>(initialMode);
-
-    // --- TIMER STATE ---
-    const [timeLeft, setTimeLeft] = useState(25 * 60); // Default 25 min
+    const [timeLeft, setTimeLeft] = useState(25 * 60);
     const [initialTime, setInitialTime] = useState(25 * 60);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     
-    // --- STOPWATCH STATE ---
     const [swTime, setSwTime] = useState(0);
     const [isSwRunning, setIsSwRunning] = useState(false);
     const [laps, setLaps] = useState<number[]>([]);
@@ -24,23 +20,15 @@ const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
     const timerRef = useRef<number | null>(null);
     const swRef = useRef<number | null>(null);
 
-    // --- TIMER LOGIC ---
     useEffect(() => {
         if (isTimerRunning && timeLeft > 0) {
             timerRef.current = window.setInterval(() => {
                 setTimeLeft((prev) => {
-                    if (prev <= 1) {
-                        setIsTimerRunning(false);
-                        // Play sound or vibrate here if strictly necessary
-                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-                        return 0;
-                    }
+                    if (prev <= 1) { setIsTimerRunning(false); return 0; }
                     return prev - 1;
                 });
             }, 1000);
-        } else {
-            if (timerRef.current) clearInterval(timerRef.current);
-        }
+        } else if (timerRef.current) clearInterval(timerRef.current);
         return () => { if (timerRef.current) clearInterval(timerRef.current); };
     }, [isTimerRunning, timeLeft]);
 
@@ -52,7 +40,7 @@ const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
 
     const adjustTimer = (amount: number) => {
         if (isTimerRunning) return;
-        const newTime = Math.max(60, Math.min(359940, timeLeft + amount)); // Min 1 min, Max 99 hours
+        const newTime = Math.max(60, Math.min(359940, timeLeft + amount)); 
         setTimeLeft(newTime);
         setInitialTime(newTime);
     };
@@ -63,16 +51,11 @@ const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
         setInitialTime(mins * 60);
     };
 
-    // --- STOPWATCH LOGIC ---
     useEffect(() => {
         if (isSwRunning) {
             const startTime = Date.now() - swTime;
-            swRef.current = window.setInterval(() => {
-                setSwTime(Date.now() - startTime);
-            }, 10); // Update every 10ms for smooth display
-        } else {
-            if (swRef.current) clearInterval(swRef.current);
-        }
+            swRef.current = window.setInterval(() => { setSwTime(Date.now() - startTime); }, 10);
+        } else if (swRef.current) clearInterval(swRef.current);
         return () => { if (swRef.current) clearInterval(swRef.current); };
     }, [isSwRunning]);
 
@@ -83,105 +66,70 @@ const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${centis.toString().padStart(2, '0')}`;
     };
 
-    const handleLap = () => {
-        setLaps(prev => [swTime, ...prev]);
-    };
-
-    // Calculate Progress Ring
-    const radius = 120;
-    const circumference = 2 * Math.PI * radius;
-    const progress = timeLeft / initialTime;
-    const dashoffset = circumference - (progress * circumference);
+    const handleLap = () => setLaps(prev => [swTime, ...prev]);
 
     return (
-        <div className="w-full max-w-md mx-auto min-h-screen flex flex-col pb-32 pt-8 px-6">
+        <div className="w-full max-w-md mx-auto min-h-screen flex flex-col pb-32 pt-10 px-6 bg-white text-black">
             
-            {/* Header */}
-            <div className="flex justify-between items-center mb-8">
-                <button onClick={onBack} className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10">
-                    <ArrowLeft size={20} />
+            <div className="flex justify-between items-center mb-12">
+                <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+                    <ArrowLeft size={20} strokeWidth={2.5}/>
                 </button>
                 
-                {/* Toggle Pill */}
-                <div className="glass-card p-1 rounded-full flex gap-1">
+                <div className="border-2 border-black p-1 rounded-full flex gap-1 bg-white">
                     <button 
                         onClick={() => setMode('timer')}
-                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${mode === 'timer' ? 'bg-[var(--primary)] text-black' : 'text-gray-400 hover:text-white'}`}
+                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase transition-all ${mode === 'timer' ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
                     >
                         Timer
                     </button>
                     <button 
                         onClick={() => setMode('stopwatch')}
-                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${mode === 'stopwatch' ? 'bg-[var(--primary)] text-black' : 'text-gray-400 hover:text-white'}`}
+                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase transition-all ${mode === 'stopwatch' ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
                     >
                         Stopwatch
                     </button>
                 </div>
-                
-                <div className="w-10"></div> {/* Spacer for balance */}
+                <div className="w-10"></div>
             </div>
 
-            {/* Content Area */}
-            <div className="flex-1 flex flex-col items-center justify-center relative">
+            <div className="flex-1 flex flex-col items-center justify-start relative">
                 
                 {mode === 'timer' ? (
                     <div className="flex flex-col items-center w-full animate-in zoom-in duration-300">
-                        {/* Circular Progress */}
-                        <div className="relative w-72 h-72 flex items-center justify-center mb-8">
-                            <svg className="w-full h-full transform -rotate-90">
-                                <circle
-                                    cx="144"
-                                    cy="144"
-                                    r={radius}
-                                    stroke="currentColor"
-                                    strokeWidth="8"
-                                    fill="transparent"
-                                    className="text-white/5"
-                                />
-                                <circle
-                                    cx="144"
-                                    cy="144"
-                                    r={radius}
-                                    stroke="currentColor"
-                                    strokeWidth="8"
-                                    fill="transparent"
-                                    strokeDasharray={circumference}
-                                    strokeDashoffset={dashoffset}
-                                    className="text-[var(--primary)] transition-all duration-1000 ease-linear"
-                                    strokeLinecap="round"
-                                />
-                            </svg>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <div className="text-6xl font-light font-mono tracking-tighter text-white tabular-nums">
-                                    {formatTime(timeLeft)}
-                                </div>
-                                <div className="text-[var(--primary)] text-xs font-bold uppercase tracking-widest mt-2">
-                                    {isTimerRunning ? 'Focusing' : 'Paused'}
-                                </div>
-                            </div>
+                        {/* Box Display */}
+                        <div className="contra-card p-8 mb-10 w-full text-center relative overflow-hidden bg-gray-50">
+                             <div className="absolute top-2 left-2 text-[10px] font-black uppercase tracking-widest text-gray-400">T-MINUS</div>
+                             <div className="text-7xl font-black font-mono tracking-tighter tabular-nums">
+                                {formatTime(timeLeft)}
+                             </div>
+                             <div className="h-2 w-full bg-gray-200 mt-4 border border-black rounded-full overflow-hidden">
+                                 <div 
+                                    className="h-full bg-black transition-all duration-1000 ease-linear"
+                                    style={{ width: `${(timeLeft / initialTime) * 100}%` }}
+                                 />
+                             </div>
                         </div>
 
                         {/* Controls */}
-                        <div className="flex items-center gap-6 mb-8">
+                        <div className="flex items-center gap-6 mb-12">
                             <button 
                                 onClick={() => { setIsTimerRunning(false); setTimeLeft(initialTime); }}
-                                className="w-12 h-12 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
+                                className="w-12 h-12 rounded-full border-2 border-black flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-all"
                             >
                                 <RotateCcw size={20} />
                             </button>
 
                             <button 
                                 onClick={() => setIsTimerRunning(!isTimerRunning)}
-                                className="w-20 h-20 rounded-full btn-lime flex items-center justify-center shadow-[0_0_40px_rgba(var(--primary-rgb),0.3)] hover:scale-105 active:scale-95 transition-all"
+                                className="w-20 h-20 rounded-full bg-black text-white flex items-center justify-center shadow-[4px_4px_0px_0px_#ccc] hover:scale-105 active:scale-95 transition-all border-4 border-white ring-2 ring-black"
                             >
                                 {isTimerRunning ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
                             </button>
 
-                            <div className="flex flex-col gap-2">
-                                <button onClick={() => adjustTimer(60)} className="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10 active:scale-95">
-                                    <Plus size={20} />
-                                </button>
-                            </div>
+                            <button onClick={() => adjustTimer(60)} className="w-12 h-12 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-gray-100 active:scale-95">
+                                <Plus size={20} />
+                            </button>
                         </div>
 
                         {/* Presets */}
@@ -190,34 +138,32 @@ const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
                                 <button 
                                     key={min}
                                     onClick={() => setPreset(min)}
-                                    className="px-4 py-2 rounded-xl glass-card text-xs font-bold text-gray-400 hover:text-white hover:bg-white/10 border border-transparent hover:border-[var(--primary)]/30 transition-all"
+                                    className="w-12 h-12 rounded-lg border-2 border-black text-xs font-bold hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_0px_#000]"
                                 >
-                                    {min}m
+                                    {min}
                                 </button>
                             ))}
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center w-full animate-in zoom-in duration-300 h-full">
-                        {/* Digital Display */}
-                        <div className="mt-8 mb-12">
-                            <div className="text-7xl font-light font-mono tracking-tighter text-white tabular-nums">
+                    <div className="flex flex-col items-center w-full animate-in zoom-in duration-300">
+                        <div className="mb-12 text-center">
+                            <div className="text-7xl font-black font-mono tracking-tighter tabular-nums">
                                 {formatSw(swTime)}
                             </div>
                         </div>
 
-                        {/* Controls */}
                         <div className="flex items-center gap-6 mb-8">
                             <button 
                                 onClick={() => { setIsSwRunning(false); setSwTime(0); setLaps([]); }}
-                                className="w-14 h-14 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 active:scale-95 transition-all"
+                                className="w-14 h-14 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-gray-100 active:scale-95 transition-all"
                             >
                                 <RotateCcw size={20} />
                             </button>
 
                             <button 
                                 onClick={() => setIsSwRunning(!isSwRunning)}
-                                className={`w-20 h-20 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all ${isSwRunning ? 'bg-red-500 text-white shadow-red-500/30' : 'btn-lime'}`}
+                                className={`w-20 h-20 rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_#000] border-2 border-black hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#000] active:translate-y-[2px] transition-all ${isSwRunning ? 'bg-white text-black' : 'bg-[#bef264] text-black'}`}
                             >
                                 {isSwRunning ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
                             </button>
@@ -225,31 +171,26 @@ const TimeApp: React.FC<TimeAppProps> = ({ onBack, initialMode }) => {
                             <button 
                                 onClick={handleLap}
                                 disabled={!isSwRunning}
-                                className="w-14 h-14 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                                className="w-14 h-14 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-gray-100 active:scale-95 disabled:opacity-30"
                             >
                                 <Flag size={20} />
                             </button>
                         </div>
 
-                        {/* Laps List */}
-                        <div className="w-full flex-1 min-h-0 overflow-hidden relative glass-card rounded-t-[32px] border-b-0">
-                            <div className="absolute inset-0 overflow-y-auto p-4 space-y-2 no-scrollbar">
-                                <div className="flex justify-between text-xs text-gray-500 px-4 mb-2 font-bold uppercase tracking-wider">
-                                    <span>Lap</span>
-                                    <span>Split</span>
-                                </div>
+                        {/* Laps */}
+                        <div className="w-full max-h-[30vh] overflow-y-auto contra-card p-0">
+                             <div className="sticky top-0 bg-gray-100 border-b-2 border-black p-2 flex justify-between text-[10px] font-black uppercase">
+                                <span>Lap</span>
+                                <span>Time</span>
+                             </div>
+                             <div className="p-2 space-y-1">
                                 {laps.map((lapTime, idx) => (
-                                    <div key={idx} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 animate-in slide-in-from-bottom-2">
-                                        <span className="text-sm font-mono text-gray-400">#{laps.length - idx}</span>
-                                        <span className="text-sm font-mono text-white tabular-nums">{formatSw(lapTime)}</span>
+                                    <div key={idx} className="flex justify-between items-center p-2 border-b border-gray-100 last:border-0 font-mono text-sm">
+                                        <span className="text-gray-500">#{laps.length - idx}</span>
+                                        <span className="font-bold">{formatSw(lapTime)}</span>
                                     </div>
                                 ))}
-                                {laps.length === 0 && (
-                                    <div className="text-center text-gray-600 text-xs mt-10 italic">
-                                        No laps recorded
-                                    </div>
-                                )}
-                            </div>
+                             </div>
                         </div>
                     </div>
                 )}
