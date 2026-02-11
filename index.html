@@ -18,15 +18,26 @@
     <style>
       :root {
         --bg-color: #FFFFFF;
+        --bg-secondary: #f4f4f5;
         --text-color: #000000;
+        --text-inverted: #FFFFFF;
         --border-color: #000000;
         --border-width: 2px;
         --shadow-offset: 4px;
         --radius: 12px;
         
-        /* Accents converted to solid pastel/high-contrast for wireframe look */
+        /* Accents */
         --primary: #bef264; 
-        --secondary: #000000;
+        --secondary: #000000; /* Button Backgrounds */
+      }
+      
+      .dark {
+        --bg-color: #000000;
+        --bg-secondary: #18181b;
+        --text-color: #FFFFFF;
+        --text-inverted: #000000;
+        --border-color: #FFFFFF;
+        --secondary: #FFFFFF;
       }
 
       body {
@@ -35,6 +46,7 @@
         color: var(--text-color);
         -webkit-tap-highlight-color: transparent;
         overscroll-behavior-y: none;
+        transition: background-color 0.3s, color 0.3s;
       }
       
       /* Hide scrollbar */
@@ -48,7 +60,7 @@
       }
 
       .contra-card {
-        background: #FFFFFF;
+        background: var(--bg-color);
         border: var(--border-width) solid var(--border-color);
         border-radius: var(--radius);
         box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--border-color);
@@ -66,9 +78,9 @@
       }
 
       .contra-btn {
-        background: #000000;
-        color: #FFFFFF;
-        border: var(--border-width) solid #000000;
+        background: var(--secondary);
+        color: var(--text-inverted);
+        border: var(--border-width) solid var(--border-color);
         border-radius: 999px;
         font-weight: 700;
         display: inline-flex;
@@ -80,12 +92,12 @@
 
       .contra-btn:hover:not(:disabled) {
         transform: translate(-1px, -1px);
-        box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.2);
+        box-shadow: 4px 4px 0px 0px var(--border-color);
       }
       
       .contra-btn:active:not(:disabled) {
         transform: translate(1px, 1px);
-        box-shadow: 1px 1px 0px 0px rgba(0,0,0,0.2);
+        box-shadow: 1px 1px 0px 0px var(--border-color);
       }
       
       .contra-btn:disabled {
@@ -94,40 +106,51 @@
       }
 
       .contra-btn-outline {
-        background: #FFFFFF;
-        color: #000000;
-        border: var(--border-width) solid #000000;
+        background: var(--bg-color);
+        color: var(--text-color);
+        border: var(--border-width) solid var(--border-color);
         border-radius: 999px;
         font-weight: 700;
-        box-shadow: 2px 2px 0px 0px #000000;
+        box-shadow: 2px 2px 0px 0px var(--border-color);
         transition: all 0.2s;
       }
 
       .contra-btn-outline:hover {
-        background: #f4f4f5;
+        background: var(--bg-secondary);
         transform: translate(-1px, -1px);
-        box-shadow: 4px 4px 0px 0px #000000;
+        box-shadow: 4px 4px 0px 0px var(--border-color);
       }
 
       .contra-input {
-        background: #FFFFFF;
-        border: var(--border-width) solid #000000;
+        background: var(--bg-color);
+        border: var(--border-width) solid var(--border-color);
         border-radius: var(--radius);
-        color: #000000;
+        color: var(--text-color);
         padding: 0.5rem 1rem;
         outline: none;
         transition: box-shadow 0.2s;
       }
 
       .contra-input:focus {
-        box-shadow: 4px 4px 0px 0px #000000;
+        box-shadow: 4px 4px 0px 0px var(--border-color);
       }
       
       .contra-badge {
-        border: 2px solid #000;
+        border: 2px solid var(--border-color);
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+      }
+      
+      /* Typography Overrides for Markdown */
+      .prose {
+        color: var(--text-color);
+      }
+      .prose strong {
+        color: var(--text-color);
+      }
+      .prose h1, .prose h2, .prose h3, .prose h4 {
+        color: var(--text-color);
       }
 
     </style>

@@ -103,19 +103,19 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-screen pb-32 px-6 flex flex-col bg-white">
+    <div className="w-full max-w-md mx-auto min-h-screen pb-32 px-6 flex flex-col bg-[var(--bg-color)]">
       
       {/* Header */}
-      <div className="pt-8 pb-4 bg-white sticky top-0 z-30 border-b-2 border-black">
+      <div className="pt-8 pb-4 bg-[var(--bg-color)] sticky top-0 z-30 border-b-2 border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-4">
-            <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+            <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center text-[var(--text-color)] hover:bg-[var(--secondary)] hover:text-[var(--text-inverted)] transition-colors">
                 <ArrowLeft size={20} strokeWidth={2.5} />
             </button>
             <div className="flex flex-col items-end">
-                 <h1 className="text-xl font-black text-black uppercase tracking-tighter">COMMAND</h1>
+                 <h1 className="text-xl font-black text-[var(--text-color)] uppercase tracking-tighter">COMMAND</h1>
                  <div className="flex items-center gap-2">
-                    {saveStatus === 'saving' && <Loader2 size={12} className="animate-spin text-black" />}
-                    {saveStatus === 'saved' && <span className="text-[10px] font-bold bg-black text-white px-1">SYNCED</span>}
+                    {saveStatus === 'saving' && <Loader2 size={12} className="animate-spin text-[var(--text-color)]" />}
+                    {saveStatus === 'saved' && <span className="text-[10px] font-bold bg-[var(--secondary)] text-[var(--text-inverted)] px-1">SYNCED</span>}
                  </div>
             </div>
         </div>
@@ -126,10 +126,10 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                 <button 
                     key={f} 
                     onClick={() => setFilterPriority(f as any)}
-                    className={`px-3 py-1 rounded-full text-xs font-black border-2 border-black transition-all ${
+                    className={`px-3 py-1 rounded-full text-xs font-black border-2 border-[var(--border-color)] transition-all ${
                         filterPriority === f 
-                        ? 'bg-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]' 
-                        : 'bg-white text-black hover:bg-gray-100'
+                        ? 'bg-[var(--secondary)] text-[var(--text-inverted)] shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]' 
+                        : 'bg-[var(--bg-color)] text-[var(--text-color)] hover:bg-[var(--bg-secondary)]'
                     }`}
                 >
                     {f.toUpperCase()}
@@ -143,7 +143,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
           <div className="flex items-center gap-2">
               <button 
                 onClick={() => setIsInputExpanded(!isInputExpanded)}
-                className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center flex-shrink-0"
+                className="w-8 h-8 rounded-lg bg-[var(--secondary)] text-[var(--text-inverted)] flex items-center justify-center flex-shrink-0"
               >
                   <Plus size={20} />
               </button>
@@ -153,7 +153,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                   onChange={(e) => setNewTitle(e.target.value)}
                   onFocus={() => setIsInputExpanded(true)}
                   placeholder="NEW DIRECTIVE..."
-                  className="bg-transparent text-black placeholder:text-gray-400 outline-none text-sm flex-1 font-bold uppercase"
+                  className="bg-transparent text-[var(--text-color)] placeholder:text-gray-400 outline-none text-sm flex-1 font-bold uppercase"
               />
           </div>
           
@@ -163,7 +163,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                       value={newDesc}
                       onChange={(e) => setNewDesc(e.target.value)}
                       placeholder="DETAILS..."
-                      className="w-full bg-gray-50 border-2 border-black rounded-lg p-3 text-xs text-black outline-none resize-none mb-3 min-h-[80px] font-mono"
+                      className="w-full bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] rounded-lg p-3 text-xs text-[var(--text-color)] outline-none resize-none mb-3 min-h-[80px] font-mono"
                   />
                   <div className="flex justify-between items-center">
                       <div className="flex gap-2">
@@ -171,13 +171,13 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                               <button 
                                 key={p}
                                 onClick={() => setNewPriority(p as any)}
-                                className={`w-6 h-6 rounded-full border-2 border-black flex items-center justify-center transition-all ${newPriority === p ? 'bg-black text-white' : 'bg-white text-transparent'}`}
+                                className={`w-6 h-6 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center transition-all ${newPriority === p ? 'bg-[var(--secondary)] text-white' : 'bg-transparent text-transparent'}`}
                               >
                                   <div className={`w-2 h-2 rounded-full ${p === 'High' ? 'bg-red-500' : p === 'Medium' ? 'bg-yellow-400' : 'bg-blue-300'}`}></div>
                               </button>
                           ))}
                       </div>
-                      <button onClick={addTask} className="text-xs font-black bg-black text-white px-6 py-2 rounded-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] transition-shadow">
+                      <button onClick={addTask} className="text-xs font-black bg-[var(--secondary)] text-[var(--text-inverted)] px-6 py-2 rounded-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] transition-shadow">
                           EXECUTE
                       </button>
                   </div>
@@ -186,15 +186,15 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
       </div>
 
       {/* Pipeline Tabs */}
-      <div className="flex mb-6 border-b-2 border-black">
+      <div className="flex mb-6 border-b-2 border-[var(--border-color)]">
           {['Backlog', 'Active', 'Archive'].map(status => (
               <button
                 key={status}
                 onClick={() => setActivePipeline(status as any)}
                 className={`flex-1 py-2 text-xs font-black uppercase tracking-wider relative transition-colors ${
                     activePipeline === status 
-                    ? 'text-black bg-[#bef264] border-t-2 border-x-2 border-black -mb-[2px] pb-[4px]' 
-                    : 'text-gray-400 hover:text-black hover:bg-gray-50'
+                    ? 'text-[var(--text-color)] bg-[#bef264] border-t-2 border-x-2 border-[var(--border-color)] -mb-[2px] pb-[4px]' 
+                    : 'text-gray-400 hover:text-[var(--text-color)] hover:bg-[var(--bg-secondary)]'
                 }`}
               >
                   {status}
@@ -205,7 +205,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
       {/* List */}
       <div className="space-y-3 flex-1">
           {visibleTasks.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 opacity-50 border-2 border-dashed border-gray-300 rounded-xl">
+              <div className="flex flex-col items-center justify-center py-12 opacity-50 border-2 border-dashed border-gray-400 rounded-xl">
                   <Box size={40} className="text-gray-400 mb-2"/>
                   <span className="text-xs font-bold text-gray-400 uppercase">NO DATA</span>
               </div>
@@ -224,24 +224,24 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onBack, sheetConfig }) => {
                           </button>
                       </div>
                       
-                      <h3 className="text-black font-bold text-lg leading-tight mb-1 uppercase">{task.title}</h3>
+                      <h3 className="text-[var(--text-color)] font-bold text-lg leading-tight mb-1 uppercase">{task.title}</h3>
                       {task.description && (
-                          <p className="text-xs text-gray-600 font-mono mb-4 border-l-2 border-gray-200 pl-2">{task.description}</p>
+                          <p className="text-xs text-gray-500 font-mono mb-4 border-l-2 border-[var(--border-color)] pl-2">{task.description}</p>
                       )}
                       
                       {/* Controls */}
-                      <div className="flex justify-end gap-2 mt-4 pt-3 border-t-2 border-gray-100">
+                      <div className="flex justify-end gap-2 mt-4 pt-3 border-t-2 border-[var(--bg-secondary)]">
                           {activePipeline === 'Backlog' && (
-                              <button onClick={() => moveTask(task.id, 'Active')} className="flex items-center gap-1 text-[10px] font-black bg-black text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition-colors">
+                              <button onClick={() => moveTask(task.id, 'Active')} className="flex items-center gap-1 text-[10px] font-black bg-[var(--secondary)] text-[var(--text-inverted)] px-3 py-1.5 rounded-full hover:opacity-90 transition-opacity">
                                   INITIATE <ArrowRight size={12} />
                               </button>
                           )}
                           {activePipeline === 'Active' && (
                               <>
-                                <button onClick={() => moveTask(task.id, 'Backlog')} className="text-black hover:bg-gray-100 px-2 rounded-full border-2 border-transparent hover:border-black transition-all">
+                                <button onClick={() => moveTask(task.id, 'Backlog')} className="text-[var(--text-color)] hover:bg-[var(--bg-secondary)] px-2 rounded-full border-2 border-transparent hover:border-[var(--border-color)] transition-all">
                                     <RotateCcw size={14} />
                                 </button>
-                                <button onClick={() => moveTask(task.id, 'Archive')} className="flex items-center gap-1 text-[10px] font-black bg-[#bef264] text-black border-2 border-black px-3 py-1.5 rounded-full hover:shadow-[2px_2px_0px_0px_#000] transition-all">
+                                <button onClick={() => moveTask(task.id, 'Archive')} className="flex items-center gap-1 text-[10px] font-black bg-[#bef264] text-black border-2 border-[var(--border-color)] px-3 py-1.5 rounded-full hover:shadow-[2px_2px_0px_0px_var(--border-color)] transition-all">
                                     <CheckSquare size={12} /> COMPLETE
                                 </button>
                               </>

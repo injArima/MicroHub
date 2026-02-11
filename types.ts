@@ -19,6 +19,7 @@ export interface SheetConfig {
 export interface ThemeConfig {
   primary: string;
   secondary: string;
+  isDarkMode: boolean;
 }
 
 export interface ApiSettings {

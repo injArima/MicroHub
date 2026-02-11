@@ -66,16 +66,16 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
 
     if (view === 'editor') {
         return (
-            <div className="w-full max-w-4xl mx-auto min-h-screen pb-6 flex flex-col pt-8 px-6 bg-white">
+            <div className="w-full max-w-4xl mx-auto min-h-screen pb-6 flex flex-col pt-8 px-6 bg-[var(--bg-color)]">
                 <div className="flex justify-between items-center mb-6">
-                    <button onClick={() => setView('list')} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+                    <button onClick={() => setView('list')} className="w-10 h-10 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center text-[var(--text-color)] hover:bg-[var(--secondary)] hover:text-[var(--text-inverted)] transition-colors">
                         <ArrowLeft size={20} strokeWidth={2.5}/>
                     </button>
                     
                     <div className="flex items-center gap-2">
                          <button 
                             onClick={() => setIsPreview(!isPreview)} 
-                            className={`w-10 h-10 rounded-full border-2 border-black flex items-center justify-center transition-all ${isPreview ? 'bg-black text-white' : 'bg-white text-black'}`}
+                            className={`w-10 h-10 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center transition-all ${isPreview ? 'bg-[var(--secondary)] text-[var(--text-inverted)]' : 'bg-[var(--bg-color)] text-[var(--text-color)]'}`}
                         >
                             {isPreview ? <Edit2 size={16} /> : <Eye size={16} />}
                         </button>
@@ -86,7 +86,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
                 </div>
                 
                 <input 
-                    className="bg-transparent text-3xl font-black text-black placeholder:text-gray-300 outline-none w-full mb-6 uppercase tracking-tight"
+                    className="bg-transparent text-3xl font-black text-[var(--text-color)] placeholder:text-gray-400 outline-none w-full mb-6 uppercase tracking-tight"
                     placeholder="TITLE..."
                     value={title}
                     onChange={e => setTitle(e.target.value)}
@@ -100,7 +100,7 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
                         </div>
                     ) : (
                         <textarea 
-                            className="flex-1 w-full h-full p-6 bg-transparent text-black outline-none resize-none font-mono text-sm leading-relaxed placeholder:text-gray-300"
+                            className="flex-1 w-full h-full p-6 bg-transparent text-[var(--text-color)] outline-none resize-none font-mono text-sm leading-relaxed placeholder:text-gray-400"
                             placeholder="START TYPING..."
                             value={content}
                             onChange={e => setContent(e.target.value)}
@@ -112,30 +112,30 @@ const JournalApp: React.FC<JournalAppProps> = ({ onBack, sheetConfig }) => {
     }
 
     return (
-        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-10 px-6 flex flex-col bg-white">
+        <div className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-10 px-6 flex flex-col bg-[var(--bg-color)]">
             <div className="flex justify-between items-center mb-8">
-                <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+                <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center text-[var(--text-color)] hover:bg-[var(--secondary)] hover:text-[var(--text-inverted)] transition-colors">
                     <ArrowLeft size={20} strokeWidth={2.5}/>
                 </button>
-                {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-black" />}
+                {saveStatus === 'saving' && <Loader2 size={16} className="animate-spin text-[var(--text-color)]" />}
             </div>
 
-            <div className="mb-8 border-b-2 border-black pb-4">
-                <h1 className="text-4xl font-black text-black uppercase tracking-tighter">Daily<br/>Log</h1>
+            <div className="mb-8 border-b-2 border-[var(--border-color)] pb-4">
+                <h1 className="text-4xl font-black text-[var(--text-color)] uppercase tracking-tighter">Daily<br/>Log</h1>
             </div>
 
-            <div onClick={() => openEditor()} className="contra-btn-outline w-full py-4 mb-8 flex items-center justify-center gap-2 cursor-pointer bg-black text-white border-black hover:bg-gray-900">
+            <div onClick={() => openEditor()} className="contra-btn-outline w-full py-4 mb-8 flex items-center justify-center gap-2 cursor-pointer bg-[var(--secondary)] text-[var(--text-inverted)] border-[var(--border-color)] hover:opacity-90">
                 <Plus size={20} /> <span className="font-black">NEW ENTRY</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {entries.map(entry => (
                     <div key={entry.id} onClick={() => openEditor(entry)} className="contra-card contra-card-hover p-5 cursor-pointer flex flex-col h-full min-h-[200px]">
-                        <div className="flex justify-between mb-4 border-b-2 border-gray-100 pb-2">
-                            <span className="text-[10px] bg-black text-white px-2 py-0.5 rounded-sm uppercase font-bold">{entry.tags[0]}</span>
+                        <div className="flex justify-between mb-4 border-b-2 border-[var(--bg-secondary)] pb-2">
+                            <span className="text-[10px] bg-[var(--secondary)] text-[var(--text-inverted)] px-2 py-0.5 rounded-sm uppercase font-bold">{entry.tags[0]}</span>
                             <span className="text-xs font-mono font-bold text-gray-500">{entry.date}</span>
                         </div>
-                        <h3 className="text-black font-black mb-2 text-xl leading-tight uppercase truncate">{entry.title}</h3>
+                        <h3 className="text-[var(--text-color)] font-black mb-2 text-xl leading-tight uppercase truncate">{entry.title}</h3>
                         <div className="text-gray-600 text-xs line-clamp-4 leading-relaxed font-mono opacity-80 flex-1">
                              <ReactMarkdown allowedElements={['p', 'strong', 'em']} unwrapDisallowed={true}>
                                 {entry.content}

@@ -35,23 +35,23 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto h-screen flex flex-col pb-24 pt-8 px-4 bg-white">
-       <div className="flex items-center gap-4 mb-4 px-2 border-b-2 border-black pb-4">
-        <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+    <div className="w-full max-w-3xl mx-auto h-screen flex flex-col pb-24 pt-8 px-4 bg-[var(--bg-color)]">
+       <div className="flex items-center gap-4 mb-4 px-2 border-b-2 border-[var(--border-color)] pb-4">
+        <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center text-[var(--text-color)] hover:bg-[var(--secondary)] hover:text-[var(--text-inverted)] transition-colors">
             <ArrowLeft size={20} strokeWidth={2.5} />
         </button>
         <div>
-            <h1 className="text-lg font-black text-black flex items-center gap-2 uppercase">Gemini Core <Sparkles size={16} /></h1>
+            <h1 className="text-lg font-black text-[var(--text-color)] flex items-center gap-2 uppercase">Gemini Core <Sparkles size={16} /></h1>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-6 px-2 no-scrollbar">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`p-4 max-w-[85%] text-sm font-medium leading-relaxed border-2 border-black shadow-[4px_4px_0px_0px_#000] ${
+            <div className={`p-4 max-w-[85%] text-sm font-medium leading-relaxed border-2 border-[var(--border-color)] shadow-[4px_4px_0px_0px_var(--border-color)] ${
                 msg.role === 'user' 
-                  ? 'bg-black text-white rounded-t-2xl rounded-bl-2xl' 
-                  : 'bg-white text-black rounded-t-2xl rounded-br-2xl'
+                  ? 'bg-[var(--secondary)] text-[var(--text-inverted)] rounded-t-2xl rounded-bl-2xl' 
+                  : 'bg-[var(--bg-color)] text-[var(--text-color)] rounded-t-2xl rounded-br-2xl'
               }`}>
                 {msg.text.toUpperCase()}
             </div>
@@ -59,10 +59,10 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
         ))}
         {isLoading && (
             <div className="flex justify-start">
-                 <div className="px-4 py-3 rounded-t-2xl rounded-br-2xl border-2 border-black bg-gray-100 flex gap-1 items-center">
-                    <span className="w-2 h-2 bg-black rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-black rounded-full animate-bounce delay-75"></span>
-                    <span className="w-2 h-2 bg-black rounded-full animate-bounce delay-150"></span>
+                 <div className="px-4 py-3 rounded-t-2xl rounded-br-2xl border-2 border-[var(--border-color)] bg-[var(--bg-secondary)] flex gap-1 items-center">
+                    <span className="w-2 h-2 bg-[var(--text-color)] rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-[var(--text-color)] rounded-full animate-bounce delay-75"></span>
+                    <span className="w-2 h-2 bg-[var(--text-color)] rounded-full animate-bounce delay-150"></span>
                 </div>
             </div>
         )}
@@ -77,12 +77,12 @@ const AiChat: React.FC<AiChatProps> = ({ onBack }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="INPUT COMMAND..."
-            className="flex-1 bg-transparent text-black outline-none text-sm h-10 placeholder:text-gray-400 font-bold uppercase"
+            className="flex-1 bg-transparent text-[var(--text-color)] outline-none text-sm h-10 placeholder:text-gray-400 font-bold uppercase"
           />
           <button 
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white hover:scale-105 transition-transform disabled:opacity-50"
+            className="w-10 h-10 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--text-inverted)] hover:scale-105 transition-transform disabled:opacity-50"
           >
             <Send size={16} />
           </button>

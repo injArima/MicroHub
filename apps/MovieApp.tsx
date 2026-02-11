@@ -81,41 +81,41 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
     }, { scope: container, dependencies: [activeTab] });
 
     return (
-        <div ref={container} className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-10 px-6 flex flex-col bg-white">
+        <div ref={container} className="w-full max-w-6xl mx-auto min-h-screen pb-32 pt-10 px-6 flex flex-col bg-[var(--bg-color)]">
             <div className="flex justify-between items-center mb-6">
-                 <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors">
+                 <button onClick={onBack} className="w-10 h-10 rounded-full border-2 border-[var(--border-color)] flex items-center justify-center text-[var(--text-color)] hover:bg-[var(--secondary)] hover:text-[var(--text-inverted)] transition-colors">
                     <ArrowLeft size={20} strokeWidth={2.5}/>
                 </button>
-                <div className="border-2 border-black px-3 py-1 rounded-full bg-[#bef264]">
+                <div className="border-2 border-[var(--border-color)] px-3 py-1 rounded-full bg-[#bef264]">
                     <span className="text-[10px] font-black text-black uppercase tracking-wider">Cinema DB</span>
                 </div>
             </div>
 
             <div className="contra-card p-1 pl-4 flex items-center gap-2 mb-6 max-w-2xl mx-auto w-full rounded-full">
-                <Search size={16} className="text-black" />
+                <Search size={16} className="text-[var(--text-color)]" />
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddMovie()}
                     placeholder="SEARCH DATABASE..."
-                    className="flex-1 bg-transparent text-black outline-none text-sm h-10 font-bold uppercase placeholder:text-gray-400"
+                    className="flex-1 bg-transparent text-[var(--text-color)] outline-none text-sm h-10 font-bold uppercase placeholder:text-gray-400"
                 />
                 <button 
                     onClick={handleAddMovie}
                     disabled={isSearching}
-                    className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white hover:scale-105 transition-transform"
+                    className="w-10 h-10 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--text-inverted)] hover:scale-105 transition-transform"
                 >
                     {isSearching ? <Loader2 size={14} className="animate-spin" /> : <Plus size={16} />}
                 </button>
             </div>
 
-            <div className="flex mb-6 max-w-md mx-auto w-full border-b-2 border-black">
+            <div className="flex mb-6 max-w-md mx-auto w-full border-b-2 border-[var(--border-color)]">
                 {['watchlist', 'watched'].map((tab) => (
                     <button 
                         key={tab}
                         onClick={() => setActiveTab(tab as any)}
-                        className={`flex-1 py-2 text-xs font-black uppercase tracking-wider transition-all ${activeTab === tab ? 'text-black border-b-4 border-black' : 'text-gray-400'}`}
+                        className={`flex-1 py-2 text-xs font-black uppercase tracking-wider transition-all ${activeTab === tab ? 'text-[var(--text-color)] border-b-4 border-[var(--border-color)]' : 'text-gray-400'}`}
                     >
                         {tab}
                     </button>
@@ -125,17 +125,17 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack, sheetConfig }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredMovies.map((movie, idx) => (
                     <div key={movie.id} className={`movie-card contra-card p-3 flex gap-4 ${idx === 0 ? 'movie-card-new' : ''}`}>
-                        <div className="w-20 h-28 bg-gray-200 border-2 border-black rounded-lg flex-shrink-0 overflow-hidden relative">
+                        <div className="w-20 h-28 bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] rounded-lg flex-shrink-0 overflow-hidden relative">
                             <img src={movie.posterUrl} className="w-full h-full object-cover grayscale contrast-125" alt="Poster" />
-                            <div className="absolute inset-0 mix-blend-multiply bg-gray-100/20"></div>
+                            <div className="absolute inset-0 mix-blend-multiply bg-[var(--bg-secondary)]/20"></div>
                         </div>
                         <div className="flex-1 flex flex-col justify-center min-w-0">
-                            <h3 className="font-black text-black text-lg leading-none mb-1 truncate uppercase">{movie.title}</h3>
-                            <p className="text-[10px] font-mono text-gray-600 mb-3 truncate">
+                            <h3 className="font-black text-[var(--text-color)] text-lg leading-none mb-1 truncate uppercase">{movie.title}</h3>
+                            <p className="text-[10px] font-mono text-gray-500 mb-3 truncate">
                                 {movie.year} // {movie.director}
                             </p>
                             <div className="flex gap-2 mt-auto">
-                                <button onClick={() => setMovies(prev => prev.map(m => m.id === movie.id ? {...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist'} : m))} className="text-[10px] font-bold border border-black px-2 py-1 rounded hover:bg-black hover:text-white transition-colors">
+                                <button onClick={() => setMovies(prev => prev.map(m => m.id === movie.id ? {...m, status: m.status === 'watchlist' ? 'watched' : 'watchlist'} : m))} className="text-[10px] font-bold border border-[var(--border-color)] px-2 py-1 rounded hover:bg-[var(--secondary)] hover:text-[var(--text-inverted)] text-[var(--text-color)] transition-colors">
                                     {movie.status === 'watchlist' ? 'MARK SEEN' : 'REWATCH'}
                                 </button>
                                 <button onClick={() => setMovies(prev => prev.filter(m => m.id !== movie.id))} className="text-[10px] font-bold text-red-500 hover:underline px-2 py-1">DELETE</button>

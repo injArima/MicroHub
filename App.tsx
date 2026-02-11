@@ -23,9 +23,9 @@ const App: React.FC = () => {
   const [theme, setTheme] = useState<ThemeConfig>(() => {
     try {
         const saved = localStorage.getItem('microhub_theme');
-        return saved ? JSON.parse(saved) : { primary: '#bef264', secondary: '#000000' };
+        return saved ? JSON.parse(saved) : { primary: '#bef264', secondary: '#000000', isDarkMode: false };
     } catch {
-        return { primary: '#bef264', secondary: '#000000' };
+        return { primary: '#bef264', secondary: '#000000', isDarkMode: false };
     }
   });
 
@@ -79,9 +79,9 @@ const App: React.FC = () => {
   const renderScreen = () => {
     if (isSyncing) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen z-10 relative bg-white">
-                <Loader2 className="w-10 h-10 text-black animate-spin mb-4" />
-                <p className="text-black font-bold text-sm">SYNCING DATA...</p>
+            <div className="flex flex-col items-center justify-center min-h-screen z-10 relative bg-[var(--bg-color)]">
+                <Loader2 className="w-10 h-10 text-[var(--text-color)] animate-spin mb-4" />
+                <p className="text-[var(--text-color)] font-bold text-sm">SYNCING DATA...</p>
             </div>
         );
     }
@@ -117,16 +117,18 @@ const App: React.FC = () => {
   // Construct CSS Variables Style Object
   const themeStyles = {
       '--primary': theme.primary,
-      '--secondary': theme.secondary,
   } as React.CSSProperties;
 
   return (
-    <div style={themeStyles} className="min-h-screen bg-white text-black font-sans relative">
+    <div 
+        style={themeStyles} 
+        className={`min-h-screen font-sans relative transition-colors duration-300 ${theme.isDarkMode ? 'dark bg-black text-white' : 'bg-white text-black'}`}
+    >
       
       {/* Grid Background for Wireframe Effect */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03]" 
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] dark:opacity-[0.1]" 
            style={{
-               backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+               backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
                backgroundSize: '20px 20px'
            }}
       />
